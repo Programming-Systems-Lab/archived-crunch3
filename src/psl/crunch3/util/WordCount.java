@@ -28,7 +28,6 @@ public class WordCount {
 	private Hashtable dictwords;
 	
 	public static void main(String[] args) {
-		System.out.println(args[0] + "   " + args[1]);
 		//if ((args[0] != null) && (args[1] != null))
 			new WordCount(args[0], args[1]);
 		//else System.out.println("please provide arguments for the number of engines (1,2,3)" 
@@ -38,12 +37,15 @@ public class WordCount {
 	public WordCount(String num, String words){
 		if (words.equals("yes")) {
 			useWordList = true;
-			//storeDictwords();
+			storeDictwords();
 		}
 		else useWordList = false;
 		engineNum = Integer.parseInt(num);
+		//generating the stoplist...
 		storeStopList();
 		try{
+			//read site list from file
+			System.out.println("reading the site list...");
 			BufferedReader inSites = new BufferedReader(new FileReader(new File(SITES_FILE)));
 			String site = null;
 			keywords = new Vector();
@@ -54,6 +56,7 @@ public class WordCount {
 				generateList(site);
 			}
 			inSites.close();
+			
 			for (int i=0;i<siteNames.size();i++){
 				compare(((Vector)(sitewords.elementAt(i))), keywords, ((String)(siteNames.elementAt(i))));
 			}
@@ -67,33 +70,47 @@ public class WordCount {
 	 * @param url the address of the website
 	 */
 	private void generateList(String url){
+		System.out.println("generating word list for " + url);
 		BufferedReader in = getWebsite(url);
 		InputStreamReader read;
 		try{
 			storeBuffer(in);
 			in.close();
 			//store words from google search.
+			System.out.println("storing google search results...");
 			GoogleSearchResultElement[] re = getGoogle(parseURL(url));
+			
 			for(int k=0;k<re.length;k++){
 				store(removePunctuations(re[k].getSnippet()+" "+re[k].getTitle()+ " " +re[k].getSummary()));
 			}
 			
+			
+			
 			//store words from yahoo search
+			System.out.println("storing yahoo search results");
 			in = getYahoo(parseURL(url));
 			storeBuffer(in);
+			
 			in.close();
 			
 			//store words from dogpile search
+			System.out.println("storing dogpile search results");
 			in = getDogPile(parseURL(url));
 			storeBuffer(in);
+			
 			in.close();
 			
 			
-			
+			System.out.println("removing stop words...");
 			removeStopWords();
+			if(useWordList){
+				System.out.println("removing words not in dictwords file");
+				removeNotDictwords();
+			}
+			
 			WordFreq temp; int i;
 			
-			//delete words that appear less than 5 times
+			//delete words with less than 3 letters, delete numbers
 			for(int j=0;j<wordlist.size();j++){
 				temp = (WordFreq)(wordlist.elementAt(j));
 				if ((temp.word).length()<3||isNumber(temp.word)||(temp.word).equals(parseURL(url))) {
@@ -105,6 +122,7 @@ public class WordCount {
 			
 			wordlist.trimToSize();
 			
+			System.out.println("sorting...");
 			sort(wordlist,0,wordlist.size()-1);
 			
 			siteNames.addElement(parseURL(url));
@@ -115,6 +133,7 @@ public class WordCount {
 			for (int j=0;j<wordlist.size();j++){
 				if((((WordFreq)wordlist.elementAt(j)).frequency > 4) && 
 						!(inVector(keywords, ((WordFreq)wordlist.elementAt(j)).word))){
+					
 					keywords.add(((WordFreq)wordlist.elementAt(j)).word);	
 					
 				}
@@ -147,6 +166,7 @@ public class WordCount {
 			else if(i==-1) return cleanLine(s.substring(j+1));
 			else if (i<j) return cleanLine(s.substring(0,i)+ " " + s.substring(j+1));
 			else{
+				System.out.println("parsing error");
 				return s.substring(0,j);
 			}
 		}
@@ -385,7 +405,7 @@ public class WordCount {
 	private void compare(Vector a, Vector b, String site){
 		try{
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ site +".txt"));
-			boolean found = true;
+			boolean found;
 			for (int j=0;j<b.size();j++){
 				found = false;
 				for(int i=0;i<a.size();i++){
@@ -427,6 +447,47 @@ public class WordCount {
 		}
 		
 		return url;
+	}
+	
+	private void storeDictwords(){
+		try{
+			BufferedReader in = new BufferedReader(new FileReader(new File("frequency" + File.separator +"dictwords.txt")));
+			dictwords = new Hashtable();
+			String word = null;
+			while ((word = in.readLine()) != null){
+				dictwords.put(word.toLowerCase(), word.toLowerCase());
+			}
+			in.close();
+		}
+		catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
+		catch(IOException ioe){
+			ioe.printStackTrace();
+		}
+	}
+	
+	private void removeNotDictwords(){
+		WordFreq temp;
+		String s,t;
+		for(int j=0;j<wordlist.size();j++){
+			temp = ((WordFreq)wordlist.elementAt(j));
+			
+				s = (String)dictwords.get(temp.word.trim());
+				if (s==null){
+					//try removing the last 's'
+					if ((temp.word).endsWith("s")){
+						s = (String)dictwords.get((temp.word).substring(0,(temp.word).length()-1));
+					}
+					if (s==null){
+						//word not in file-- remove it
+						wordlist.removeElementAt(j);
+						System.out.println("removed " + temp.word);
+						--j;
+					}
+				}
+	
+		}
 	}
 	
 	private class WordFreq{
