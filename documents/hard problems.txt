@@ -1,0 +1,3 @@
+coming up with the rule base/engine
+getting context from IM, email and webpages
+how to get info about where a user clicked
