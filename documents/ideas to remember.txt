@@ -2,4 +2,4 @@ ideas to remember
 
 http://www.surbl.org/ - SURBL
 suffix trees
-DOM node distance measuring - Andrew Hogue (Google/MIT, Haystack)
+DOM node distance measuring - Andrew Hogue (Google/MIT, Haystack) (edit distance)
