@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Vector;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.Iterator;
 import org.w3c.dom.*;
@@ -92,6 +93,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	ContentExtractorDescriptionGUI descriptionGUI; // the description GUI
 	private Vector visitedClusters;
 	private boolean detectRandomSurfing = false;
+	private String linkToAppend = null;
+	private String currentAddress = null;
 	
 	/**
 	 * Creates a new instance without any input stream and the default settings file.
@@ -136,6 +139,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		if (Crunch3.settings.isVerbose())
 			parser.setErrorHandler(new ContentExtractorErrorHandler());
 
+		
 		try {
 
 			//Create the input source using the ISO-8859-1 character set
@@ -143,8 +147,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			parser.parse(new InputSource(reader));
 			mTree = parser.getDocument();
 			extractContent(mTree);
-
-		} catch (Exception e) {
+			
+			
+			
+		} 
+		
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -153,8 +161,57 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		if (child) {
 			if (mTree == null)
 				mTree = (Document) iNode;
-			extract(iNode);
-
+			extract(iNode, mTree);
+			
+			
+			org.cyberneko.html.parsers.DOMParser parser = new org.cyberneko.html.parsers.DOMParser();
+			String address = null;
+			URL site =null; 
+			Document newTree;
+			InputStream in;
+			try{
+				/**if((linkToAppend !=null) && (linkToAppend != address)){
+					
+					System.out.println("*** " + linkToAppend);
+					address = linkToAppend;
+					linkToAppend = null;
+					try{
+						site = new URL(address);
+					}
+					catch(MalformedURLException ex){
+						//maybe it's a relative url
+						try{
+							
+							if(currentAddress == null)
+								currentAddress = Crunch3.mainWindow.getURL();
+								
+								site = new URL (currentAddress + address);
+								
+							
+						}
+						catch(Exception e){
+							e.printStackTrace();
+							//break;
+						}
+					}
+				
+					in = site.openStream();
+					InputStreamReader reader = new InputStreamReader(in, "ISO-8859-1");
+					parser.parse(new InputSource(reader));
+					newTree = parser.getDocument();
+					linkToAppend = null;
+					extract(newTree,newTree);
+					if(linkToAppend != null) System.out.println("*** " + linkToAppend);
+					//prettyPrint(newTree, System.out);
+					appendDocument(newTree, mTree);
+					//prettyPrint(mTree, System.out);
+					
+				}**/
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
 			//Appends the links to the bottom of the page
 			if (settings.addLinksToBottom)
 				addEnqueuedLinks();
@@ -178,12 +235,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @param iNode
 	 *            the node to start checking
 	 */
-	private void extract(final Node iNode) {
+	private void extract(final Node iNode, Document doc) {
 		NodeList children = iNode.getChildNodes();
 		if (children != null) {
 			int len = children.getLength();
 			for (int i = 0; i < len; i++) {
-				filterNode(children.item(i));
+				filterNode(children.item(i), doc);
 			}
 		}
 	}
@@ -194,16 +251,16 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @param iNode
 	 *            the node to filter
 	 */
-	private void filterNode(final Node iNode) {
+	private void filterNode(final Node iNode, Document doc) {
 		//Boolean that determines if the the children of the node should be
 		// filtered
 		mCheckChildren = true;
 
 		//Put the node through the sequence of filters
-		passThroughFilters(iNode);
+		passThroughFilters(iNode, doc);
 
 		if (mCheckChildren)
-			filterChildren(iNode);
+			filterChildren(iNode, doc);
 	} //filterNode
 
 	/**
@@ -212,7 +269,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @param iNode
 	 *            the node to filter
 	 */
-	private void passThroughFilters(final Node iNode) {
+	private void passThroughFilters(final Node iNode, Document doc) {
 		//Check to see if the node is a Text node or an element node and
 		//act accordingly
 		int type = iNode.getNodeType();
@@ -277,6 +334,11 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 			//<A HREF> with no Images
 			else if (settings.ignoreTextLinks && isTextLink(iNode) ) {
+				//before you remove, check if has a child with text "next"
+				//to append to href link to current document
+				
+				linkToAppend = getNextLink(iNode);
+				
 				parent.removeChild(iNode);
 				if (settings.addLinksToBottom)
 					enqueueLink(iNode);
@@ -291,7 +353,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 					//Make sure the image link is the image
 					if (image)
-						alt = createImageLinkAltNode(iNode);
+						alt = createImageLinkAltNode(iNode, doc);
 					if (alt != null) {
 						parent.getParentNode().insertBefore(alt, iNode.getParentNode());
 					} //if
@@ -313,7 +375,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			//<IMG*>
 			else if (settings.ignoreImages && name.equals("IMG") && !isImageLink(iNode)) {
 				if (settings.displayImageAlts) {
-					Node alt = createAltNode(iNode);
+					Node alt = createAltNode(iNode, doc);
 					if (alt != null) {
 						//Node replaced = parent.insertBefore(alt, iNode);
 						parent.insertBefore(alt, iNode);
@@ -399,7 +461,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			//<TABLE>
 			else if (settings.removeEmptyTables && name.equals("TABLE") ) {
 				//Call method that removes empty tables
-				removeEmptyTables(iNode);
+				removeEmptyTables(iNode, doc);
 				mCheckChildren = false;
 			} //else if
 
@@ -423,9 +485,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 		//Text node
 		else if (type == Node.TEXT_NODE) {
-
-			//String value = iNode.getNodeValue();
-
+			
+			
 			//================================================================
 			//Set of conditions determining what text to ignore
 			//================================================================
@@ -442,13 +503,13 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @param iNode
 	 *            the node to filter the children
 	 */
-	private void filterChildren(final Node iNode) {
+	private void filterChildren(final Node iNode, Document doc) {
 		if (iNode.hasChildNodes()) {
 			Node next = iNode.getFirstChild();
 			while (next != null) {
 				Node current = next;
 				next = current.getNextSibling();
-				filterNode(current);
+				filterNode(current, doc);
 			}
 		}
 	} //filterChildren
@@ -459,7 +520,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @param iNode
 	 *            the table node to examine
 	 */
-	private void removeEmptyTables(final Node iNode) {
+	private void removeEmptyTables(final Node iNode, Document doc) {
 		//First filter the children but check for
 		//undeleted nodes
 		if (iNode.hasChildNodes()) {
@@ -468,7 +529,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			while (next != null) {
 				Node current = next;
 				next = current.getNextSibling();
-				filterNode(current);
+				filterNode(current,doc);
 			} //while
 		} //if
 
@@ -548,7 +609,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 *            the <IMG>node that is within the <A>tag
 	 * @return the new node or null if something went wrong
 	 */
-	private Node createImageLinkAltNode(final Node iNode) {
+	private Node createImageLinkAltNode(final Node iNode, Document doc) {
 		boolean imageMap = false;
 
 		//Make sure it is an image link and an image
@@ -593,21 +654,21 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			return null;
 
 		//CONSTRUCT REPLACEMENT NODE
-		Element parent = mTree.createElement("B");
-		Element italic = mTree.createElement("I");
-		Element imageLink = mTree.createElement("A");
+		Element parent = doc.createElement("B");
+		Element italic = doc.createElement("I");
+		Element imageLink = doc.createElement("A");
 		imageLink.setAttribute("href", imageSource);
-		Element altLink = mTree.createElement("A");
+		Element altLink = doc.createElement("A");
 		altLink.setAttribute("href", linkHref);
-		Node openBracket = mTree.createTextNode("[");
-		Node closeBracket = mTree.createTextNode("]");
-		Node seperator = mTree.createTextNode(" | ");
+		Node openBracket = doc.createTextNode("[");
+		Node closeBracket = doc.createTextNode("]");
+		Node seperator = doc.createTextNode(" | ");
 		Node imageLinkText;
 		if (imageMap)
-			imageLinkText = mTree.createTextNode("Image Map");
+			imageLinkText = doc.createTextNode("Image Map");
 		else
-			imageLinkText = mTree.createTextNode("Image");
-		Node altLinkText = mTree.createTextNode(altTag);
+			imageLinkText = doc.createTextNode("Image");
+		Node altLinkText = doc.createTextNode(altTag);
 
 		//Link together nodes
 		parent.appendChild(openBracket);
@@ -630,7 +691,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 *            the image node
 	 * @return the node to add to the DOM tree or null if the node isn't an image or doesn't have an ALT attribute.
 	 */
-	private Node createAltNode(final Node iNode) {
+	private Node createAltNode(final Node iNode, Document mTree) {
 		if (!isImage(iNode))
 			return null;
 
@@ -832,6 +893,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 *            the node to start removing children from
 	 */
 	private void removeAll(final Node iNode) {
+		if(isTextLink(iNode)) linkToAppend = getNextLink(iNode);
 		if (isTextLink(iNode) && settings.addLinksToBottom) {
 			enqueueLink(iNode);
 		} else {
@@ -855,6 +917,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 *            the type of links to remove
 	 */
 	private void removeLinksAndText(final Node iNode, final int iType) {
+		if(isTextLink(iNode)) linkToAppend = getNextLink(iNode);
 		if (isLink(iNode) || iNode.getNodeType() == Node.TEXT_NODE) {
 			if (iType == ALL)
 				iNode.getParentNode().removeChild(iNode);
@@ -885,6 +948,22 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		return AdsServerList.isAdsServer(iDomain);
 	} //isAdDomain
 
+	
+	private String getNextLink(final Node iNode){
+		Node temp = iNode.getFirstChild(); 
+		if((temp != null) && (temp.getNodeType() == Node.TEXT_NODE)){
+			
+			String text = ((temp.getNodeValue()).trim()).toLowerCase();
+			if (text.startsWith("next")){
+				String s = ((Element)iNode).getAttribute("href");
+				return s;
+			}
+		}
+		if(linkToAppend == null) return null;
+		else return linkToAppend;
+	}
+	
+	
 	/**
 	 * Determines if a given node contains a given attribute
 	 * 
@@ -1225,6 +1304,45 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		return false;
 	}
 	
+	
+	private void appendDocument(Document from, Document to){
+	
+		//Node newNode = to.importNode(from.getDocumentElement(), true);
+		Node fromCurrent = (from.getFirstChild()).getFirstChild();
+		Node toCurrent;
+		while(fromCurrent != null){
+			System.out.println(fromCurrent.getNodeName());
+			if ((fromCurrent.getNodeName()).equals("BODY")){
+				
+				toCurrent = (to.getDocumentElement()).getFirstChild();
+				
+				System.out.println("before loop" + toCurrent.getNodeName());
+				while(toCurrent != null){
+					if ((toCurrent.getNodeName()).equals("BODY")){
+						
+						//append all children of fromCurrent to toCurrent
+						fromCurrent = fromCurrent.getFirstChild();
+						while (fromCurrent !=null){
+							toCurrent.appendChild(to.importNode(fromCurrent, true));
+							fromCurrent = fromCurrent.getNextSibling();
+						}
+						toCurrent = null;
+					}
+					else{
+						System.out.println(toCurrent.getNodeName());
+						toCurrent = toCurrent.getNextSibling();
+					}
+				}
+				
+				fromCurrent = null;
+			}
+			else fromCurrent = fromCurrent.getNextSibling();
+			
+		}
+		
+	}
+	
+	
 	/**
 	 * Add enqueued links to bottom of page
 	 */
@@ -1468,6 +1586,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @return the processed file
 	 */
 	public File process(final File in) throws IOException {
+		
 		FileInputStream streamIn = new FileInputStream(in);
 		mIn = streamIn;
 		extractContent();
@@ -1623,10 +1742,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 	/**
 	 * computes extraction settings by caluculating the distance of the current URL
-	 * to the clusters generated by the preprocessor WordCount.
-	 * also checks whether a page is a homepage using the heuristics in HomePageTestser  
+	 * to the clusters generated by the preprocessor WordCount.java
+	 * also checks whether a page is a homepage using the heuristics in HomePageTestser.java
 	 */
 	public void reportURL(String URL){
+		
+		currentAddress = URL;
 		
 		if (!Crunch3.settings.isGUISet()) return;
 		psl.crunch3.util.HomePageTester hpt = new psl.crunch3.util.HomePageTester(Crunch3.mainWindow.getURL().trim());
@@ -1688,6 +1809,23 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			
 			
 		}
+		else{
+			if(descriptionGUI.checkFrontPage() && hpt.isHomePage()){
+				
+				if((descriptionGUI.getSettingsLabel()).equals("news")){
+					descriptionGUI.commitSettings("config" + File.separator + "level9.ini", 9);
+					descriptionGUI.setSettingsLevel(9);
+				}
+				
+				
+			}
+			else if(descriptionGUI.checkFrontPage() && !hpt.isHomePage()){
+				if((descriptionGUI.getSettingsLabel()).equals("news")){
+					descriptionGUI.commitSettings("config" + File.separator + "level2.ini", 2);
+					descriptionGUI.setSettingsLevel(2);
+				}
+			}
+		}
 	}
 	
 	private void relax(){
@@ -1747,6 +1885,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 					break;
 		
 		}
+		descriptionGUI.updateSettingsLevel();
 	}
 	
 	private boolean isRandomSurfing(){

@@ -220,7 +220,6 @@ public class PluginFilterRunner {
 					dome.printStackTrace();
 				documentCopyable = false;
 			}
-
 		if (!documentCopyable) {
 			StringWriter stringWriter = new StringWriter();
 			XHTMLSerializer xHTMLSerializer = new XHTMLSerializer();

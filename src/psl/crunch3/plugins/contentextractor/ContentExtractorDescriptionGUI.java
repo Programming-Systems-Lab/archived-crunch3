@@ -22,6 +22,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,6 +49,8 @@ public class ContentExtractorDescriptionGUI {
 	private Composite mainComposite = null;
 	private Sash ContentPluginSeparator1;
 	private Group presetsGroup;
+	private Group settingsGroup;
+	private Group userSettingsGroup;
 	private Button autoButton = null;
 	private Button newsButton = null;
 	private Button shoppingButton = null;
@@ -55,6 +58,10 @@ public class ContentExtractorDescriptionGUI {
 	private Button educationButton = null;
 	private Button textHeavyButton = null;
 	private Button linkHeavyButton = null;
+	private Button normalButton = null;
+	private Button pdaButton = null;
+	private Button impairedButton = null;
+	private Button infoButton = null;
 	private Sash ContentPluginSeparator2;
 	private Group automaticGroup;
 	private Label specificImageLabel = null;
@@ -69,6 +76,10 @@ public class ContentExtractorDescriptionGUI {
 	private Button customButton = null;
 	private Combo engineCombo = null;
 	private Scale relax;
+	private Label relaxLabel = null;
+	private Label toughenLabel = null; 
+	private Button frontPageCheck = null;
+	
 	
 	private ContentExtractorSettings newFilter = ContentExtractorSettings.getInstance();
 	private boolean isAuto = false;
@@ -78,6 +89,8 @@ public class ContentExtractorDescriptionGUI {
 	private Hashtable clusters;
 	private int engineNumber = 5;
 	private int settingLevel = 0;
+	private boolean frontPage = true;
+	private String settingsLabel;
 	
 	/**
 	 * @param c
@@ -111,7 +124,11 @@ public class ContentExtractorDescriptionGUI {
 		// init visuals
 		mainComposite = new Composite(parentComposite, SWT.NONE);
 		ContentPluginSeparator1 = new Sash(mainComposite, SWT.HORIZONTAL | SWT.BORDER);
-		presetsGroup = new Group(mainComposite, SWT.NONE);
+		settingsGroup = new Group(mainComposite, SWT.NULL);
+		
+		presetsGroup = new Group(settingsGroup, SWT.NONE);
+		userSettingsGroup = new Group(settingsGroup, SWT.NULL);
+		
 		newsButton = new Button(presetsGroup, SWT.RADIO);
 		shoppingButton = new Button(presetsGroup, SWT.RADIO);
 		governmentButton = new Button(presetsGroup, SWT.RADIO);
@@ -129,6 +146,13 @@ public class ContentExtractorDescriptionGUI {
 		 }
 		
 		
+		normalButton = new Button(userSettingsGroup, SWT.RADIO);
+		impairedButton = new Button(userSettingsGroup, SWT.RADIO);
+		infoButton = new Button(userSettingsGroup, SWT.RADIO);
+		pdaButton = new Button(userSettingsGroup, SWT.RADIO);
+		frontPageCheck = new Button(userSettingsGroup, SWT.CHECK);
+		
+		
 		ContentPluginSeparator2 = new Sash(mainComposite, SWT.HORIZONTAL | SWT.BORDER);
 		automaticGroup = new Group(mainComposite, SWT.NULL);
 		specificImageLabel = new Label(automaticGroup, SWT.BORDER);
@@ -140,18 +164,23 @@ public class ContentExtractorDescriptionGUI {
 		applicationLabel = new Label(referrerGroup, SWT.NULL);
 		applicationText = new Text(referrerGroup, SWT.BORDER);
 		customGroup = new Group(mainComposite, SWT.NULL);
+		toughenLabel = new Label(customGroup, SWT.NULL);
 		relax = new Scale(customGroup, SWT.NULL);
+		relaxLabel = new Label(customGroup, SWT.NULL);
 		
-		
+				
 		
 		
 		// init nonvisuals
 		GridData mainCompositeGridData = new GridData();
 		GridLayout mainCompositeGridLayout = new GridLayout();
 		ButtonGroup modeSelectionGroup = new ButtonGroup();
+		ButtonGroup userSelectionGroup = new ButtonGroup();
 		GridData ContentSeparator1 = new GridData();
-		GridData presetsGroupGrid = new GridData();	
+		GridData presetsGroupGrid = new GridData();
 		GridLayout presetsGridLayout = new GridLayout();
+		GridData userSettingsGroupGrid = new GridData();
+		GridLayout userSettingsGroupLayout = new GridLayout();
 		GridData autoButtonGridData = new GridData();
 		GridData newsButtonGridData = new GridData();
 		GridData shoppingButtonGridData = new GridData();
@@ -159,6 +188,10 @@ public class ContentExtractorDescriptionGUI {
 		GridData educationButtonGridData = new GridData();
 		GridData textHeavyButtonGridData = new GridData();
 		GridData linkHeavyButtonGridData = new GridData();
+		GridData normalButtonGridData = new GridData();
+		GridData pdaButtonGridData = new GridData();
+		GridData imparedButtonGridData = new GridData();
+		GridData infoButtonGridData = new  GridData();
 		GridData automaticGroupGrid = new GridData();	
 		GridLayout automaticGridLayout = new GridLayout();
 		GridData customButtonGridData = new GridData();
@@ -175,6 +208,8 @@ public class ContentExtractorDescriptionGUI {
 		GridData customGroupGrid = new GridData();	
 		GridLayout customGroupGridLayout = new GridLayout();
 		GridData comboGridData = new GridData();
+		GridData settingsGroupGridData = new GridData();
+		FillLayout settingsGroupGridLayout = new FillLayout(SWT.HORIZONTAL);
 		
 		
 		// set fields
@@ -190,6 +225,8 @@ public class ContentExtractorDescriptionGUI {
 		ContentSeparator2.grabExcessHorizontalSpace = true;
 		ContentSeparator2.horizontalAlignment = GridData.FILL;
 		ContentSeparator2.heightHint = 0;
+		userSettingsGroupGrid.grabExcessHorizontalSpace = true;
+		userSettingsGroupGrid.horizontalAlignment = GridData.FILL;
 		automaticGridLayout.numColumns = 3;
 		automaticGroupGrid.grabExcessHorizontalSpace = true;
 		automaticGroupGrid.horizontalAlignment = GridData.FILL;
@@ -197,7 +234,6 @@ public class ContentExtractorDescriptionGUI {
 		specificImageLabelGridData.widthHint = 100;
 		genericImageLabelGridData.heightHint = 105;
 		genericImageLabelGridData.widthHint = 100;
-		customGroupGridLayout.numColumns = 3;
 		referrerGroupGridLayout.numColumns = 2;
 		referrerGroupGrid.grabExcessHorizontalSpace = true;
 		referrerGroupGrid.horizontalAlignment = GridData.FILL;
@@ -205,9 +241,14 @@ public class ContentExtractorDescriptionGUI {
 		referrerTextGridData.horizontalAlignment = GridData.FILL;
 		applicationTextGridData.grabExcessHorizontalSpace = true;
 		applicationTextGridData.horizontalAlignment = GridData.FILL;
-		customGroupGridLayout.numColumns = 2;
+		customGroupGridLayout.numColumns = 3;
 		customGroupGrid.grabExcessHorizontalSpace = true;
 		customGroupGrid.horizontalAlignment = GridData.FILL;
+		settingsGroupGridData.grabExcessHorizontalSpace = true;
+		settingsGroupGridData.horizontalAlignment = GridData.FILL;
+		settingsGroup.setLayoutData(settingsGroupGridData);
+		settingsGroup.setLayout(settingsGroupGridLayout);
+		
 		
 		// set properties
 		mainComposite.setLayoutData(mainCompositeGridData);
@@ -242,6 +283,25 @@ public class ContentExtractorDescriptionGUI {
 		automaticGroup.setLayoutData(automaticGroupGrid);
 		automaticGroup.setLayout(automaticGridLayout);
 		automaticGroup.setText("Automatic Detection");
+		
+		userSettingsGroup.setLayoutData(userSettingsGroupGrid);
+		userSettingsGroup.setLayout(userSettingsGroupLayout);
+		userSettingsGroup.setText("User Options");
+		userSelectionGroup.add(normalButton);
+		userSelectionGroup.add(infoButton);
+		userSelectionGroup.add(pdaButton);
+		userSelectionGroup.add(impairedButton);
+		normalButton.setLayoutData(normalButtonGridData);
+		normalButton.setText("Normal");
+		pdaButton.setLayoutData(pdaButtonGridData);
+		pdaButton.setText("PDA");
+		infoButton.setLayoutData(infoButtonGridData);
+		infoButton.setText("Information Retrieval");
+		impairedButton.setLayoutData(imparedButtonGridData);
+		impairedButton.setText("Visually Impaired");
+		frontPageCheck.setText("Detect Front Page");
+		frontPageCheck.setSelection(true);
+		
 		ContentPluginSeparator2.setLayoutData(ContentSeparator2);
 		specificImageLabel.setLayoutData(specificImageLabelGridData);
 		specificImageLabel.setSize(100, 105);
@@ -271,6 +331,10 @@ public class ContentExtractorDescriptionGUI {
 		autoButton.setText("Automatic");
 		relax.setMaximum(12);
 		relax.setMinimum(1);
+		relax.setPageIncrement(1);
+		relaxLabel.setText("Relax");
+		toughenLabel.setText("Toughen");
+		
 		
 		// END VISUALS_INITIALIZATION
 
@@ -316,6 +380,30 @@ public class ContentExtractorDescriptionGUI {
 			}
 		});
 		
+		normalButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e){
+				normalButton_widgetSelected(e);
+			}
+		});
+		
+		pdaButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e){
+				pdaButton_widgetSelected(e);
+			}
+		});
+		
+		infoButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e){
+				infoButton_widgetSelected(e);
+			}
+		});
+		
+		impairedButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e){
+				impairedButton_widgetSelected(e);
+			}
+		});
+		
 		engineCombo.addSelectionListener(new SelectionAdapter() {
 		    public void widgetSelected(SelectionEvent e){
 		      Character c = new Character((engineCombo.getText()).charAt(0));
@@ -328,54 +416,101 @@ public class ContentExtractorDescriptionGUI {
 		 	public void widgetSelected(SelectionEvent e)
 		 	{
 		 		autoButton.setSelection(false);
-		 		customButton.setSelection(true);
+		 		selectCustom();
 		 		isAuto = false;
+		 		frontPageCheck.setSelection(false);
+		 		frontPage = false;
 				commitSettings("config" + File.separator + "level" + relax.getSelection() + ".ini", relax.getSelection());    
 		 	}
 			}
 		);
 		
+		frontPageCheck.addSelectionListener(new SelectionAdapter(){
+			
+			public void widgetSelected(SelectionEvent e){
+				if (frontPageCheck.getSelection() == true){
+					frontPage = true;
+				}
+				else{
+					frontPage = false;
+				}
+			}	
+		});
+		
 		// TODO 
-		if (ContentExtractor.customLast)
+		if (ContentExtractor.customLast){
 			customButton.setSelection(true);
+			settingsLabel = "custom";
+		}
 		else{
 			newsButton.setSelection(true);
+			settingsLabel = "news";
+			relax.setSelection(2);
 		}
-		System.out.println("*************");
+		
+		normalButton.setSelection(true);
+		
 		if(!(Crunch3.settings.isGUISet())){
-			System.out.println("*******************" + Crunch3.settings.getSettings());
 			commitSettings(Crunch3.settings.getSettings(), 0);
 		}
 	}
 	
 	private void newsButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.NEWS_SETTINGS_FILE_DEF, 0);
+		commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF, 0);
+		settingsLabel = "news";
+		relax.setSelection(1);
 		isAuto = false;
 	}
 	
 	protected void shoppingButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF , 0);
+		commitSettings(ContentExtractor.LEVEL7_SETTINGS_FILE_DEF , 0);
+		settingsLabel = "shopping";
+		relax.setSelection(7);
 		isAuto = false;
 	}
 	
 	protected void governmentButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.GOVERNMENT_SETTINGS_FILE_DEF , 0);
+		commitSettings(ContentExtractor.LEVEL5_SETTINGS_FILE_DEF , 0);
+		settingsLabel = "government";
+		relax.setSelection(5);
 		isAuto = false;
 	}
 	
 	protected void educationButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.EDUCATION_SETTINGS_FILE_DEF , 0);
+		commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 0);
+		settingsLabel = "education";
+		relax.setSelection(6);
 		isAuto = false;
 	}
 	
 	protected void textHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.TEXT_HEAVY_SETTINGS_FILE_DEF , 0);
+		commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 0);
+		settingsLabel = "text heavy";
+		relax.setSelection(2);
 		isAuto = false;
 	}
 	
 	protected void linkHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LINK_HEAVY_SETTINGS_FILE_DEF, 0);
+		commitSettings(ContentExtractor.LEVEL10_SETTINGS_FILE_DEF, 0);
+		settingsLabel = "link heavy";
+		relax.setSelection(10);
 		isAuto = false;
+	}
+	
+	protected void normalButton_widgetSelected(SelectionEvent e) {
+		
+	}
+	
+	protected void pdaButton_widgetSelected(SelectionEvent e) {
+		
+	}
+	
+	protected void infoButton_widgetSelected(SelectionEvent e) {
+		
+	}
+	
+	protected void impairedButton_widgetSelected(SelectionEvent e) {
+		
 	}
 	
 	/**
@@ -384,6 +519,7 @@ public class ContentExtractorDescriptionGUI {
 	 */
 	protected void auto_widgetSelected(SelectionEvent e) {
 		isAuto = true;
+		settingsLabel = "automatic";
 		
 		//store cluster information 
 		try{
@@ -450,6 +586,7 @@ public class ContentExtractorDescriptionGUI {
 	protected void customButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF , 0);
 		isAuto = false;
+		settingsLabel = "custom";
 	}
 	
 	
@@ -543,6 +680,22 @@ public class ContentExtractorDescriptionGUI {
 		});
 	}
 	
+	 public void updateSettingsLevel(){
+	 	final int level = this.settingLevel;
+	 	setSettingsLevel(level);
+    	
+    }
+	
+	 public void setSettingsLevel(final int level){
+	 	Crunch3.Display_1.syncExec(new Runnable(){
+			public void run(){
+				if(relax != null && !relax.isDisposed())
+					relax.setSelection(level);
+			}
+		});
+    }
+	 
+
 	
 	//selects the custom button
 	public void selectCustom(){
@@ -613,7 +766,19 @@ public class ContentExtractorDescriptionGUI {
     public int getSettingLevel(){
     	return settingLevel;
     }
+    
+    public boolean checkFrontPage(){
+    	return frontPage;
+    }
 
+    public String getSettingsLabel(){
+    	return settingsLabel;
+    }
+    
+    
+    
+   
+    
     /**
      * Changes the filter settings to new settings read from a file.
      * @param fileName the file containing the new filter settings. 

@@ -869,7 +869,7 @@ public class MainWindow extends Thread {
 	public void run() {
 		try {
 			//int windowHeight = 509;
-			int windowHeight = 725;
+			int windowHeight = 760;
 			//int windowWidth = 447;
 			int windowWidth = 515;
 			
@@ -1144,24 +1144,7 @@ public class MainWindow extends Thread {
 	}
 
 	private void processNoGUI(){
-		
-		System.out.println("working");
 		ContentExtractorDescriptionGUI dg = new ContentExtractorDescriptionGUI(mainShell);
-		
-		/**TableItem selectedItem = pluginTable.getItem(0);
-		
-		ProxyFilter plugin = (ProxyFilter) selectedItem.getData();
-		pluginNameLabel.setText(plugin.getName());
-		pluginDescriptionText.setText(plugin.getDescription());
-		
-		if (plugin instanceof EnhancedProxyFilter){
-			EnhancedProxyFilter enhancedPlugin = (EnhancedProxyFilter)plugin;
-			pluginDescriptionGUIComposite = enhancedPlugin.getDescriptionGUI(descriptionComposite);
-		}
-		enablePluginCheck.setSelection(plugin.isEnabled());
-		configurePluginButton.setEnabled(plugin.hasSettingsGUI());**/
-		
-		
 	}
 	
 	private String[] split(final String text, final String delimiters) {
