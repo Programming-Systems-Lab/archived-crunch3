@@ -1,6 +1,22 @@
 ideas to remember
 
-http://www.surbl.org/ - SURBL
-suffix trees
-DOM node distance measuring - Andrew Hogue (Google/MIT, Haystack) (edit distance)
+- http://www.surbl.org/ - SURBL
+- suffix trees
+- DOM node distance measuring - Andrew Hogue (Google/MIT, Haystack) (edit distance)
+- goodness metric
+			you're going to have to come with some kind of metric, it's tough, but otherwise it's just totally subjective
+			well, saying that various results are "acceptable" and that competitors have "worse" results is also kind of flaky with nothing backing it up
+			how is a diff a goodness metric?, you need rules for what is "content" on a particular website, 
+			as well as "look and feel", and then you can measure how well you're reducing to content, while preserving look and feel
+			then others can argue with metrics, but not your conclusions :-), a first cut metric would help legitimize the field in general
+			And you can call it the "Gupta metric"
 
+- Detect random surfing from purposeful workflow based browsing
+- Detect and block phishing websites
+- Use referrer data to highlight relevant data from page to page
+- Improve handling of sites that require large amounts of form based input
+- Use a commercial HTML parser
+- Mozilla/IE’s parsers may be more efficient
+- Improve latency and scalability (tab browsers)
+- Use sophisticated NLP techniques as additional heuristics
+- Learn from user’s browsing habits
