@@ -26,6 +26,7 @@ import psl.crunch3.Crunch3;
 import psl.crunch3.plugins.EnhancedProxyFilter;
 import psl.crunch3.plugins.ProxyFilterSettings;
 import psl.crunch3.plugins.SiteDependentFilter;
+import psl.crunch3.util.WordCount;
 
 
 /**
@@ -1607,8 +1608,59 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		}
 	}
 	
+	public void reportURL(String URL){
+		if (descriptionGUI.isAuto()){
+			//check what cluster the site belongs to and determine the correct filter.
+			WordCount wc = new WordCount(URL.substring(7), descriptionGUI.getFrequencies(),
+					descriptionGUI.getKeys(), descriptionGUI.getSites());
+			
+			int cluster = descriptionGUI.getCluster(wc.getClosestSite());
+			System.out.println(cluster);
+			
+			switch(cluster){
+			
+				case 1: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 2: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 3: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 4: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 5: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 6: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 7: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 8: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						break;
+				case 9: descriptionGUI.commitSettings(ContentExtractor.NEWS_SETTINGS_FILE_DEF);
+						break;
+				case 10: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
+					 	 break;
+				case 11: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
+						 break;
+				case 12: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+						 break;
+				case 13: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
+						break;
+				case 14: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
+						 break;
+				case 15: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
+						break;
+				default: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
+						break;
+			
+			}
+			
+		}
+	}
+	
 	public void selectCustom(){
 		descriptionGUI.selectCustom();
 	}
+	
+	
 	
 } //ContentExtractor

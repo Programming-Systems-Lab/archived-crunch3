@@ -17,8 +17,8 @@ public interface SiteDependentFilter {
 	public void reportReferer(String referer);
 
 	public void reportHost(String host);
-	/**
-	 * @param string
-	 */
+	
 	public void reportApplication(String application);
+	
+	public void reportURL(String URL);
 }

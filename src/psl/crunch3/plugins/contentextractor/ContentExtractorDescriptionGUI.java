@@ -5,13 +5,18 @@
  */
 package psl.crunch3.plugins.contentextractor;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -62,7 +67,12 @@ public class ContentExtractorDescriptionGUI {
 	private Button customButton = null;
 	
 	private ContentExtractorSettings newFilter = ContentExtractorSettings.getInstance();
-
+	private boolean isAuto = false;
+	private int [][] frequencies;
+	private Vector keywords;
+	private Vector names;
+	private Hashtable clusters;
+	
 	/**
 	 * @param c
 	 */
@@ -291,35 +301,92 @@ public class ContentExtractorDescriptionGUI {
 	
 	private void newsButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.NEWS_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
 	protected void shoppingButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
 	protected void governmentButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.GOVERNMENT_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
 	protected void educationButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.EDUCATION_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
 	protected void textHeavyButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.TEXT_HEAVY_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
 	protected void linkHeavyButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.LINK_HEAVY_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
+	/**
+	 * load automatic settings from file
+	 * @param e
+	 */
 	protected void auto_widgetSelected(SelectionEvent e) {
-		//check which cluster the current site is closest to
+		isAuto = true;
+		
+		//store cluster information 
+		try{
+			BufferedReader inSites = new BufferedReader(new FileReader(new File("keyinfo.txt")));
+			String site = null;
+			clusters = new Hashtable();
+			//the file should be in the same format as written by the WordCount
+			int numSites = Integer.parseInt(inSites.readLine());
+			int keySize = Integer.parseInt(inSites.readLine());
+			frequencies = new int[numSites+1][keySize];
+		
+			//read in the list of sites
+			StringTokenizer st;
+			names = new Vector();
+			for(int i=1;(site = inSites.readLine()) !=null;i++){
+				st = new StringTokenizer(site);
+				names.addElement(st.nextToken());
+				for(int j=0;st.hasMoreElements();j++){
+					frequencies[i][j] = Integer.parseInt(st.nextToken());
+				}
+			}
+			
+			inSites.close();
+		
+			BufferedReader in = new BufferedReader(new FileReader(new File("key.txt")));
+			String word = null;
+			keywords = new Vector();
+			while((word =in.readLine())!=null){
+				keywords.addElement(word);
+			}
+			in.close();
+			
+			int index;
+			in = new BufferedReader(new FileReader(new File("clusters.txt")));
+			while((word =in.readLine())!=null){
+				index = word.indexOf(" ");
+				clusters.put(word.substring(0,index), 
+						word.substring(index+1));
+			}
+			in.close();
+			
+			
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
 		commitSettings(ContentExtractor.AUTOMATIC_SETTINGS_FILE_DEF);
 	}
 	
 	protected void customButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF);
+		isAuto = false;
 	}
 	
 	
@@ -450,6 +517,27 @@ public class ContentExtractorDescriptionGUI {
     	}
     }
     
+    
+    public boolean isAuto(){
+    	return isAuto;
+    }
+    
+    public int[][] getFrequencies(){
+    	return frequencies;
+    }
+    
+    
+    public Vector getKeys(){
+    	return keywords;
+    }
+    
+    public Vector getSites(){
+    	return names;
+    }
+    
+    public int getCluster(String closest){
+    	return Integer.parseInt((String)clusters.get(closest));
+    }
     
     /**
      * Changes the filter settings to new settings read from a file.

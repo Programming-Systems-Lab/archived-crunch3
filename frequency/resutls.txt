@@ -1,175 +1,183 @@
 The elements in cluster #1 are: 
 the-times+co	0		0
 timesonline+co	0		0
-thesun+co	1	timesonline+co	779
 
 The elements in cluster #2 are: 
-pricewatch	0		0
-streetprices	0		0
-pricegrabber	1	streetprices	497
-anandtech	1	pricewatch	576
-apple	1	pricewatch	577
-mtekk+com	2	anandtech	643
-techjapan	2	anandtech	644
-auctions+yahoo	1	pricewatch	651
-arstechnica	2	anandtech	657
-infosyncworld	2	anandtech	663
-SpotStop	2	anandtech	676
-resellerratings	1	streetprices	679
-allsports	1	pricewatch	712
-techreview	2	anandtech	720
-overstock	1	pricewatch	761
-buy	1	streetprices	773
-dpreview	2	anandtech	776
-newegg	1	pricewatch	789
-bhphotovideo	1	streetprices	804
-theinquirer	2	anandtech	807
-tomshardware	2	anandtech	877
-slashdot	2	anandtech	922
-
-The elements in cluster #3 are: 
 indiaabroad	0		0
 rediff	0		0
-timesofindia+indiatimes	1	indiaabroad	890
+hindustantimes	1	indiaabroad	748
+timesofindia+indiatimes	1	indiaabroad	872
+
+The elements in cluster #3 are: 
+pricewatch	0		0
+streetprices	0		0
+pricegrabber	1	streetprices	498
+nextag	1	pricewatch	501
+apple	1	pricewatch	567
+auctions+yahoo	1	pricewatch	624
+resellerratings	1	pricewatch	650
+bhphotovideo	2	nextag	708
+overstock	1	pricewatch	712
+buy	1	streetprices	763
+newegg	1	pricewatch	818
+tomshardware	1	streetprices	953
 
 The elements in cluster #4 are: 
 BizRate	0		0
 Shopzilla	0		0
-epinions	1	Shopzilla	489
-nextag	2	epinions	531
-fatwallet	2	epinions	554
-shopping	2	epinions	593
-shopping+yahoo	2	epinions	620
+epinions	1	Shopzilla	488
+shopping	2	epinions	559
+fatwallet	2	epinions	566
+shopping+yahoo	1	BizRate	612
 
 The elements in cluster #5 are: 
-expressindia	0		0
-indianexpress	0		0
-hinduonnet	1	indianexpress	571
-kuro5hin	1	indianexpress	627
-observerindia	1	indianexpress	663
-hindustantimes	1	indianexpress	804
-gertzfile	1	indianexpress	863
-groklaw	2	kuro5hin	867
-
-The elements in cluster #6 are: 
 news+bbc+co	0		0
 bbc+co	0		0
-news+yahoo	1	news+bbc+co	550
-news+com	1	news+bbc+co	807
+news+yahoo	1	news+bbc+co	564
+news+com	2	news+yahoo	741
+
+The elements in cluster #6 are: 
+expressindia	0		0
+indianexpress	0		0
+observerindia	1	indianexpress	656
 
 The elements in cluster #7 are: 
-news+ft	0		0
-observer	0		0
-newyorkpost	1	observer	525
-tnr	2	newyorkpost	560
-ny1	2	newyorkpost	565
-heroicstories	1	observer	572
-cnn	1	news+ft	573
-cbc	2	cnn	573
-drudgereport	1	news+ft	579
-ap	1	news+ft	581
-marsrovers+jpl+nasa	1	news+ft	587
-stltoday	2	newyorkpost	600
-chicagotribune	2	newyorkpost	603
-timesunion	1	observer	603
-theregister	1	news+ft	618
-eonline	2	newyorkpost	618
-suntimes	1	news+ft	622
-theunionleader	1	observer	654
-sports+yahoo	1	observer	661
-outlookindia	2	newyorkpost	670
-tampatrib	2	newyorkpost	674
-washingtontimes	2	newyorkpost	677
-azcentral	1	observer	697
-sfgate	2	newyorkpost	701
-thestate	2	newyorkpost	704
-iht	1	observer	706
-wonkette	2	heroicstories	707
-globalsecurity	2	newyorkpost	708
-csmonitor	1	observer	709
-themoscowtimes	1	news+ft	709
-thisislondon+co	2	newyorkpost	711
-jpost	2	newyorkpost	720
-usatoday	2	cnn	725
-worldtribune	2	newyorkpost	734
-latimes	2	suntimes	735
-orlandosentinel	2	newyorkpost	743
-baltimoresun	2	suntimes	748
-smh+com	2	newyorkpost	758
-cleveland	2	azcentral	759
-pressherald+mainetoday	1	news+ft	767
-wired	1	observer	777
-slate+msn	1	observer	780
-digitalidworld	2	heroicstories	782
-fark	2	newyorkpost	790
-nytimes	2	suntimes	793
-tech+nytimes	2	newyorkpost	799
-sportingnews	1	news+ft	807
-pcworld	2	wired	814
-dallasnews	1	news+ft	834
-salon	2	newyorkpost	836
-mobiletracker	2	theregister	841
-economist	2	wired	853
-sun-sentinel	1	news+ft	867
-joystiq	2	newyorkpost	871
-nydailynews	2	newyorkpost	887
-cbs+sportsline	2	sports+yahoo	901
-eweek	2	theregister	917
-ndtv	2	cnn	930
-abqjournal	1	observer	940
-ajc	2	azcentral	991
-indystar	2	azcentral	997
-
-The elements in cluster #8 are: 
-warehouse	0		0
-connection	0		0
-tesco	1	warehouse	549
-walmart	2	tesco	618
-zones	1	warehouse	625
-ebay	2	tesco	657
-target	2	tesco	662
-time	2	zones	740
-amazon	2	tesco	744
-insight	1	connection	754
-
-The elements in cluster #9 are: 
-hp	0		0
-ibm	0		0
-dell	1	hp	603
-
-The elements in cluster #10 are: 
 spaceflightnews	0		0
 spacetoday	0		0
-spaceDaily	1	spacetoday	641
-universetoday	1	spacetoday	645
-rednova	1	spaceflightnews	768
-space	2	spaceDaily	826
-spaceref	1	spaceflightnews	829
+universetoday	1	spacetoday	562
+spaceDaily	1	spacetoday	673
+rednova	1	spaceflightnews	701
+spaceref	1	spacetoday	765
+space	1	spacetoday	772
+spaceflightnow	1	spacetoday	823
+
+The elements in cluster #8 are: 
+hp	0		0
+ibm	0		0
+dell	1	hp	572
+infoworld	1	ibm	942
+
+The elements in cluster #9 are: 
+iht	0		0
+observer	0		0
+newyorkpost	1	observer	521
+cnn	1	iht	527
+ny1	2	newyorkpost	541
+drudgereport	1	iht	547
+news+ft	1	observer	548
+washingtontimes	1	iht	561
+cbc	1	observer	578
+hinduonnet	1	observer	585
+timesunion	1	observer	592
+suntimes	1	observer	599
+stltoday	2	newyorkpost	613
+sports+yahoo	1	observer	619
+ap	2	news+ft	621
+theunionleader	1	observer	640
+themoscowtimes	1	iht	640
+globalsecurity	1	iht	657
+allsports	2	sports+yahoo	658
+sfgate	1	observer	681
+csmonitor	1	iht	721
+thisislondon+co	1	observer	732
+pressherald+mainetoday	1	iht	733
+wired	1	observer	740
+usatoday	2	cnn	742
+jpost	2	newyorkpost	743
+smh+com	1	iht	749
+fark	2	newyorkpost	750
+latimes	2	washingtontimes	751
+tech+nytimes	2	newyorkpost	756
+cleveland	2	cbc	757
+pcworld	2	wired	778
+salon	2	newyorkpost	782
+thesun+co	1	observer	789
+sportingnews	2	cbc	794
+nytimes	2	newyorkpost	797
+japantoday	1	observer	804
+dallasnews	2	news+ft	834
+economist	2	wired	836
+gertzfile	2	globalsecurity	846
+nydailynews	2	newyorkpost	848
+sun-sentinel	2	suntimes	872
+cbs+sportsline	2	sports+yahoo	890
+ndtv	2	cnn	896
+abqjournal	1	observer	980
+
+The elements in cluster #10 are: 
+tnr	0		0
+tomalak	0		0
+heroicstories	1	tnr	574
+marsrovers+jpl+nasa	1	tomalak	583
+prosportsdaily	1	tomalak	584
+kuro5hin	1	tomalak	585
+catless+ncl+ac	1	tomalak	611
+outlookindia	1	tnr	652
+techreview	1	tnr	706
+digitalidworld	1	tnr	722
+slate+msn	1	tnr	751
+time	1	tnr	755
+joystiq	1	tnr	826
+groklaw	2	kuro5hin	840
+slashdot	2	kuro5hin	858
+blogs+msdn	1	tnr	885
+fuckedcompany	1	tomalak	893
+engadget	2	joystiq	948
+mobilewhack	1	tnr	955
+counterpunch	1	tnr	991
 
 The elements in cluster #11 are: 
-prosportsdaily	0		0
-tomalak	0		0
-catless+ncl+ac	1	tomalak	613
-fuckedcompany	1	tomalak	883
+connection	0		0
+warehouse	0		0
+tesco	1	warehouse	551
+eonline	2	tesco	618
+target	2	tesco	629
+ebay	2	tesco	660
+walmart	2	tesco	664
+zones	1	warehouse	673
+insight	1	connection	678
+amazon	2	tesco	758
+computerworld	2	insight	906
 
 The elements in cluster #12 are: 
-pocketpcthoughts	0		0
-smartphonethoughts	0		0
-digitalmediathoughts	1	smartphonethoughts	675
-ppcw	1	smartphonethoughts	821
-eHomeUpgrade	1	smartphonethoughts	855
-blogs+msdn	1	smartphonethoughts	890
+anandtech	0		0
+theinquirer	0		0
+theregister	1	theinquirer	597
+techjapan	1	theinquirer	615
+arstechnica	1	anandtech	615
+mtekk+com	1	anandtech	641
+infosyncworld	1	theinquirer	643
+SpotStop	1	anandtech	671
+worldtribune	1	theinquirer	687
+pocketpcthoughts	2	infosyncworld	699
+dpreview	1	anandtech	776
+eHomeUpgrade	2	techjapan	822
+ppcw	2	infosyncworld	822
+hardocp	1	anandtech	826
+mobiletracker	2	theregister	861
+eweek	2	theregister	879
+photographyblog	2	dpreview	935
 
 The elements in cluster #13 are: 
 defamer	0		0
 gawker	0		0
-gizmodo	1	defamer	772
+wonkette	1	defamer	633
+gizmodo	1	defamer	721
 
 The elements in cluster #14 are: 
-charlotte	0		0
-miami	0		0
+azcentral	0		0
+chicagotribune	0		0
+tampatrib	1	chicagotribune	659
+thestate	1	chicagotribune	689
+baltimoresun	1	chicagotribune	702
+orlandosentinel	1	chicagotribune	715
+tallahassee	2	thestate	737
+charlotte	2	thestate	770
+miami	1	chicagotribune	875
+ajc	1	chicagotribune	959
+indystar	1	azcentral	971
 
 The elements in cluster #15 are: 
-computerworld	0		0
-infoworld	0		0
+digitalmediathoughts	0		0
+smartphonethoughts	0		0
 

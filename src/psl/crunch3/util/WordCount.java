@@ -7,6 +7,7 @@ import com.google.soap.search.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.StringTokenizer;
 import javax.swing.*;
 import java.awt.image.*;
 import java.awt.*;
@@ -25,6 +26,8 @@ import org.jfree.chart.axis.*;
 public class WordCount extends JFrame{
 
 	private boolean useWordList;
+	private boolean drawGraphs;
+	private boolean fromCrunch;
 	private int engineNum;
 	private String STOPLIST_FILE = "frequency" + File.separator + "stoplist1.txt";
 	private final String SITES_FILE = "frequency" + File.separator + "sites.txt";
@@ -40,6 +43,8 @@ public class WordCount extends JFrame{
 	private int[][] frequencies;
 	private Vector distances;
 	private Vector clusters;
+	private String closestSite;
+	
 	public static void main(String[] args) {
 		//if ((args[0] != null) && (args[1] != null))
 			WordCount wc = new WordCount(args[0], args[1]);
@@ -49,6 +54,10 @@ public class WordCount extends JFrame{
 	
 	public WordCount(String num, String words){
 		
+		//use this constructor for generating the key (not used from crunch)
+		fromCrunch = false;
+		
+		drawGraphs=true;
 		cp = this.getContentPane();
 		chartPanel = new JPanel();
 		
@@ -86,6 +95,27 @@ public class WordCount extends JFrame{
 			
 			findClusters();
 			
+			//write all information to file
+			DataOutputStream out = new DataOutputStream(new FileOutputStream("key.txt"));
+			for(int i=0;i<keywords.size();i++){
+				out.writeBytes((String)keywords.elementAt(i)+ "\n");
+			}
+			
+			out.close();
+			out = new DataOutputStream(new FileOutputStream("keyinfo.txt"));
+			out.writeBytes(siteNames.size() + "\n");
+			out.writeBytes(keywords.size() + "\n");
+			
+			for(int i=0;i<siteNames.size();i++){
+				out.writeBytes((String)siteNames.elementAt(i));
+				for(int j=0;j<keywords.size();j++){
+					out.writeBytes(" "+ frequencies[i][j]);
+				}
+				out.writeBytes("\n");
+			}
+			
+			
+			out.close();
 			sp.add(chartPanel);
 			cp.add(sp);
 		}
@@ -93,6 +123,64 @@ public class WordCount extends JFrame{
 			e.printStackTrace();
 		}	
 	}
+	
+	
+	public WordCount(String URL, int[][]freq, Vector keys, Vector names){
+		
+		//call this constructor from crunch to get closest site to requested url
+		fromCrunch = true;
+		useWordList = true;
+		drawGraphs = false;
+		closestSite = "";
+		storeDictwords();
+		//generating the stoplist...
+		storeStopList();
+		try{
+			//read site list from file
+			System.out.println("reading the site list...");
+			
+			keywords = new Vector();
+			sitewords = new Vector();
+			siteNames = names;
+			frequencies = freq;
+			
+			String site;
+			if((site = URL) != null){
+				wordlist = new Vector();
+				generateList(site, true);
+			}
+			
+			
+			distances = new Vector();
+			keywords = keys;
+			
+			
+			compare(0);
+			
+			
+			int pos = siteNames.size()-1;
+			
+			for(int i=1;i<siteNames.size();i++){
+				distances.addElement(new Distance((String)siteNames.elementAt(i), 
+							(String)siteNames.elementAt(0), 
+							getDistance(frequencies[i],frequencies[0])));
+					//System.out.println("the distance between " + (String)siteNames.elementAt(i)+ " and " +
+						//	(String)siteNames.elementAt(0)+ "  is  " + getDistance(frequencies[i],frequencies[0]));
+				
+			}
+			
+			sortDistance(distances,0, distances.size()-1);
+			System.out.println("the closest site is " + ((Distance)distances.elementAt(distances.size()-1)).site1);
+			closestSite = ((Distance)distances.elementAt(distances.size()-1)).site1;
+			names.removeElementAt(0);
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}	
+	}
+	
+	
 	/**
 	 * Generates a lists of words and their corresponding frequencies and writes them to a file.
 	 * @param url the address of the website
@@ -141,10 +229,10 @@ public class WordCount extends JFrame{
 			storeBuffer(in);
 			in.close();
 			
-			/*System.out.println("storing  search results");
+			/**System.out.println("storing  search results");
 			in = getLycos(parseURL(url,true));
 			storeBuffer(in);
-			in.close();*/
+			in.close();**/
 			
 			System.out.println("storing excite search results");
 			in = getExcite(parseURL(url,true));
@@ -176,7 +264,10 @@ public class WordCount extends JFrame{
 			System.out.println("sorting...");
 			sort(wordlist,0,wordlist.size()-1);
 			
-			siteNames.addElement(parseURL(url,isRoot));
+			if(fromCrunch){
+				siteNames.insertElementAt(parseURL(url,true)+"crunch",0);
+			}
+			else siteNames.addElement(parseURL(url,isRoot));
 			sitewords.addElement(wordlist);
 			
 			
@@ -371,8 +462,8 @@ public class WordCount extends JFrame{
 		try{
 			GoogleSearch s = new GoogleSearch();
 		    //s.setKey("1k5kJwtQFHK8GfcJs6hI40N3M6MTxEpt");
-			//s.setKey("ICXEmVhQFHLkCpwMjwWO6Ev9yYdyuMvA");
-			s.setKey("xnDUeklQFHJeHhwWNLtXeDSfh0zIPfGf");
+			s.setKey("ICXEmVhQFHLkCpwMjwWO6Ev9yYdyuMvA");
+			//s.setKey("xnDUeklQFHJeHhwWNLtXeDSfh0zIPfGf");
 			s.setQueryString(query);
 	        GoogleSearchResult r = s.doSearch();
 	        return r.getResultElements();
@@ -506,50 +597,61 @@ public class WordCount extends JFrame{
 		try{
 			Vector a = ((Vector)(sitewords.elementAt(index)));
 			String site = ((String)(siteNames.elementAt(index)));
-			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ site +".txt"));
-			XYSeries series = new XYSeries(site,false,false);
+			DataOutputStream out=null;
+			if (!fromCrunch){
+				out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ site +".txt"));
+			}
+			XYSeries series=null;
+			if (drawGraphs){
+				series = new XYSeries(site,false,false);
+			}
 			boolean found;
 			
 			for (int j=0;j<keywords.size();j++){
 				found = false;
 				for(int i=0;i<a.size();i++){
 					if((((WordFreq)(a.elementAt(i))).word).equals((String)keywords.elementAt(j))){
-						out.writeBytes(((String)keywords.elementAt(j))+ "\t" + ((WordFreq)(a.elementAt(i))).frequency + "\n");
+						if (!fromCrunch){
+							out.writeBytes(((String)keywords.elementAt(j))+ "\t" + ((WordFreq)(a.elementAt(i))).frequency + "\n");
+						}
 						frequencies[index][j] = ((WordFreq)(a.elementAt(i))).frequency;
-						series.add(j,((WordFreq)(a.elementAt(i))).frequency);
+						if (drawGraphs) series.add(j,((WordFreq)(a.elementAt(i))).frequency);
 						found = true;
 					}
 				}
 				if(!found){
-					out.writeBytes(((String)keywords.elementAt(j))+ "\t" + 0 + "\n");
-					
-					series.add(j,0);
+					if (!fromCrunch){
+						out.writeBytes(((String)keywords.elementAt(j))+ "\t" + 0 + "\n");
+					}
+					if (drawGraphs)series.add(j,0);
 				}
 				
 			}
-			out.close();
+			if (!fromCrunch) out.close();
 			
 			//create the graph
 			
-		    
-			DefaultTableXYDataset xyds = new DefaultTableXYDataset();
-            xyds.addSeries(series);
+			if (drawGraphs){
+				DefaultTableXYDataset xyds = new DefaultTableXYDataset();
+				xyds.addSeries(series);
 			
-            JFreeChart chart = ChartFactory.createXYBarChart
-            (site, "x", false,"y",xyds, PlotOrientation.VERTICAL, true,true,true);
+				JFreeChart chart = ChartFactory.createXYBarChart
+				(site, "x", false,"y",xyds, PlotOrientation.VERTICAL, true,true,true);
             
            
-            XYPlot plot = chart.getXYPlot();
-            ValueAxis yAxis = plot.getRangeAxis();
-            yAxis.setRange(0,50);
+				XYPlot plot = chart.getXYPlot();
+				ValueAxis yAxis = plot.getRangeAxis();
+				yAxis.setRange(0,50);
             
             
-            BufferedImage image = chart.createBufferedImage(500,300);
-            ChartUtilities.saveChartAsJPEG(new File("frequency" + File.separator+ site +".jpg"), chart, 500, 300);
-            JLabel lblChart = new JLabel();
-            lblChart.setIcon(new ImageIcon(image));
-            chartPanel.add(lblChart);
+				BufferedImage image = chart.createBufferedImage(500,300);
+				ChartUtilities.saveChartAsJPEG(new File("frequency" + File.separator+ site +".jpg"), chart, 500, 300);
+				JLabel lblChart = new JLabel();
+				lblChart.setIcon(new ImageIcon(image));
+				chartPanel.add(lblChart);
+			}
 		}
+		
 		catch(Exception e){
 			e.printStackTrace();
 		}
@@ -664,8 +766,8 @@ public class WordCount extends JFrame{
 		
 	}
 	
-	private void findClusters(){
-		System.out.println(siteNames.size());
+	
+	private void generateDistances(){
 		for(int i=0;i<siteNames.size();i++){
 			for(int j=i+1;j<siteNames.size();j++){
 				distances.addElement(new Distance((String)siteNames.elementAt(i), 
@@ -683,8 +785,11 @@ public class WordCount extends JFrame{
 			System.out.println("The distance between " + ((Distance)(distances.elementAt(i))).site1 + " and " + 
 					((Distance)(distances.elementAt(i))).site2 + " is " + ((Distance)(distances.elementAt(i))).distance);
 		}
+	}
+	
+	private void findClusters(){
 		
-
+		generateDistances();
 		clusters = new Vector();
 		
 		//add the sites with the smallest distance to an initial cluster
@@ -765,24 +870,8 @@ public class WordCount extends JFrame{
 					}
 				}
 				else {
-					//join the 2 clusters
-					/**if(!(cluster1.equals(cluster2))){
-						clustertag++;
-						Integer i = new Integer(clustertag);
-						
-						for(int l=0;l<cluster1.size();l++){
-							((ClusterNode)cluster1.elementAt(l)).addTag(i.toString());
-						}
-						for(int m=0; m < cluster2.size(); m++){
-							
-							cluster1.addElement(cluster2.elementAt(m));
-							
-							((ClusterNode)cluster2.elementAt(m)).addTag(i.toString());
-						}
-						
-						clusters.removeElement(cluster2);
-						
-					}**/
+					//do nothing
+					
 				}
 			}
 			else{
@@ -799,19 +888,21 @@ public class WordCount extends JFrame{
 		ClusterNode cn = null;
 		try{
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator + "resutls.txt"));
+			DataOutputStream os = new DataOutputStream(new FileOutputStream("clusters.txt"));
 			for(int i=0;i<clusters.size();i++){
 				temp = (Vector)clusters.elementAt(i);
 				System.out.print("The elements in cluster #" + (i+1) + " are: ");
 				out.writeBytes("The elements in cluster #" + (i+1) + " are: \n");
 				for(int j=0;j<temp.size();j++){
 					cn = (ClusterNode)temp.elementAt(j);
+					os.writeBytes(cn.site + " " + (i+1) + "\n");
 					System.out.println(cn.site + "\t" + cn.level +
 						"\t" + cn.pulled + "\t" + cn.distance);
 					out.writeBytes(cn.site + "\t" + cn.level +
 							"\t" + cn.pulled + "\t" + cn.distance + "\n");
-				
 				}
 				out.writeBytes("\n");
+				
 			}
 			
 		}
@@ -819,6 +910,9 @@ public class WordCount extends JFrame{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 	
 	/**
 	 * @param site
@@ -866,6 +960,10 @@ public class WordCount extends JFrame{
 		}
 		return distance;
 		
+	}
+	
+	public String getClosestSite(){
+		return closestSite;
 	}
 	
 	private class WordFreq{

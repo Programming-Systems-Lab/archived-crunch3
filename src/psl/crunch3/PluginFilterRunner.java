@@ -72,6 +72,10 @@ public class PluginFilterRunner {
 				}
 				Crunch3.mainWindow.setURL(Crunch3.mainWindow.parseURL(clientData.getFirstLine().trim(), clientData.get("Host")));
 				sdf.reportApplication(clientData.get("User-Agent"));
+				
+				
+				sdf.reportURL(Crunch3.mainWindow.parseURL(clientData.getFirstLine().trim(), clientData.get("Host")));
+				
 			}
 
 			if (currentDocument != null)

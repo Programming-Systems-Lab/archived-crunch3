@@ -59,8 +59,7 @@ www.gertzfile.com/gertzfile
 www.gizmodo.com
 www.globalsecurity.org
 www.gothamist.com
-www.groklaw.net
-www.guardian.co.uk 
+www.groklaw.net 
 www.hardocp.com
 www.heroicstories.com 
 www.hinduonnet.com 
@@ -157,8 +156,7 @@ www.walmart.com
 www.tesco.com
 www.streetprices.com 
 www.techbargains.com   
-www.zones.com 
-www.warehouse.com 
+www.zones.com  
 www.connection.com 
 www.insight.com 
 www.resellerratings.com 
@@ -168,4 +166,5 @@ www.dell.com
 www.apple.com 
 www.hp.com 
 www.ibm.com
+www.warehouse.com
 auctions.yahoo.com
