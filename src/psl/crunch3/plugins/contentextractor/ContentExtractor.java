@@ -27,6 +27,7 @@ import psl.crunch3.plugins.EnhancedProxyFilter;
 import psl.crunch3.plugins.ProxyFilterSettings;
 import psl.crunch3.plugins.SiteDependentFilter;
 
+
 /**
  * This class uses a settings file to determine portions of a web site to remove, thus extracting the true content of a site based on the user's preferences.
  * 
@@ -1604,6 +1605,10 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 				System.out.println("This is A Homepage!");
 			else System.out.println("This is not a Homepage");
 		}
+	}
+	
+	public void selectCustom(){
+		descriptionGUI.selectCustom();
 	}
 	
 } //ContentExtractor

@@ -281,7 +281,7 @@ public class ContentExtractorDescriptionGUI {
 			}
 		});
 		
-		// TODO change this to what the last selection was
+		// TODO 
 		if (ContentExtractor.customLast)
 			customButton.setSelection(true);
 		else{
@@ -327,6 +327,7 @@ public class ContentExtractorDescriptionGUI {
 	}
 	
 	public void updateSpecificImage(final String imageName){
+		
 		// FIXME method stub
 		Crunch3.Display_1.syncExec(new Runnable(){
 			public void run(){
@@ -410,6 +411,18 @@ public class ContentExtractorDescriptionGUI {
 		});
 	}
 	
+	
+	//selects the custom button
+	public void selectCustom(){
+		customButton.setSelection(true);
+		newsButton.setSelection(false);
+		shoppingButton.setSelection(false);
+		governmentButton.setSelection(false);
+		educationButton.setSelection(false);
+		textHeavyButton.setSelection(false);
+		linkHeavyButton.setSelection(false);
+		autoButton.setSelection(false);
+	}
 
     /**
      * Copies src file to dst file.  If the dst file does not exist, it is created.

@@ -25,7 +25,7 @@ public class HomePageTester {
 	}
 	
 	private void testPage(){
-		isHomePage = (checkSyntax() || checkStructure()); 
+		isHomePage = (checkSyntax() && checkStructure()); 
 	}
 	
 	
@@ -48,7 +48,8 @@ public class HomePageTester {
 				tempURL = url.substring(0,i);
 				URL page = new URL(tempURL);
 				String response = page.openConnection().getHeaderField(0);
-				if (response.trim().endsWith("404 Not Found") || response.trim().endsWith("403 Forbidden")){
+				if (response.trim().endsWith("404 Not Found") || response.trim().endsWith("403 Forbidden") 
+						|| response.trim().endsWith("401 Unauthorized")){
 					return false;
 				}
 				i = tempURL.lastIndexOf("/");

@@ -15,4 +15,5 @@ import org.eclipse.swt.widgets.Composite;
  */
 public abstract class EnhancedProxyFilter extends ProxyFilter {
 	public abstract Composite getDescriptionGUI(Composite c);
+	public abstract void selectCustom();
 }

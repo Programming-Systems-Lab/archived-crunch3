@@ -804,7 +804,6 @@ public class MainWindow extends Thread {
 			pluginDescriptionGUIComposite = enhancedPlugin.getDescriptionGUI(descriptionComposite);
 			redraw = true;
 		}
-		
 		enablePluginCheck.setSelection(plugin.isEnabled());
 		configurePluginButton.setEnabled(plugin.hasSettingsGUI());
 		
@@ -847,7 +846,7 @@ public class MainWindow extends Thread {
 		plugin.getSettingsGUI();
 	}
 	// END EVENT_HANDLING
-
+	
 	public MainWindow() {
 		super("MainWindowDisplayThread");
 		this.start();
@@ -1086,6 +1085,15 @@ public class MainWindow extends Thread {
 		return "";
 	}
 	
+	
+	public void setCustom(){
+		int selectionIndex = pluginTable.getSelectionIndex();
+		if (selectionIndex == 0){  //ContentExtractor is selected
+			TableItem selectedItem = pluginTable.getItem(selectionIndex);
+			EnhancedProxyFilter enhancedPlugin = (EnhancedProxyFilter)(selectedItem.getData());
+			enhancedPlugin.selectCustom();
+		}
+	}
 	
 	/**
 	 * @return the main shell

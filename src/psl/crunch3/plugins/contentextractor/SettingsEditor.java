@@ -954,6 +954,7 @@ public class SettingsEditor implements ProxyFilterSettings {
 			mFilter.changeSetting(ContentExtractorConstants.MAX_LINEBREAKS, maxLineBreaksField.getText());
 
 		mFilter.saveToCustom();
+		Crunch3.mainWindow.setCustom();
 		
 	}
 
