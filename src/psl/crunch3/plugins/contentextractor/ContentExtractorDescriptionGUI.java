@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Combo;
 
 import psl.crunch3.ButtonGroup;
 import psl.crunch3.Crunch3;
@@ -65,6 +66,7 @@ public class ContentExtractorDescriptionGUI {
 	private Text applicationText = null;
 	private Group customGroup;
 	private Button customButton = null;
+	private Combo engineCombo = null;
 	
 	private ContentExtractorSettings newFilter = ContentExtractorSettings.getInstance();
 	private boolean isAuto = false;
@@ -72,6 +74,7 @@ public class ContentExtractorDescriptionGUI {
 	private Vector keywords;
 	private Vector names;
 	private Hashtable clusters;
+	private int engineNumber = 5;
 	
 	/**
 	 * @param c
@@ -112,8 +115,17 @@ public class ContentExtractorDescriptionGUI {
 		educationButton = new Button(presetsGroup, SWT.RADIO);
 		textHeavyButton = new Button(presetsGroup, SWT.RADIO);
 		linkHeavyButton = new Button(presetsGroup, SWT.RADIO);
-		autoButton = new Button(presetsGroup, SWT.RADIO);
 		customButton = new Button(presetsGroup, SWT.RADIO);
+		
+		
+		autoButton = new Button(presetsGroup, SWT.RADIO);
+		engineCombo = new Combo(presetsGroup , SWT.DROP_DOWN);
+		engineCombo.setText("5");
+		for (int i = 1; i < 8; i++){
+		   engineCombo.add(i+" ");
+		 }
+		
+		
 		ContentPluginSeparator2 = new Sash(mainComposite, SWT.HORIZONTAL | SWT.BORDER);
 		automaticGroup = new Group(mainComposite, SWT.NULL);
 		specificImageLabel = new Label(automaticGroup, SWT.BORDER);
@@ -125,6 +137,8 @@ public class ContentExtractorDescriptionGUI {
 		applicationLabel = new Label(referrerGroup, SWT.NULL);
 		applicationText = new Text(referrerGroup, SWT.BORDER);
 		customGroup = new Group(mainComposite, SWT.NULL);
+		
+		
 		
 		
 		// init nonvisuals
@@ -156,6 +170,8 @@ public class ContentExtractorDescriptionGUI {
 		GridData applicationTextGridData  = new GridData();
 		GridData customGroupGrid = new GridData();	
 		GridLayout customGroupGridLayout = new GridLayout();
+		GridData comboGridData = new GridData();
+		
 		
 		// set fields
 		mainCompositeGridLayout.numColumns = 1;
@@ -216,8 +232,7 @@ public class ContentExtractorDescriptionGUI {
 		textHeavyButton.setText("Text Heavy");
 		linkHeavyButton.setLayoutData(linkHeavyButtonGridData);
 		linkHeavyButton.setText("Link Heavy");
-		autoButton.setLayoutData(autoButtonGridData);
-		autoButton.setText("Automatic");
+		
 		customButton.setLayoutData(customButtonGridData);
 		customButton.setText("Custom");
 		automaticGroup.setLayoutData(automaticGroupGrid);
@@ -246,6 +261,10 @@ public class ContentExtractorDescriptionGUI {
 		customGroup.setText("Custom Settings");
 		customGroup.setLayout(customGroupGridLayout);
 		customGroup.setLayoutData(customGroupGrid);
+		engineCombo.setData(comboGridData);
+		autoButton.setLayoutData(autoButtonGridData);
+		autoButton.setText("Automatic");
+		
 		
 		// END VISUALS_INITIALIZATION
 
@@ -289,6 +308,13 @@ public class ContentExtractorDescriptionGUI {
 			public void widgetSelected(SelectionEvent e){
 				customButton_widgetSelected(e);
 			}
+		});
+		
+		engineCombo.addSelectionListener(new SelectionAdapter() {
+		    public void widgetSelected(SelectionEvent e){
+		      Character c = new Character((engineCombo.getText()).charAt(0));
+		      engineNumber = Integer.parseInt(c.toString());
+		    }
 		});
 		
 		// TODO 
@@ -537,6 +563,10 @@ public class ContentExtractorDescriptionGUI {
     
     public int getCluster(String closest){
     	return Integer.parseInt((String)clusters.get(closest));
+    }
+    
+    public int getEngineNumber(){
+    	return engineNumber;
     }
     
     /**

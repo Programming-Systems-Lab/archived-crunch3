@@ -77,6 +77,7 @@ public class WordCount extends JFrame{
 			System.out.println("reading the site list...");
 			BufferedReader inSites = new BufferedReader(new FileReader(new File(SITES_FILE)));
 			String site = null;
+			engineNum = 5;
 			keywords = new Vector();
 			sitewords = new Vector();
 			siteNames = new Vector();
@@ -125,7 +126,7 @@ public class WordCount extends JFrame{
 	}
 	
 	
-	public WordCount(String URL, int[][]freq, Vector keys, Vector names){
+	public WordCount(String URL, int[][]freq, Vector keys, Vector names, int engines){
 		
 		//call this constructor from crunch to get closest site to requested url
 		fromCrunch = true;
@@ -144,6 +145,7 @@ public class WordCount extends JFrame{
 			siteNames = names;
 			frequencies = freq;
 			
+			engineNum = engines;
 			String site;
 			if((site = URL) != null){
 				wordlist = new Vector();
@@ -189,56 +191,73 @@ public class WordCount extends JFrame{
 		System.out.println("generating word list for " + url);
 		BufferedReader in = getWebsite(url);
 		InputStreamReader read;
+		System.out.println("********************    " + engineNum);
 		try{
 			storeBuffer(in);
 			in.close();
 			//if(isRoot) generateLinks(getWebsite(url),url);
 			//store words from google search.
-			System.out.println("storing google search results...");
-			GoogleSearchResultElement[] re = getGoogle(parseURL(url,true));
 			
-			for(int k=0;k<re.length;k++){
-				store(removePunctuations(re[k].getSnippet()+" "+re[k].getTitle()+ " " +re[k].getSummary()));
+			if(engineNum >0){
+				System.out.println("storing google search results...");
+				GoogleSearchResultElement[] re = getGoogle(parseURL(url,true));
+			
+				for(int k=0;k<re.length;k++){
+					store(removePunctuations(re[k].getSnippet()+" "+re[k].getTitle()+ " " +re[k].getSummary()));
+				}
+			}
+			
+			if(engineNum > 1){
+				//store words from yahoo search
+				System.out.println("storing yahoo search results");
+				in = getYahoo(parseURL(url,true));
+				storeBuffer(in);
+			
+				in.close();
 			}
 			
 			
+			if(engineNum >2){
+				//store words from dogpile search
+				System.out.println("storing dogpile search results");
+				in = getDogPile(parseURL(url,true));
+				storeBuffer(in);
 			
-			//store words from yahoo search
-			System.out.println("storing yahoo search results");
-			in = getYahoo(parseURL(url,true));
-			storeBuffer(in);
+				in.close();
+			}
 			
-			in.close();
 			
-			//store words from dogpile search
-			System.out.println("storing dogpile search results");
-			in = getDogPile(parseURL(url,true));
-			storeBuffer(in);
+			if(engineNum >3){
+				//store words from msn search
+				System.out.println("storing msn search results");
+				in = getMSN(parseURL(url,true));
 			
-			in.close();
+				storeBuffer(in);
+				in.close();
+			}
 			
-			//store words from msn search
-			System.out.println("storing msn search results");
-			in = getMSN(parseURL(url,true));
-			storeBuffer(in);
-			in.close();
+			if(engineNum >4){
+				//store words from altavista search
+				System.out.println("storing altavista search results");
+				in = getAltaVista(parseURL(url,true));
+				storeBuffer(in);
+				in.close();
+			}
 			
-			//store words from altavista search
-			System.out.println("storing altavista search results");
-			in = getAltaVista(parseURL(url,true));
-			storeBuffer(in);
-			in.close();
+			if(engineNum >5){
+				System.out.println("storing excite search results");
+				in = getExcite(parseURL(url,true));
+				storeBuffer(in);
+				in.close();
+			}
 			
-			/**System.out.println("storing  search results");
-			in = getLycos(parseURL(url,true));
-			storeBuffer(in);
-			in.close();**/
 			
-			System.out.println("storing excite search results");
-			in = getExcite(parseURL(url,true));
-			storeBuffer(in);
-			in.close();
-			
+			if(engineNum >6){
+				System.out.println("storing  search results");
+				in = getLycos(parseURL(url,true));
+				storeBuffer(in);
+				in.close();
+			}
 			
 			System.out.println("removing stop words...");
 			removeStopWords();
