@@ -18,10 +18,11 @@ public class WordCount {
 
 	private boolean useWordList;
 	private int engineNum;
-	private String STOPLIST_FILE = "frequency" + File.separator + "stoplist1.txt";;
+	private String STOPLIST_FILE = "frequency" + File.separator + "stoplist1.txt";
 	private final String SITES_FILE = "frequency" + File.separator + "sites.txt";
 	private Vector stoplist;
 	private Vector wordlist;
+	private Hashtable dictwords;
 	
 	public static void main(String[] args) {
 		System.out.println(args[0] + "   " + args[1]);
@@ -32,7 +33,10 @@ public class WordCount {
 	}
 	
 	public WordCount(String num, String words){
-		if (words.equals("yes")) useWordList = true;
+		if (words.equals("yes")) {
+			useWordList = true;
+			//storeDictwords();
+		}
 		else useWordList = false;
 		engineNum = Integer.parseInt(num);
 		storeStopList();
@@ -89,9 +93,12 @@ public class WordCount {
 				}	
 			}
 			
+			
 			wordlist.trimToSize();
 			
 			sort(wordlist,0,wordlist.size()-1);
+			
+			
 			
 			//write the data from wordlist to a file.
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ parseURL(url)+".txt"));
@@ -103,6 +110,7 @@ public class WordCount {
 		}
 		catch(Exception e){
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
@@ -137,7 +145,6 @@ public class WordCount {
 						line = line.substring(line.indexOf("<title>")+7);
 						if(line.indexOf("</")!= -1) {
 							line = line.substring(0,line.indexOf("</"));
-							System.out.println(line);
 							store(removePunctuations(line));
 						}
 					}
@@ -154,7 +161,6 @@ public class WordCount {
 				else{
 					
 					leftover = cleanLine(line);
-					System.out.println(leftover);
 					store(removePunctuations(leftover));
 				}
 			}
@@ -167,6 +173,8 @@ public class WordCount {
 	
 	
 	
+	
+	
 	/*
 	 * removes the punctuation marks from the line parameter and returns the clean line.
 	 */
@@ -176,7 +184,8 @@ public class WordCount {
 			c = line.charAt(i);
 			if((c==',')||(c=='.')||(c==';')||(c==':')||(c=='!')||(c=='?')||(c=='`')||(c=='\'')||(c=='"')||
 					(c=='\\')||(c=='/')||(c=='(')||(c==')')||(c=='[')||(c==']')||(c=='<')||(c=='>')
-					||(c=='}')||(c=='{')||(c=='|')||(c=='&')||(c=='+')||(c=='=')||(c=='-')||(c=='#')||(c=='%'))
+					||(c=='}')||(c=='{')||(c=='|')||(c=='&')||(c=='+')||(c=='=')||(c=='-')||(c=='#')||(c=='%')
+					||(c=='$')||(c=='_'))
 				line = line.substring(0,i)+" " + line.substring(i+1);
 		}
 		return line.trim();
@@ -356,7 +365,7 @@ public class WordCount {
 		//replace every '.' with " "
 		i=url.indexOf('.');
 		while(i!=-1){
-			url=url.substring(0,i) + " " + url.substring(i+1);
+			url=url.substring(0,i) + "+" + url.substring(i+1);
 			i=url.indexOf('.');
 		}
 		
