@@ -1,10 +1,14 @@
 more
 http
 onmouseout
+ffffff
+cc9999
+why
 getelementbyid
 document
 results
 new
+indexof
 web
 var
 agt

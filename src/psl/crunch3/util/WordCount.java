@@ -22,6 +22,9 @@ public class WordCount {
 	private final String SITES_FILE = "frequency" + File.separator + "sites.txt";
 	private Vector stoplist;
 	private Vector wordlist;
+	private Vector sitewords;
+	private Vector keywords;
+	private Vector siteNames;
 	private Hashtable dictwords;
 	
 	public static void main(String[] args) {
@@ -43,11 +46,17 @@ public class WordCount {
 		try{
 			BufferedReader inSites = new BufferedReader(new FileReader(new File(SITES_FILE)));
 			String site = null;
+			keywords = new Vector();
+			sitewords = new Vector();
+			siteNames = new Vector();
 			while((site = inSites.readLine()) != null){
 				wordlist = new Vector();
 				generateList(site);
 			}
 			inSites.close();
+			for (int i=0;i<siteNames.size();i++){
+				compare(((Vector)(sitewords.elementAt(i))), keywords, ((String)(siteNames.elementAt(i))));
+			}
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -87,7 +96,7 @@ public class WordCount {
 			//delete words that appear less than 5 times
 			for(int j=0;j<wordlist.size();j++){
 				temp = (WordFreq)(wordlist.elementAt(j));
-				if ((temp.frequency)<5 ||(temp.word).length()<3||isNumber(temp.word)||(temp.word).equals(parseURL(url))) {
+				if ((temp.word).length()<3||isNumber(temp.word)||(temp.word).equals(parseURL(url))) {
 					wordlist.removeElementAt(j);
 					--j;
 				}	
@@ -98,15 +107,29 @@ public class WordCount {
 			
 			sort(wordlist,0,wordlist.size()-1);
 			
+			siteNames.addElement(parseURL(url));
+			sitewords.addElement(wordlist);
+			
+			
+			//add words of frequency 5 and above to keywords vector
+			for (int j=0;j<wordlist.size();j++){
+				if((((WordFreq)wordlist.elementAt(j)).frequency > 4) && 
+						!(inVector(keywords, ((WordFreq)wordlist.elementAt(j)).word))){
+					keywords.add(((WordFreq)wordlist.elementAt(j)).word);	
+					
+				}
+			}
+			
 			
 			
 			//write the data from wordlist to a file.
-			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ parseURL(url)+".txt"));
+			/*DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ parseURL(url)+".txt"));
 			for (int j=0;j<wordlist.size();j++){
 				out.writeBytes((((WordFreq)wordlist.elementAt(j)).word)+ "\t" + 
 						(((WordFreq)wordlist.elementAt(j)).frequency) + "\n");
 			}
-			out.close();
+			out.close();*/
+			
 		}
 		catch(Exception e){
 			System.out.println(e.getMessage());
@@ -124,7 +147,6 @@ public class WordCount {
 			else if(i==-1) return cleanLine(s.substring(j+1));
 			else if (i<j) return cleanLine(s.substring(0,i)+ " " + s.substring(j+1));
 			else{
-				System.out.println("parsing error");
 				return s.substring(0,j);
 			}
 		}
@@ -191,6 +213,16 @@ public class WordCount {
 		return line.trim();
 		
 	}
+	
+	//returns true if the word is in the vector
+	private boolean inVector(Vector v, String word){
+		for(int i=0;i<v.size();i++){
+			if(((String)v.elementAt(i)).equals(word))
+				return true;
+		}
+		return false;
+	}
+	
 	
 	/*
 	 * Stores the input line in the wordlist vector or updates the count
@@ -349,6 +381,31 @@ public class WordCount {
 			return null;
 		}
 	}
+	
+	private void compare(Vector a, Vector b, String site){
+		try{
+			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ site +".txt"));
+			boolean found = true;
+			for (int j=0;j<b.size();j++){
+				found = false;
+				for(int i=0;i<a.size();i++){
+					if((((WordFreq)(a.elementAt(i))).word).equals((String)b.elementAt(j))){
+						out.writeBytes(((String)b.elementAt(j))+ "\t" + ((WordFreq)(a.elementAt(i))).frequency + "\n");
+						found = true;
+					}
+				}
+				if(!found){
+					out.writeBytes(((String)b.elementAt(j))+ "\t" + 0 + "\n");
+				}
+				
+			}
+			out.close();
+		}
+		catch(Exception e){
+			
+		}
+	}
+	
 	
 	/*
 	 * return the host name given the url string (assumes no http://...)
