@@ -384,7 +384,7 @@ public class ContentExtractorSettings implements ContentExtractorConstants {
 		mSettings.setProperty(IGNORE_EMBED_TAGS, ignoreEmbedTags);
 		mSettings.setProperty(IGNORE_FLASH, ignoreFlash);
 	}
-
+	
 	/**
 	 * Save the settings file
 	 */
@@ -398,4 +398,23 @@ public class ContentExtractorSettings implements ContentExtractorConstants {
 				e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Saves the settings to the custom settings file & default settings file
+	 */
+	public void saveToCustom() {
+		saveProperties();
+
+		try {
+			
+			mSettings.store(new FileOutputStream(new File(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF)), "Content Extractor Settings File");
+			mSettings.store(new FileOutputStream(new File(mSettingsFile)), "Content Extractor Settings File");
+		} catch (Exception e) {
+			if (Crunch3.settings.isVerbose())
+				e.printStackTrace();
+		}
+		
+	}
+	
+	
 }

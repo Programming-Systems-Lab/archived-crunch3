@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="jars/nekohtml-0.8.2/nekohtml.jar"/>
 	<classpathentry kind="lib" path="jars/xerces-2_6_0/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="jars/xerces-2_6_0/xmlParserAPIs.jar"/>
+	<classpathentry kind="lib" path="C:/j2sdk1.4.2_05/src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

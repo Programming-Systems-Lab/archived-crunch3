@@ -103,6 +103,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		mImagesSource = new LinkedList();
 	}
 
+	
 	/**
 	 * Extracts the content of the html page based on the settings
 	 */

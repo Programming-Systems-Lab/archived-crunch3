@@ -950,10 +950,11 @@ public class SettingsEditor implements ProxyFilterSettings {
 		mFilter.changeSetting(ContentExtractorConstants.IGNORE_FLASH, Boolean.toString(ignoreFlashCheck.getSelection()));
 		mFilter.changeSetting(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, Boolean.toString(appendLinksCheck.getSelection()));
 		mFilter.changeSetting(ContentExtractorConstants.LIMIT_LINEBREAKS, Boolean.toString(limitLineBreaksCheck.getSelection()));
-		if (limitLineBreaksCheck.getSelection())
+		//if (limitLineBreaksCheck.getSelection())
 			mFilter.changeSetting(ContentExtractorConstants.MAX_LINEBREAKS, maxLineBreaksField.getText());
 
-		mFilter.saveSettings();
+		mFilter.saveToCustom();
+		
 	}
 
 	public void revertSettings() {
