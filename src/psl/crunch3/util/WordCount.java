@@ -47,9 +47,7 @@ public class WordCount {
 		}
 		catch(Exception e){
 			e.printStackTrace();
-		}
-		
-		
+		}	
 	}
 	/**
 	 * Generates a lists of words and their corresponding frequencies and writes them to a file.
@@ -57,35 +55,25 @@ public class WordCount {
 	 */
 	private void generateList(String url){
 		BufferedReader in = getWebsite(url);
+		InputStreamReader read;
 		try{
-			String line = null;
-			while((line = in.readLine()) != null){
-				store(removePunctuations(line));
-			}
+			storeBuffer(in);
 			in.close();
-			
 			//store words from google search.
 			GoogleSearchResultElement[] re = getGoogle(parseURL(url));
 			for(int k=0;k<re.length;k++){
-				store(removePunctuations(re[k].getSnippet()+" "+re[k].getTitle()+" "+
-						re[k].getURL()+" "+re[k].getSummary()));
+				store(removePunctuations(re[k].getSnippet()+" "+re[k].getTitle()+ " " +re[k].getSummary()));
 			}
 			
 			//store words from yahoo search
 			in = getYahoo(parseURL(url));
-			line = null;
-			while((line = in.readLine()) != null){
-				store(removePunctuations(line));
-			}
+			storeBuffer(in);
 			in.close();
 			
 			//store words from dogpile search
-			/*in = getDogPile(parseURL(url));
-			line = null;
-			while((line = in.readLine()) != null){
-				store(removePunctuations(line));
-			}
-			in.close();*/
+			in = getDogPile(parseURL(url));
+			storeBuffer(in);
+			in.close();
 			
 			
 			
@@ -95,13 +83,12 @@ public class WordCount {
 			//delete words that appear less than 5 times
 			for(int j=0;j<wordlist.size();j++){
 				temp = (WordFreq)(wordlist.elementAt(j));
-				if ((temp.frequency)<5 ||(temp.word).length()<3||isNumber(temp.word)) {
+				if ((temp.frequency)<5 ||(temp.word).length()<3||isNumber(temp.word)||(temp.word).equals(parseURL(url))) {
 					wordlist.removeElementAt(j);
 					--j;
-				}
-				
-				
+				}	
 			}
+			
 			wordlist.trimToSize();
 			
 			sort(wordlist,0,wordlist.size()-1);
@@ -118,6 +105,67 @@ public class WordCount {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	private String cleanLine(String s){
+		if((s.indexOf('<')==(-1))&&((s.indexOf('<')==(-1)))) return s;
+		else{
+			int i=s.indexOf('<');
+			int j=s.indexOf('>');
+			
+			if(j==-1)return s.substring(0,i);
+			else if(i==-1) return cleanLine(s.substring(j+1));
+			else if (i<j) return cleanLine(s.substring(0,i)+ " " + s.substring(j+1));
+			else{
+				System.out.println("parsing error");
+				return s.substring(0,j);
+			}
+		}
+	}
+	
+	
+	
+	private void storeBuffer(BufferedReader in){
+		try{
+			String line = null;
+			String leftover="";
+			boolean bodyFound = false;
+			while((line = in.readLine()) != null){
+				
+				if(!bodyFound){
+					//try to extract information from the title
+					if(line.indexOf("<title>") != -1){
+						line = line.substring(line.indexOf("<title>")+7);
+						if(line.indexOf("</")!= -1) {
+							line = line.substring(0,line.indexOf("</"));
+							System.out.println(line);
+							store(removePunctuations(line));
+						}
+					}
+					
+					//check if line contains body tag
+					if(line.toLowerCase().indexOf("<body") != -1){
+						store(removePunctuations(cleanLine(line)));
+						bodyFound=true;
+					}
+						
+					//otherwise skip line...
+					
+				}
+				else{
+					
+					leftover = cleanLine(line);
+					System.out.println(leftover);
+					store(removePunctuations(leftover));
+				}
+			}
+			in.close();
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	
 	
 	/*
 	 * removes the punctuation marks from the line parameter and returns the clean line.

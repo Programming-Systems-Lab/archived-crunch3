@@ -1,4 +1,16 @@
 http
+getelementbyid
+document
+results
+new
+web
+var
+agt
+what
+site
+sponsored
+write
+amp
 tr
 td
 width
