@@ -306,7 +306,7 @@ public class HttpStream extends Thread {
 		
 		// only filter if not homepage or filter homepages turned on
 		shouldFilter = shouldFilter && (Crunch3.settings.isFilterHomepages() || !isHomepage());
-
+		
 		if (shouldFilter)
 			contentFile = filter();
 		

@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Scale;
 
 import psl.crunch3.ButtonGroup;
 import psl.crunch3.Crunch3;
@@ -67,6 +68,7 @@ public class ContentExtractorDescriptionGUI {
 	private Group customGroup;
 	private Button customButton = null;
 	private Combo engineCombo = null;
+	private Scale relax;
 	
 	private ContentExtractorSettings newFilter = ContentExtractorSettings.getInstance();
 	private boolean isAuto = false;
@@ -130,7 +132,7 @@ public class ContentExtractorDescriptionGUI {
 		ContentPluginSeparator2 = new Sash(mainComposite, SWT.HORIZONTAL | SWT.BORDER);
 		automaticGroup = new Group(mainComposite, SWT.NULL);
 		specificImageLabel = new Label(automaticGroup, SWT.BORDER);
-		classificationLabel = new Label(automaticGroup, SWT.NONE);
+		classificationLabel = new Label(automaticGroup, SWT.NULL);
 		genericImageLabel = new Label(automaticGroup, SWT.BORDER);
 		referrerGroup = new Group(mainComposite, SWT.NULL);
 		referrerLabel = new Label(referrerGroup, SWT.NULL);
@@ -138,6 +140,7 @@ public class ContentExtractorDescriptionGUI {
 		applicationLabel = new Label(referrerGroup, SWT.NULL);
 		applicationText = new Text(referrerGroup, SWT.BORDER);
 		customGroup = new Group(mainComposite, SWT.NULL);
+		relax = new Scale(customGroup, SWT.NULL);
 		
 		
 		
@@ -244,6 +247,7 @@ public class ContentExtractorDescriptionGUI {
 		specificImageLabel.setSize(100, 105);
 		classificationLabel.setLayoutData(classificationLabelGridData);
 		classificationLabel.setText("classification label"); // FIXME change text properly
+		classificationLabel.setAlignment(SWT.CENTER);
 		genericImageLabel.setLayoutData(genericImageLabelGridData);
 		genericImageLabel.setSize(100, 105);
 		referrerGroup.setText("Referrer Data");
@@ -265,7 +269,8 @@ public class ContentExtractorDescriptionGUI {
 		engineCombo.setData(comboGridData);
 		autoButton.setLayoutData(autoButtonGridData);
 		autoButton.setText("Automatic");
-		
+		relax.setMaximum(12);
+		relax.setMinimum(1);
 		
 		// END VISUALS_INITIALIZATION
 
@@ -318,11 +323,28 @@ public class ContentExtractorDescriptionGUI {
 		    }
 		});
 		
+		relax.addSelectionListener(
+		 new SelectionAdapter(){
+		 	public void widgetSelected(SelectionEvent e)
+		 	{
+		 		autoButton.setSelection(false);
+		 		customButton.setSelection(true);
+		 		isAuto = false;
+				commitSettings("config" + File.separator + "level" + relax.getSelection() + ".ini", relax.getSelection());    
+		 	}
+			}
+		);
+		
 		// TODO 
 		if (ContentExtractor.customLast)
 			customButton.setSelection(true);
 		else{
 			newsButton.setSelection(true);
+		}
+		System.out.println("*************");
+		if(!(Crunch3.settings.isGUISet())){
+			System.out.println("*******************" + Crunch3.settings.getSettings());
+			commitSettings(Crunch3.settings.getSettings(), 0);
 		}
 	}
 	
@@ -365,9 +387,27 @@ public class ContentExtractorDescriptionGUI {
 		
 		//store cluster information 
 		try{
+			
+			String part1;
+			String word = null;
+			int index1, index2;
+			clusters = new Hashtable();
+			BufferedReader in = new BufferedReader(new FileReader(new File("clusters.txt")));
+			while((word =in.readLine())!=null){
+				index1 = word.indexOf(" ");
+				part1 = word.substring(index1+1);
+				index2 = part1.indexOf(" ");
+				clusters.put(word.substring(0,index1), 
+						new ClusterInfo((Integer.parseInt(part1.substring(0,index2))),
+								(Integer.parseInt(part1.substring(index2+1))))
+						);
+			}
+			in.close();
+			
+			
 			BufferedReader inSites = new BufferedReader(new FileReader(new File("keyinfo.txt")));
 			String site = null;
-			clusters = new Hashtable();
+			
 			//the file should be in the same format as written by the WordCount
 			int numSites = Integer.parseInt(inSites.readLine());
 			int keySize = Integer.parseInt(inSites.readLine());
@@ -378,36 +418,26 @@ public class ContentExtractorDescriptionGUI {
 			names = new Vector();
 			for(int i=1;(site = inSites.readLine()) !=null;i++){
 				st = new StringTokenizer(site);
-				names.addElement(st.nextToken());
-				for(int j=0;st.hasMoreElements();j++){
-					frequencies[i][j] = Integer.parseInt(st.nextToken());
+				word = st.nextToken();
+				if(clusters.get(word) !=null){
+					names.addElement(word);
+					for(int j=0;st.hasMoreElements();j++){
+						frequencies[i][j] = Integer.parseInt(st.nextToken());
+					}
 				}
 			}
 			
 			inSites.close();
 		
-			BufferedReader in = new BufferedReader(new FileReader(new File("key.txt")));
-			String word = null;
+			in = new BufferedReader(new FileReader(new File("key.txt")));
+			
 			keywords = new Vector();
 			while((word =in.readLine())!=null){
 				keywords.addElement(word);
 			}
 			in.close();
 			
-			String part1;
-			int index1, index2;
-			in = new BufferedReader(new FileReader(new File("clusters.txt")));
-			while((word =in.readLine())!=null){
-				index1 = word.indexOf(" ");
-				part1 = word.substring(index1+1);
-				index2 = part1.indexOf(" ");
-				System.out.println(index2);
-				clusters.put(word.substring(0,index1), 
-						new ClusterInfo((Integer.parseInt(part1.substring(0,index2))),
-								(Integer.parseInt(part1.substring(index2+1))))
-						);
-			}
-			in.close();
+			
 			
 			
 		}
@@ -449,15 +479,6 @@ public class ContentExtractorDescriptionGUI {
 			}
 		});
 		
-	}
-	public void updateClassificationLabel(final String text){
-		// FIXME method stub
-		Crunch3.Display_1.syncExec(new Runnable(){
-			public void run(){
-				if(classificationLabel != null && !classificationLabel.isDisposed())
-					classificationLabel.setText(text);
-			}
-		});
 	}
 	
 	
@@ -508,6 +529,16 @@ public class ContentExtractorDescriptionGUI {
 			public void run(){
 				if(applicationText != null && !applicationText.isDisposed())
 					applicationText.setText(text);
+			}
+		});
+	}
+	
+	public void updateClassificationLabel(final String text){
+		// FIXME method stub
+		Crunch3.Display_1.syncExec(new Runnable(){
+			public void run(){
+				if(classificationLabel != null && !classificationLabel.isDisposed())
+					classificationLabel.setText(text);
 			}
 		});
 	}
@@ -583,8 +614,6 @@ public class ContentExtractorDescriptionGUI {
     	return settingLevel;
     }
 
-    
-    
     /**
      * Changes the filter settings to new settings read from a file.
      * @param fileName the file containing the new filter settings. 
@@ -601,7 +630,10 @@ public class ContentExtractorDescriptionGUI {
 			e.printStackTrace();
 		}
 		
+		
+		
 		settingLevel = level;
+		
 		
     	newFilter.changeSetting(ContentExtractorConstants.ONLY_TEXT, Boolean.toString
     			(nSettings.getProperty(ContentExtractorConstants.ONLY_TEXT, ContentExtractorConstants.ONLY_TEXT_DEF)));

@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.TrayItem;
 
 import psl.crunch3.plugins.EnhancedProxyFilter;
 import psl.crunch3.plugins.ProxyFilter;
+import psl.crunch3.plugins.contentextractor.ContentExtractorDescriptionGUI;
 
 /**
  * Generates the main window for Crunch 3.0.
@@ -180,6 +181,8 @@ public class MainWindow extends Thread {
 		}
 		
 		mainShell = new Shell(Crunch3.Display_1, SWT.SHELL_TRIM);
+		
+		
 		
 		trayMenu = new Menu(mainShell, SWT.POP_UP);
 		trayOpenMenuItem = new MenuItem(trayMenu, SWT.PUSH);
@@ -690,8 +693,9 @@ public class MainWindow extends Thread {
 		if (Crunch3.settings.isVerbose())
 			System.out.println("mainTrayItem_defaultSelection: " + e);
 		
-		mainShell.setVisible(true);
-		mainShell.setActive();
+			mainShell.setVisible(true);
+			mainShell.setActive();
+		
 	}
 	private void mainTrayItem_menuDetect(final Event e) {
 		if (Crunch3.settings.isVerbose())
@@ -790,8 +794,11 @@ public class MainWindow extends Thread {
 		if (selectionIndex == -1)
 			return;
 
+		
 		TableItem selectedItem = pluginTable.getItem(selectionIndex);
+		
 		ProxyFilter plugin = (ProxyFilter) selectedItem.getData();
+		
 		pluginNameLabel.setText(plugin.getName());
 		pluginDescriptionText.setText(plugin.getDescription());
 		
@@ -874,8 +881,14 @@ public class MainWindow extends Thread {
 				Crunch3.Display_1.getBounds().height / 2 - mainShell.getBounds().height / 2,
 				windowWidth,
 				windowHeight);
+			if(Crunch3.settings.isGUISet())
 			mainShell.open();
+			//this opens crunch without GUI and loads one settings file for the whole session
+			else{
+				processNoGUI();
+			}
 			isInitialized = true;
+			
 
 			while (!mainShell.isDisposed()) {
 				try {
@@ -1130,6 +1143,27 @@ public class MainWindow extends Thread {
 		filterHomepagesCheck.setSelection(Crunch3.settings.isFilterHomepages());
 	}
 
+	private void processNoGUI(){
+		
+		System.out.println("working");
+		ContentExtractorDescriptionGUI dg = new ContentExtractorDescriptionGUI(mainShell);
+		
+		/**TableItem selectedItem = pluginTable.getItem(0);
+		
+		ProxyFilter plugin = (ProxyFilter) selectedItem.getData();
+		pluginNameLabel.setText(plugin.getName());
+		pluginDescriptionText.setText(plugin.getDescription());
+		
+		if (plugin instanceof EnhancedProxyFilter){
+			EnhancedProxyFilter enhancedPlugin = (EnhancedProxyFilter)plugin;
+			pluginDescriptionGUIComposite = enhancedPlugin.getDescriptionGUI(descriptionComposite);
+		}
+		enablePluginCheck.setSelection(plugin.isEnabled());
+		configurePluginButton.setEnabled(plugin.hasSettingsGUI());**/
+		
+		
+	}
+	
 	private String[] split(final String text, final String delimiters) {
 		StringTokenizer tokens = new StringTokenizer(text, delimiters);
 		String[] strings = new String[tokens.countTokens()];

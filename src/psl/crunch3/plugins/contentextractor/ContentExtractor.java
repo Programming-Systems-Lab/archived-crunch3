@@ -91,7 +91,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	ContentExtractorSettings settings; // the settings
 	ContentExtractorDescriptionGUI descriptionGUI; // the description GUI
 	private Vector visitedClusters;
-	
+	private boolean detectRandomSurfing = false;
 	
 	/**
 	 * Creates a new instance without any input stream and the default settings file.
@@ -1628,6 +1628,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 */
 	public void reportURL(String URL){
 		
+		if (!Crunch3.settings.isGUISet()) return;
 		psl.crunch3.util.HomePageTester hpt = new psl.crunch3.util.HomePageTester(Crunch3.mainWindow.getURL().trim());
 		if (Crunch3.settings.isVerbose()){
 			if (hpt.isHomePage())
@@ -1672,12 +1673,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 				int level = descriptionGUI.getSettingLevel();
 				if(level ==2){
 					level+=4;
-					System.out.println("@@@@@@@@@@" + level);
+					System.out.println("Setting level " + level);
 					descriptionGUI.commitSettings("config" + File.separator + "level" + level + ".ini", level);
 				}
 			}
 			
-			if(visitedClusters.size()==3){
+			if((visitedClusters.size()==3) && detectRandomSurfing){
 			//if surfing is random then relax the setting
 				if(isRandomSurfing()){
 					System.out.println("Random Surfing Detected");
@@ -1701,36 +1702,48 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		switch(cluster){
 		
 			case 1: descriptionGUI.commitSettings(ContentExtractor.LEVEL10_SETTINGS_FILE_DEF, 10);
+					descriptionGUI.updateClassificationLabel("news");
 					break;
 			case 2: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
 					break;
 			case 3: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("world news");
 					break;
 			case 4: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("world news");
 					break;
 			case 5: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					descriptionGUI.updateClassificationLabel("news");
 					break;
 			case 6: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("shopping");
 					break;
 			case 7: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					descriptionGUI.updateClassificationLabel("news");
 					break;
 			case 8: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("shopping");
 					break;
 			case 9: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					descriptionGUI.updateClassificationLabel("news");
 					break;
 			case 10: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+					descriptionGUI.updateClassificationLabel("space");
 				 	 break;
 			case 11: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+					descriptionGUI.updateClassificationLabel("tech news");
 					 break;
 			case 12: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("gossip");
 					 break;
-			case 13: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+			case 13: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("blogs");
 					break;
-			case 14: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2); 
+			case 14: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					descriptionGUI.updateClassificationLabel("news");
 					 break;
-			case 15: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
-					break;
 			default: descriptionGUI.commitSettings(ContentExtractor.LEVEL12_SETTINGS_FILE_DEF , 12); 
+						descriptionGUI.updateClassificationLabel("misc");
 					break;
 		
 		}

@@ -175,7 +175,7 @@ public class WordCount extends JFrame{
 			Distance temp = (Distance)distances.elementAt(distances.size()-1);
 			System.out.println("the closest site is " + temp.site1);
 			System.out.println("the distance is " + temp.distance);
-			if(temp.distance <600)
+			if(temp.distance <700)
 				closestSite = temp.site1;
 			else
 				closestSite = null;
@@ -686,6 +686,11 @@ public class WordCount extends JFrame{
 	 * return the host name given the url string (assumes no http://...)
 	 */
 	public static String parseURL(String url, boolean isRoot){
+		//kill any '/' characters at the end of the url.
+		if(url.charAt(url.length()-1) == '/'){
+			url = url.substring(0,url.length()-1);
+		}
+		
 		int i = url.indexOf('\\');
 		String first=url;
 		String second = "";

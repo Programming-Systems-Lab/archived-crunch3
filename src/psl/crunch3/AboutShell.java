@@ -104,7 +104,7 @@ public class AboutShell {
 		titleLabel.setLayoutData(titleLabelGridData);
 		titleLabel.setText("Crunch 3.0");
 		authorsLabel.setLayoutData(authorsLabelGridData);
-		authorsLabel.setText("Suhit Gupta\n" + "Dr. Gail Kaiser\n" + "Peter Grimm\n" + "David Neistadt");
+		authorsLabel.setText("Suhit Gupta\n" + "Dr. Gail Kaiser\n" + "Hila Becker");
 		acknowledgementLabel.setLayoutData(acknowledgementLabelGridData);
 		acknowledgementLabel.setText(
 			"This product includes software developed by Andy Clark.\n"
@@ -112,7 +112,7 @@ public class AboutShell {
 		divider.setEnabled(false);
 		divider.setLayoutData(dividerGridData);
 		copyrightLabel.setLayoutData(copyrightLabelGridData);
-		copyrightLabel.setText("Copyright (c) 2004: The Trustees of Columbia University in the City\nof New York. All Rights Reserved.");
+		copyrightLabel.setText("Copyright (c) 2005: The Trustees of Columbia University in the City\nof New York. All Rights Reserved.");
 		okButton.setLayoutData(okButtonGridData);
 		okButton.setText("    OK    ");
 		// END VISUALS_INITIALIZATION

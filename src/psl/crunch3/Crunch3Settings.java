@@ -5,6 +5,7 @@
  */
 package psl.crunch3;
 
+
 import java.util.HashSet;
 import java.util.Vector;
 
@@ -15,6 +16,7 @@ import java.util.Vector;
  */
 public class Crunch3Settings {
 	public static final boolean VERBOSE_DEF = false;
+	public static final boolean GUI_DEF = false;
 	public static final int LISTEN_PORT_DEF = 4000;
 	public static final int SERVER_SOCKET_TIMEOUT_DEF = 1000;
 	public static final int SOCKET_TIMEOUT_DEF = 5000;
@@ -25,6 +27,7 @@ public class Crunch3Settings {
 	public static final String[] FILTER_TYPES_DEF = { "text/html" };
 	public static final boolean FILTER_HOMEPAGES_DEF = true;
 	public static final boolean PROXY_MODE_DEF = true;
+	public static String SETTINGS_FILE = "custom.ini";
 
 	//internal variables
 	private String[] arguments;
@@ -34,6 +37,9 @@ public class Crunch3Settings {
 	private boolean verbose;
 	private boolean verboseSet = false;
 
+	private boolean gui;
+	private boolean guiSet = false;
+	
 	private int listenPort;
 	private boolean listenPortSet = false;
 
@@ -64,6 +70,9 @@ public class Crunch3Settings {
 
 	private boolean proxyMode = true;
 	private boolean proxyModeSet = false;
+	
+	private boolean settingsFile;
+	private boolean settingsFileSet = false;
 
 	/**
 	 * Constructs a new Crunch3Settings using a given set of arguments. Usually
@@ -157,7 +166,12 @@ public class Crunch3Settings {
 			"-st".equals(argument) || "--socket-timeout".equals(argument)) {
 			processSocketTimeout(argNumber + 1);
 			return 2;
-		} else {
+		} else if ("-g".equals(argument) || "--gui".equals(argument)) {
+			setGUI(true);
+		} else if ("-f".equals(argument) || "--file".equals(argument)){
+			SETTINGS_FILE = arguments[argNumber+1];
+		}
+		else {
 			additionalArgs.add(argument);
 		}
 
@@ -313,6 +327,16 @@ public class Crunch3Settings {
 			return PROXY_MODE_DEF;
 	}
 
+	public boolean isGUISet(){
+		if(guiSet){
+			return gui;
+		}
+		else return GUI_DEF;
+	}
+	
+	public String getSettings(){
+		return SETTINGS_FILE;
+	}
 	/**
 	 * Sets the port to listen on in proxy mode. Valid ports are in the range
 	 * from 0 to 65535.
@@ -345,6 +369,11 @@ public class Crunch3Settings {
 	public void setVerbose(boolean b) {
 		verbose = b;
 		verboseSet = true;
+	}
+	
+	public void setGUI(boolean b){
+		gui = b;
+		guiSet = true;
 	}
 
 	/**
