@@ -172,8 +172,13 @@ public class WordCount extends JFrame{
 			}
 			
 			sortDistance(distances,0, distances.size()-1);
-			System.out.println("the closest site is " + ((Distance)distances.elementAt(distances.size()-1)).site1);
-			closestSite = ((Distance)distances.elementAt(distances.size()-1)).site1;
+			Distance temp = (Distance)distances.elementAt(distances.size()-1);
+			System.out.println("the closest site is " + temp.site1);
+			System.out.println("the distance is " + temp.distance);
+			if(temp.distance <600)
+				closestSite = temp.site1;
+			else
+				closestSite = null;
 			names.removeElementAt(0);
 			
 		}
@@ -191,7 +196,6 @@ public class WordCount extends JFrame{
 		System.out.println("generating word list for " + url);
 		BufferedReader in = getWebsite(url);
 		InputStreamReader read;
-		System.out.println("********************    " + engineNum);
 		try{
 			storeBuffer(in);
 			in.close();
@@ -604,6 +608,7 @@ public class WordCount extends JFrame{
 	public BufferedReader getWebsite(String address){
 		try{
 			URL url = new URL("http://" + address);
+			
 			return new BufferedReader(new InputStreamReader(url.openStream()));
 		}
 		catch(Exception e){
@@ -680,7 +685,7 @@ public class WordCount extends JFrame{
 	/*
 	 * return the host name given the url string (assumes no http://...)
 	 */
-	private String parseURL(String url, boolean isRoot){
+	public static String parseURL(String url, boolean isRoot){
 		int i = url.indexOf('\\');
 		String first=url;
 		String second = "";
@@ -914,7 +919,7 @@ public class WordCount extends JFrame{
 				out.writeBytes("The elements in cluster #" + (i+1) + " are: \n");
 				for(int j=0;j<temp.size();j++){
 					cn = (ClusterNode)temp.elementAt(j);
-					os.writeBytes(cn.site + " " + (i+1) + "\n");
+					os.writeBytes(cn.site + " " + (i+1) + " " + cn.level + "\n");
 					System.out.println(cn.site + "\t" + cn.level +
 						"\t" + cn.pulled + "\t" + cn.distance);
 					out.writeBytes(cn.site + "\t" + cn.level +

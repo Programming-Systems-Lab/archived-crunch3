@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Vector;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -50,6 +51,20 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	public static final String LINK_HEAVY_SETTINGS_FILE_DEF = "config" + File.separator + "link heavy.ini";
 	public static final String AUTOMATIC_SETTINGS_FILE_DEF = "config" + File.separator + "automatic.ini";
 	public static final String CUSTOM_SETTINGS_FILE_DEF = "config" + File.separator + "custom.ini";
+	
+	public static final String LEVEL1_SETTINGS_FILE_DEF = "config" + File.separator + "level1.ini";
+	public static final String LEVEL2_SETTINGS_FILE_DEF = "config" + File.separator + "level2.ini";
+	public static final String LEVEL3_SETTINGS_FILE_DEF = "config" + File.separator + "level3.ini";
+	public static final String LEVEL4_SETTINGS_FILE_DEF = "config" + File.separator + "level4.ini";
+	public static final String LEVEL5_SETTINGS_FILE_DEF = "config" + File.separator + "level5.ini";
+	public static final String LEVEL6_SETTINGS_FILE_DEF = "config" + File.separator + "level6.ini";
+	public static final String LEVEL7_SETTINGS_FILE_DEF = "config" + File.separator + "level7.ini";
+	public static final String LEVEL8_SETTINGS_FILE_DEF = "config" + File.separator + "level8.ini";
+	public static final String LEVEL9_SETTINGS_FILE_DEF = "config" + File.separator + "level9.ini";
+	public static final String LEVEL10_SETTINGS_FILE_DEF = "config" + File.separator + "level10.ini";
+	public static final String LEVEL11_SETTINGS_FILE_DEF = "config" + File.separator + "level11.ini";
+	public static final String LEVEL12_SETTINGS_FILE_DEF = "config" + File.separator + "level12.ini";
+	
 	public static final String CONTENT_TEXT = "text/plain";
 	public static final String CONTENT_HTML = "text/html";
 
@@ -75,7 +90,9 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 	ContentExtractorSettings settings; // the settings
 	ContentExtractorDescriptionGUI descriptionGUI; // the description GUI
-
+	private Vector visitedClusters;
+	
+	
 	/**
 	 * Creates a new instance without any input stream and the default settings file.
 	 */
@@ -104,6 +121,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		mLinksSourceAll = new LinkedList();
 		mLinksTextAll = new LinkedList();
 		mImagesSource = new LinkedList();
+		
+		visitedClusters = new Vector();
 	}
 
 	
@@ -1619,58 +1638,112 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		
 		if (descriptionGUI.isAuto()){
 			//check what cluster the site belongs to and determine the correct filter.
-			WordCount wc = new WordCount(URL.substring(7), descriptionGUI.getFrequencies(),
-					descriptionGUI.getKeys(), descriptionGUI.getSites(), descriptionGUI.getEngineNumber());
+			int cluster = 0;
 			
-			int cluster = descriptionGUI.getCluster(wc.getClosestSite());
-			System.out.println(cluster);
+			//check if the site is already clustered.
+			if((cluster = descriptionGUI.getCluster(WordCount.parseURL(URL.substring(7),true))) != 0){
+				System.out.println(URL +" is already clustered");
+			}
+			else{
 			
+				WordCount wc = new WordCount(URL.substring(7), descriptionGUI.getFrequencies(),
+						descriptionGUI.getKeys(), descriptionGUI.getSites(), descriptionGUI.getEngineNumber());
+				String closest = wc.getClosestSite();
+				if(closest !=null)
+					cluster = descriptionGUI.getCluster(closest);
+				else cluster = 0;
+				
+				System.out.println(cluster);
 			
-			
-			switch(cluster){
-			
-				case 1: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 2: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 3: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 4: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 5: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 6: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 7: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 8: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						break;
-				case 9: descriptionGUI.commitSettings(ContentExtractor.NEWS_SETTINGS_FILE_DEF);
-						break;
-				case 10: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
-					 	 break;
-				case 11: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
-						 break;
-				case 12: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
-						 break;
-				case 13: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
-						break;
-				case 14: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
-						 break;
-				case 15: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
-						break;
-				default: descriptionGUI.commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF); 
-						break;
 			
 			}
 			
+		    visitedClusters.addElement(new Integer(cluster));
+		    if(visitedClusters.size()>3){
+		    	visitedClusters.removeElementAt(0);
+		    }
+		    
+		    //this method should be changed after each run of WordCount.
+		    applySettings(cluster);
+
+			
+			//if the page is a news home page change the setting to level 6
+			if(hpt.isHomePage()){
+				int level = descriptionGUI.getSettingLevel();
+				if(level ==2){
+					level+=4;
+					System.out.println("@@@@@@@@@@" + level);
+					descriptionGUI.commitSettings("config" + File.separator + "level" + level + ".ini", level);
+				}
+			}
+			
+			if(visitedClusters.size()==3){
+			//if surfing is random then relax the setting
+				if(isRandomSurfing()){
+					System.out.println("Random Surfing Detected");
+					relax(); 
+				}
+			}
+			
+			
 		}
+	}
+	
+	private void relax(){
+		descriptionGUI.commitSettings("config" + File.separator + "level" + 9 + ".ini", 9);
 	}
 	
 	public void selectCustom(){
 		descriptionGUI.selectCustom();
 	}
 	
+	private void applySettings(int cluster){
+		switch(cluster){
+		
+			case 1: descriptionGUI.commitSettings(ContentExtractor.LEVEL10_SETTINGS_FILE_DEF, 10);
+					break;
+			case 2: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					break;
+			case 3: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					break;
+			case 4: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					break;
+			case 5: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					break;
+			case 6: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					break;
+			case 7: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					break;
+			case 8: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					break;
+			case 9: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					break;
+			case 10: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+				 	 break;
+			case 11: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+					 break;
+			case 12: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					 break;
+			case 13: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+					break;
+			case 14: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2); 
+					 break;
+			case 15: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+					break;
+			default: descriptionGUI.commitSettings(ContentExtractor.LEVEL12_SETTINGS_FILE_DEF , 12); 
+					break;
+		
+		}
+	}
+	
+	private boolean isRandomSurfing(){
+		int current = ((Integer)(visitedClusters.elementAt(2))).intValue();
+		int prev1 = ((Integer)(visitedClusters.elementAt(1))).intValue();
+		int prev2 = ((Integer)(visitedClusters.elementAt(0))).intValue();
+		System.out.println(current + "  " + prev1 + "  "+ prev2);
+		if((current != prev1) && (current != prev2)) return true;
+		else return false;
+	}
 	
 	
 } //ContentExtractor

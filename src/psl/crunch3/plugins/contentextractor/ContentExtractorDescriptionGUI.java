@@ -75,6 +75,7 @@ public class ContentExtractorDescriptionGUI {
 	private Vector names;
 	private Hashtable clusters;
 	private int engineNumber = 5;
+	private int settingLevel = 0;
 	
 	/**
 	 * @param c
@@ -326,32 +327,32 @@ public class ContentExtractorDescriptionGUI {
 	}
 	
 	private void newsButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.NEWS_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.NEWS_SETTINGS_FILE_DEF, 0);
 		isAuto = false;
 	}
 	
 	protected void shoppingButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.SHOPPING_SETTINGS_FILE_DEF , 0);
 		isAuto = false;
 	}
 	
 	protected void governmentButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.GOVERNMENT_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.GOVERNMENT_SETTINGS_FILE_DEF , 0);
 		isAuto = false;
 	}
 	
 	protected void educationButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.EDUCATION_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.EDUCATION_SETTINGS_FILE_DEF , 0);
 		isAuto = false;
 	}
 	
 	protected void textHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.TEXT_HEAVY_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.TEXT_HEAVY_SETTINGS_FILE_DEF , 0);
 		isAuto = false;
 	}
 	
 	protected void linkHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LINK_HEAVY_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.LINK_HEAVY_SETTINGS_FILE_DEF, 0);
 		isAuto = false;
 	}
 	
@@ -393,12 +394,18 @@ public class ContentExtractorDescriptionGUI {
 			}
 			in.close();
 			
-			int index;
+			String part1;
+			int index1, index2;
 			in = new BufferedReader(new FileReader(new File("clusters.txt")));
 			while((word =in.readLine())!=null){
-				index = word.indexOf(" ");
-				clusters.put(word.substring(0,index), 
-						word.substring(index+1));
+				index1 = word.indexOf(" ");
+				part1 = word.substring(index1+1);
+				index2 = part1.indexOf(" ");
+				System.out.println(index2);
+				clusters.put(word.substring(0,index1), 
+						new ClusterInfo((Integer.parseInt(part1.substring(0,index2))),
+								(Integer.parseInt(part1.substring(index2+1))))
+						);
 			}
 			in.close();
 			
@@ -407,11 +414,11 @@ public class ContentExtractorDescriptionGUI {
 		catch(Exception ex){
 			ex.printStackTrace();
 		}
-		commitSettings(ContentExtractor.AUTOMATIC_SETTINGS_FILE_DEF);
+		
 	}
 	
 	protected void customButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF);
+		commitSettings(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF , 0);
 		isAuto = false;
 	}
 	
@@ -562,18 +569,27 @@ public class ContentExtractorDescriptionGUI {
     }
     
     public int getCluster(String closest){
-    	return Integer.parseInt((String)clusters.get(closest));
+    	ClusterInfo temp = (ClusterInfo)clusters.get(closest);
+    	if (temp != null)
+    		return temp.clusterNum;
+    	else return 0;
     }
     
     public int getEngineNumber(){
     	return engineNumber;
     }
     
+    public int getSettingLevel(){
+    	return settingLevel;
+    }
+
+    
+    
     /**
      * Changes the filter settings to new settings read from a file.
      * @param fileName the file containing the new filter settings. 
      */
-    public void commitSettings(String fileName) {
+    public void commitSettings(String fileName , int level) {
     	File nSettingsFile = new File(fileName);
     	TypedProperties nSettings = new TypedProperties();
     	try {
@@ -584,6 +600,9 @@ public class ContentExtractorDescriptionGUI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		settingLevel = level;
+		
     	newFilter.changeSetting(ContentExtractorConstants.ONLY_TEXT, Boolean.toString
     			(nSettings.getProperty(ContentExtractorConstants.ONLY_TEXT, ContentExtractorConstants.ONLY_TEXT_DEF)));
     	newFilter.changeSetting(ContentExtractorConstants.IGNORE_ADS,Boolean.toString
@@ -682,4 +701,15 @@ public class ContentExtractorDescriptionGUI {
 		
 	}
     
+    
+    class ClusterInfo{
+    	private int clusterNum;
+    	private int level;
+    	
+    	ClusterInfo(int num, int level){
+    		clusterNum = num;
+    		this.level = level;
+    	}
+    	
+    }
 }

@@ -1,153 +1,149 @@
-the-times+co 1
-timesonline+co 1
-indiaabroad 2
-rediff 2
-hindustantimes 2
-timesofindia+indiatimes 2
-pricewatch 3
-streetprices 3
-pricegrabber 3
-nextag 3
-apple 3
-auctions+yahoo 3
-resellerratings 3
-bhphotovideo 3
-overstock 3
-buy 3
-newegg 3
-tomshardware 3
-BizRate 4
-Shopzilla 4
-epinions 4
-shopping 4
-fatwallet 4
-shopping+yahoo 4
-news+bbc+co 5
-bbc+co 5
-news+yahoo 5
-news+com 5
-expressindia 6
-indianexpress 6
-observerindia 6
-spaceflightnews 7
-spacetoday 7
-universetoday 7
-spaceDaily 7
-rednova 7
-spaceref 7
-space 7
-spaceflightnow 7
-hp 8
-ibm 8
-dell 8
-infoworld 8
-iht 9
-observer 9
-newyorkpost 9
-cnn 9
-ny1 9
-drudgereport 9
-news+ft 9
-washingtontimes 9
-cbc 9
-hinduonnet 9
-timesunion 9
-suntimes 9
-stltoday 9
-sports+yahoo 9
-ap 9
-theunionleader 9
-themoscowtimes 9
-globalsecurity 9
-allsports 9
-sfgate 9
-csmonitor 9
-thisislondon+co 9
-pressherald+mainetoday 9
-wired 9
-usatoday 9
-jpost 9
-smh+com 9
-fark 9
-latimes 9
-tech+nytimes 9
-cleveland 9
-pcworld 9
-salon 9
-thesun+co 9
-sportingnews 9
-nytimes 9
-japantoday 9
-dallasnews 9
-economist 9
-gertzfile 9
-nydailynews 9
-sun-sentinel 9
-cbs+sportsline 9
-ndtv 9
-abqjournal 9
-tnr 10
-tomalak 10
-heroicstories 10
-marsrovers+jpl+nasa 10
-prosportsdaily 10
-kuro5hin 10
-catless+ncl+ac 10
-outlookindia 10
-techreview 10
-digitalidworld 10
-slate+msn 10
-time 10
-joystiq 10
-groklaw 10
-slashdot 10
-blogs+msdn 10
-fuckedcompany 10
-engadget 10
-mobilewhack 10
-counterpunch 10
-connection 11
-warehouse 11
-tesco 11
-eonline 11
-target 11
-ebay 11
-walmart 11
-zones 11
-insight 11
-amazon 11
-computerworld 11
-anandtech 12
-theinquirer 12
-theregister 12
-techjapan 12
-arstechnica 12
-mtekk+com 12
-infosyncworld 12
-SpotStop 12
-worldtribune 12
-pocketpcthoughts 12
-dpreview 12
-eHomeUpgrade 12
-ppcw 12
-hardocp 12
-mobiletracker 12
-eweek 12
-photographyblog 12
-defamer 13
-gawker 13
-wonkette 13
-gizmodo 13
-azcentral 14
-chicagotribune 14
-tampatrib 14
-thestate 14
-baltimoresun 14
-orlandosentinel 14
-tallahassee 14
-charlotte 14
-miami 14
-ajc 14
-indystar 14
-digitalmediathoughts 15
-smartphonethoughts 15
+the-times+co 1 0
+timesonline+co 1 0
+pricewatch 2 0
+streetprices 2 0
+epinions 2 1
+pricegrabber 2 1
+BizRate 2 2
+nextag 2 2
+Shopzilla 2 2
+shopping 2 2
+tesco 2 2
+anandtech 2 2
+fatwallet 2 2
+shopping+yahoo 2 2
+auctions+yahoo 2 1
+resellerratings 2 1
+ebay 2 2
+SpotStop 2 1
+overstock 2 2
+bhphotovideo 2 1
+buy 2 1
+amazon 2 2
+tomshardware 2 1
+newegg 2 2
+indiaabroad 3 0
+rediff 3 0
+outlookindia 3 1
+hindustantimes 3 2
+thesun+co 3 1
+timesofindia+indiatimes 3 1
+ndtv 3 1
+expressindia 4 0
+indianexpress 4 0
+observerindia 4 1
+news+bbc+co 5 0
+bbc+co 5 0
+news+yahoo 5 1
+news+ft 5 1
+cnn 5 1
+ap 5 1
+cbc 5 2
+suntimes 5 2
+sports+yahoo 5 1
+allsports 5 2
+news+com 5 1
+wired 5 1
+usatoday 5 2
+pcworld 5 2
+economist 5 2
+sportingnews 5 2
+sun-sentinel 5 2
+cbs+sportsline 5 2
+hp 6 0
+ibm 6 0
+apple 6 1
+dell 6 2
+target 6 2
+walmart 6 2
+iht 7 0
+tomalak 7 0
+tnr 7 1
+prosportsdaily 7 1
+hinduonnet 7 1
+washingtontimes 7 1
+drudgereport 7 1
+theregister 7 1
+marsrovers+jpl+nasa 7 1
+heroicstories 7 1
+techreview 7 2
+csmonitor 7 1
+themoscowtimes 7 1
+kuro5hin 7 1
+catless+ncl+ac 7 1
+techjapan 7 1
+arstechnica 7 2
+theinquirer 7 1
+slate+msn 7 2
+globalsecurity 7 2
+pressherald+mainetoday 7 1
+worldtribune 7 1
+digitalidworld 7 2
+groklaw 7 2
+japantoday 7 1
+fark 7 2
+hardocp 7 2
+blogs+msdn 7 2
+space 7 2
+fuckedcompany 7 1
+gertzfile 7 2
+researchbuzz 7 2
+slashdot 7 2
+mobilewhack 7 2
+connection 8 0
+warehouse 8 0
+zones 8 1
+insight 8 1
+time 8 2
+computerworld 8 2
+infoworld 8 1
+eweek 8 2
+newyorkpost 9 0
+ny1 9 0
+stltoday 9 1
+observer 9 1
+timesunion 9 1
+chicagotribune 9 1
+orlandosentinel 9 2
+eonline 9 1
+theunionleader 9 2
+azcentral 9 2
+tampatrib 9 2
+latimes 9 2
+smh+com 9 2
+thisislondon+co 9 1
+tech+nytimes 9 1
+sfgate 9 1
+thestate 9 2
+jpost 9 1
+cleveland 9 2
+baltimoresun 9 2
+salon 9 1
+nytimes 9 1
+dallasnews 9 2
+nydailynews 9 1
+indystar 9 2
+ajc 9 2
+spaceflightnews 10 0
+spacetoday 10 0
+universetoday 10 1
+spaceDaily 10 1
+rednova 10 1
+spaceflightnow 10 1
+spaceref 10 1
+infosyncworld 11 0
+mtekk+com 11 0
+ppcw 11 1
+dpreview 11 1
+mobiletracker 11 1
+defamer 12 0
+gawker 12 0
+wonkette 12 1
+gizmodo 12 1
+pocketpcthoughts 13 0
+smartphonethoughts 13 0
+digitalmediathoughts 13 1
+eHomeUpgrade 13 2
+charlotte 14 0
+tallahassee 14 0
+miami 14 1
