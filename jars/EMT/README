@@ -1,0 +1,24 @@
+Email Mining Toolkit.
+Version 3.4 README
+
+1) This application requires the following to be installed:
+	-Java 1.4 or newer 
+	(http://java.sun.com/j2se/1.4.2/download.html Note: J2SE-JRE is fine)
+
+1a) optional: for very large datesets, if the java database is slow:
+	-Mysql 3.23 or later
+	(http://www.mysql.com/downloads/mysql-4.0.html Note: Scroll down windows download)
+		
+2) For converting outlook express the following is required:
+	-readdbx.exe
+	-cygwin1.dll
+
+3) for FIRST TIME USE:
+
+java -jar emt.jar
+
+note: In the config window, fill in the relavent data, and save will need a restart,
+
+4) use the emtclient.bat (or your own) created by step 3, to run emt.
+
+

@@ -1,0 +1,11 @@
+HOTWORDS = etc/hotwords.txt
+DBUSERNAME = root
+DBTYPE = DERBY
+DBPASSWORD = 
+STOPWORDS = etc/stoplist.txt
+SHOW = true
+ALIASFILENAME = etc/aliases
+DBHOST = localhost
+CONFIG = EMTconfig.txt
+DBNAME = test
+DOS_BATCH_FILE = emtclient.bat
