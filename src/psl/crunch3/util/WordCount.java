@@ -7,6 +7,14 @@ import com.google.soap.search.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import javax.swing.*;
+import java.awt.image.*;
+import java.awt.*;
+import org.jfree.chart.*;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.*;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.axis.*;
 
 /**
  * @author hb2143
@@ -14,7 +22,7 @@ import java.util.*;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class WordCount {
+public class WordCount extends JFrame{
 
 	private boolean useWordList;
 	private int engineNum;
@@ -24,18 +32,29 @@ public class WordCount {
 	private Vector stoplist;
 	private Vector wordlist;
 	private Vector sitewords;
-	private Vector keywords;
-	private Vector siteNames;
+	private Vector keywords; 
+	private Vector siteNames; //stores the names of the sites
 	private Hashtable dictwords;
-	
+	private Container cp;
+	private JPanel chartPanel;
+	private int[][] frequencies;
+	private Vector distances;
+	private Vector clusters;
 	public static void main(String[] args) {
 		//if ((args[0] != null) && (args[1] != null))
-			new WordCount(args[0], args[1]);
-		//else System.out.println("please provide arguments for the number of engines (1,2,3)" 
-			//	+ "and whether you want to use the words file or not (yes/no)");
+			WordCount wc = new WordCount(args[0], args[1]);
+			wc.setVisible(true);
+		
 	}
 	
 	public WordCount(String num, String words){
+		
+		cp = this.getContentPane();
+		chartPanel = new JPanel();
+		
+		ScrollPane sp = new ScrollPane();
+		
+		this.setSize(800,500);
 		if (words.equals("yes")) {
 			useWordList = true;
 			storeDictwords();
@@ -54,14 +73,21 @@ public class WordCount {
 			siteNames = new Vector();
 			while((site = inSites.readLine()) != null){
 				wordlist = new Vector();
-				generateList(site);
+				generateList(site, true);
 			}
 			inSites.close();
 			
-			
+			chartPanel.setLayout(new GridLayout(siteNames.size(),1));
+			frequencies = new int[siteNames.size()][keywords.size()];
+			distances = new Vector();
 			for (int i=0;i<siteNames.size();i++){
-				compare(((Vector)(sitewords.elementAt(i))), keywords, ((String)(siteNames.elementAt(i))));
+				compare(i);
 			}
+			
+			findClusters();
+			
+			sp.add(chartPanel);
+			cp.add(sp);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -71,17 +97,17 @@ public class WordCount {
 	 * Generates a lists of words and their corresponding frequencies and writes them to a file.
 	 * @param url the address of the website
 	 */
-	private void generateList(String url){
+	private void generateList(String url, boolean isRoot){
 		System.out.println("generating word list for " + url);
 		BufferedReader in = getWebsite(url);
 		InputStreamReader read;
 		try{
 			storeBuffer(in);
 			in.close();
-			generateLinks(getWebsite(url),url);
+			//if(isRoot) generateLinks(getWebsite(url),url);
 			//store words from google search.
 			System.out.println("storing google search results...");
-			GoogleSearchResultElement[] re = getGoogle(parseURL(url));
+			GoogleSearchResultElement[] re = getGoogle(parseURL(url,true));
 			
 			for(int k=0;k<re.length;k++){
 				store(removePunctuations(re[k].getSnippet()+" "+re[k].getTitle()+ " " +re[k].getSummary()));
@@ -91,16 +117,38 @@ public class WordCount {
 			
 			//store words from yahoo search
 			System.out.println("storing yahoo search results");
-			in = getYahoo(parseURL(url));
+			in = getYahoo(parseURL(url,true));
 			storeBuffer(in);
 			
 			in.close();
 			
 			//store words from dogpile search
 			System.out.println("storing dogpile search results");
-			in = getDogPile(parseURL(url));
+			in = getDogPile(parseURL(url,true));
 			storeBuffer(in);
 			
+			in.close();
+			
+			//store words from msn search
+			System.out.println("storing msn search results");
+			in = getMSN(parseURL(url,true));
+			storeBuffer(in);
+			in.close();
+			
+			//store words from altavista search
+			System.out.println("storing altavista search results");
+			in = getAltaVista(parseURL(url,true));
+			storeBuffer(in);
+			in.close();
+			
+			/*System.out.println("storing  search results");
+			in = getLycos(parseURL(url,true));
+			storeBuffer(in);
+			in.close();*/
+			
+			System.out.println("storing excite search results");
+			in = getExcite(parseURL(url,true));
+			storeBuffer(in);
 			in.close();
 			
 			
@@ -116,7 +164,7 @@ public class WordCount {
 			//delete words with less than 3 letters, delete numbers
 			for(int j=0;j<wordlist.size();j++){
 				temp = (WordFreq)(wordlist.elementAt(j));
-				if ((temp.word).length()<3||isNumber(temp.word)||(temp.word).equals(parseURL(url))) {
+				if ((temp.word).length()<3||isNumber(temp.word)||(temp.word).equals(parseURL(url,true))) {
 					wordlist.removeElementAt(j);
 					--j;
 				}	
@@ -128,13 +176,13 @@ public class WordCount {
 			System.out.println("sorting...");
 			sort(wordlist,0,wordlist.size()-1);
 			
-			siteNames.addElement(parseURL(url));
+			siteNames.addElement(parseURL(url,isRoot));
 			sitewords.addElement(wordlist);
 			
 			
 			//add words of frequency 5 and above to keywords vector
 			for (int j=0;j<wordlist.size();j++){
-				if((((WordFreq)wordlist.elementAt(j)).frequency > 4) && 
+				if((((WordFreq)wordlist.elementAt(j)).frequency > 9) && 
 						!(inVector(keywords, ((WordFreq)wordlist.elementAt(j)).word))){
 					
 					keywords.add(((WordFreq)wordlist.elementAt(j)).word);	
@@ -322,7 +370,9 @@ public class WordCount {
 	private GoogleSearchResultElement[] getGoogle(String query){
 		try{
 			GoogleSearch s = new GoogleSearch();
-		    s.setKey("1k5kJwtQFHK8GfcJs6hI40N3M6MTxEpt");
+		    //s.setKey("1k5kJwtQFHK8GfcJs6hI40N3M6MTxEpt");
+			//s.setKey("ICXEmVhQFHLkCpwMjwWO6Ev9yYdyuMvA");
+			s.setKey("xnDUeklQFHJeHhwWNLtXeDSfh0zIPfGf");
 			s.setQueryString(query);
 	        GoogleSearchResult r = s.doSearch();
 	        return r.getResultElements();
@@ -358,6 +408,53 @@ public class WordCount {
 		
 	}
 	
+	private BufferedReader getMSN(String address){
+		try{
+			URL url = new URL("http://search.msn.com/results.aspx?q=" + address.trim());
+			return new BufferedReader(new InputStreamReader(url.openStream()));
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}	
+	private BufferedReader getAltaVista(String address){
+		try{
+			URL url = new URL("http://www.altavista.com/web/results?q=" + address.trim());
+			return new BufferedReader(new InputStreamReader(url.openStream()));
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private BufferedReader getLycos(String address){ 
+		  
+		try{ 
+		 URL url = new URL("http://search.lycos.com/default.asp?query=" + address.trim()); 
+		 return new BufferedReader(new InputStreamReader(url.openStream())); 
+		} 
+		  
+		catch(Exception e){ 
+		 e.printStackTrace(); 
+		 return null; 
+		} 
+		 
+	} 
+		private BufferedReader getExcite(String address){ 
+		  
+		try{ 
+		 URL url = new URL("http://msxml.excite.com/info.xcite/search/web/" + address.trim()); 
+		 return new BufferedReader(new InputStreamReader(url.openStream())); 
+		} 
+		  
+		catch(Exception e){ 
+		 e.printStackTrace(); 
+		 return null; 
+		} 
+		}
 	//returns true is the string is a number
 	private boolean isNumber(String s){
 		for(int i=0;i<s.length();i++){
@@ -405,27 +502,52 @@ public class WordCount {
 		}
 	}
 	
-	private void compare(Vector a, Vector b, String site){
+	private void compare(int index){
 		try{
+			Vector a = ((Vector)(sitewords.elementAt(index)));
+			String site = ((String)(siteNames.elementAt(index)));
 			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator+ site +".txt"));
+			XYSeries series = new XYSeries(site,false,false);
 			boolean found;
-			for (int j=0;j<b.size();j++){
+			
+			for (int j=0;j<keywords.size();j++){
 				found = false;
 				for(int i=0;i<a.size();i++){
-					if((((WordFreq)(a.elementAt(i))).word).equals((String)b.elementAt(j))){
-						out.writeBytes(((String)b.elementAt(j))+ "\t" + ((WordFreq)(a.elementAt(i))).frequency + "\n");
+					if((((WordFreq)(a.elementAt(i))).word).equals((String)keywords.elementAt(j))){
+						out.writeBytes(((String)keywords.elementAt(j))+ "\t" + ((WordFreq)(a.elementAt(i))).frequency + "\n");
+						frequencies[index][j] = ((WordFreq)(a.elementAt(i))).frequency;
+						series.add(j,((WordFreq)(a.elementAt(i))).frequency);
 						found = true;
 					}
 				}
 				if(!found){
-					out.writeBytes(((String)b.elementAt(j))+ "\t" + 0 + "\n");
+					out.writeBytes(((String)keywords.elementAt(j))+ "\t" + 0 + "\n");
+					
+					series.add(j,0);
 				}
 				
 			}
 			out.close();
+			DefaultTableXYDataset xyds = new DefaultTableXYDataset();
+            xyds.addSeries(series);
+			
+            JFreeChart chart = ChartFactory.createXYBarChart
+            (site, "x", false,"y",xyds, PlotOrientation.VERTICAL, true,true,true);
+            
+           
+            XYPlot plot = chart.getXYPlot();
+            ValueAxis yAxis = plot.getRangeAxis();
+            yAxis.setRange(0,100);
+            
+            
+            BufferedImage image = chart.createBufferedImage(500,300);
+            //ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+            JLabel lblChart = new JLabel();
+            lblChart.setIcon(new ImageIcon(image));
+            chartPanel.add(lblChart);
 		}
 		catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	}
 	
@@ -433,23 +555,31 @@ public class WordCount {
 	/*
 	 * return the host name given the url string (assumes no http://...)
 	 */
-	private String parseURL(String url){
+	private String parseURL(String url, boolean isRoot){
 		int i = url.indexOf('\\');
-		if (i!=-1) url = url.substring(0,i);
-		i=url.indexOf('.');
-		if((url.substring(0,i)).startsWith("www")){
-			url = url.substring(i+1);
+		String first=url;
+		String second = "";
+		if (i!=-1) first = url.substring(0,i);
+		i=first.indexOf('.');
+		if((first.substring(0,i)).startsWith("www")){
+			first = first.substring(i+1);
 		}
-		i=url.lastIndexOf('.');
-		if(i!=-1) url=url.substring(0,i);
+		i=first.lastIndexOf('.');
+		if(i!=-1) first=first.substring(0,i);
 		//replace every '.' with " "
-		i=url.indexOf('.');
+		i=first.indexOf('.');
 		while(i!=-1){
-			url=url.substring(0,i) + "+" + url.substring(i+1);
-			i=url.indexOf('.');
+			first=first.substring(0,i) + "+" + first.substring(i+1);
+			i=first.indexOf('.');
 		}
-		
-		return url;
+		if(isRoot) return first;
+		else{ 
+			i=url.indexOf('\\');
+			if (i!=-1) second = url.substring(i+1);
+			i=second.indexOf('\\');
+			if(i!=-1) second = second.substring(0,i);
+			return (first + "_" + second);
+		}
 	}
 	
 	private void storeDictwords(){
@@ -509,7 +639,8 @@ public class WordCount {
 				if(index!=-1){
 					line = line.substring(index+9);
 					wordlist = new Vector();
-					//generateList(url+line.substring(0,line.indexOf("\"")));
+					generateList(url + line.substring(0,line.indexOf("\"")),false);
+					//System.out.println(url + line.substring(0,line.indexOf("\"")));
 					line = line.substring(line.indexOf("\"")+1);
 				}
 				else{
@@ -529,6 +660,202 @@ public class WordCount {
 		
 	}
 	
+	private void findClusters(){
+		System.out.println(siteNames.size());
+		for(int i=0;i<siteNames.size();i++){
+			for(int j=i+1;j<siteNames.size();j++){
+				distances.addElement(new Distance((String)siteNames.elementAt(i), 
+						(String)siteNames.elementAt(j), getDistance(frequencies[i],frequencies[j])));
+				System.out.println("the distance between " + (String)siteNames.elementAt(i)+ " and " +
+						(String)siteNames.elementAt(j)+ "  is  " + getDistance(frequencies[i],frequencies[j]));
+			}
+		}
+		
+		System.out.println("sorting distances... ");
+		
+		sortDistance(distances,0, distances.size()-1);
+		
+		for(int i=0;i<distances.size();i++){
+			System.out.println("The distance between " + ((Distance)(distances.elementAt(i))).site1 + " and " + 
+					((Distance)(distances.elementAt(i))).site2 + " is " + ((Distance)(distances.elementAt(i))).distance);
+		}
+		
+
+		clusters = new Vector();
+		
+		//add the sites with the smallest distance to an initial cluster
+		Vector cluster1 = new Vector();
+		cluster1.addElement(new ClusterNode(((Distance)distances.elementAt(distances.size()-1)).site1,0, "", 0,"1"));
+		cluster1.addElement(new ClusterNode(((Distance)distances.elementAt(distances.size()-1)).site2,0, "", 0,"1"));
+		clusters.addElement(cluster1);
+		
+		int levelCounter = 0;
+		Vector temp; 
+		Distance dist;
+		int threshold = 300;
+		int currentThreshold = 300;
+		boolean found1 = false;
+		boolean found2 = false;
+		int index2=0;
+		Vector cluster2 = null;
+		int l1 = -1;
+		int l2 = -1;
+		int clustertag = 1;
+		int n1 = -1;
+		int n2 =-1;
+		for (int j=distances.size()-2;j>0;--j){
+			found1 = false;
+			found2 = false;
+			cluster1 = null;
+			cluster2 = null;
+			l1=-1;
+			l2=-1;
+			if(((Distance)distances.elementAt(j)).distance <= currentThreshold){
+				//get the next pair of sites with the shortest distance
+				dist = (Distance)distances.elementAt(j);
+				//check if either one of the sites is already in a cluster
+				//for now an element can only belong to one cluster
+				for(int i=0;i<clusters.size();i++){
+					temp = (Vector)clusters.elementAt(i);
+					for(int n=0;n<temp.size();n++){
+						if ((((ClusterNode)temp.elementAt(n)).site).equals(dist.site1)){
+							
+								cluster1 = (Vector)clusters.elementAt(i);
+								n1 = n;
+								found1 = true;
+								l1 = ((ClusterNode)temp.elementAt(n)).level;
+							
+						
+						}
+						if ((((ClusterNode)temp.elementAt(n)).site).equals(dist.site2)){	
+							
+								cluster2 = (Vector)clusters.elementAt(i);
+								n2 = n;
+								found2 = true;
+								l2 = ((ClusterNode)temp.elementAt(n)).level;
+							
+						}
+					}	
+				}
+				if(!found1 && !found2){
+					//create a new cluster
+					temp = new Vector();
+					clustertag++;
+					Integer i =  new Integer(clustertag);
+					temp.addElement(new ClusterNode(dist.site1,0, "" , 0, i.toString()));
+					temp.addElement(new ClusterNode(dist.site2,0, "" , 0, i.toString()));
+					clusters.addElement(temp);
+				}
+				else if(found1 && !found2){//add to the first cluster
+					if(l1 < 2){
+						l1++;
+						cluster1.addElement(new ClusterNode(dist.site2,l1, dist.site1,
+								dist.distance, ((ClusterNode)cluster1.elementAt(n1)).getCurrentTag()));
+					}
+				}
+				else if(found2 && !found1){ //add to the second cluster
+					if(l2 < 2){
+						l2++;
+						cluster2.addElement(new ClusterNode(dist.site1,l2, dist.site2,
+								dist.distance, ((ClusterNode)cluster2.elementAt(n2)).getCurrentTag()));
+					}
+				}
+				else {
+					//join the 2 clusters
+					/**if(!(cluster1.equals(cluster2))){
+						clustertag++;
+						Integer i = new Integer(clustertag);
+						
+						for(int l=0;l<cluster1.size();l++){
+							((ClusterNode)cluster1.elementAt(l)).addTag(i.toString());
+						}
+						for(int m=0; m < cluster2.size(); m++){
+							
+							cluster1.addElement(cluster2.elementAt(m));
+							
+							((ClusterNode)cluster2.elementAt(m)).addTag(i.toString());
+						}
+						
+						clusters.removeElement(cluster2);
+						
+					}**/
+				}
+			}
+			else{
+				levelCounter++;
+				currentThreshold = threshold + (50*levelCounter);
+				++j;
+				
+				
+			}
+			if(currentThreshold > 1000) break;
+		}
+		
+		System.out.println("The clusters are ...  ");
+		ClusterNode cn = null;
+		for(int i=0;i<clusters.size();i++){
+			temp = (Vector)clusters.elementAt(i);
+			System.out.print("The elements in cluster #" + (i+1) + " are: ");
+			for(int j=0;j<temp.size();j++){
+				cn = (ClusterNode)temp.elementAt(j);
+				System.out.println(cn.site + "\t" + cn.level +
+						"\t" + cn.pulled + "\t" + cn.distance +
+						"\t" + cn.printTags());
+				
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * @param site
+	 */
+	private void remove(String site){
+		for(int i=0;i<distances.size();i++){
+			if ((((Distance)distances.elementAt(1)).site1).equals(site) ||
+					(((Distance)distances.elementAt(1)).site2).equals(site))
+				distances.removeElementAt(i);
+		}
+	}
+	
+	private void sortDistance(Vector v, int left, int right){
+		
+		if(left>=right) return;
+		int temp = ((Distance)v.elementAt(right)).distance;
+		int i = left - 1;
+		int j = right;
+			while(true) {
+				while(((Distance)v.elementAt(++i)).distance >((Distance)v.elementAt(right)).distance);
+				while(j > 0)
+					if(((Distance)v.elementAt(--j)).distance >=((Distance)v.elementAt(right)).distance)
+						break;
+				if(i >= j) break;
+				swap(v,i,j);
+			}
+			swap(v,i,right);
+			sortDistance(v,left, i-1);
+			sortDistance(v,i+1, right);
+	}
+	
+	/**
+	 * calculates the distance between 
+	 * @param a
+	 */
+	private int getDistance(int[] a, int[] b){
+		if(a.length != b.length)
+		return 0;
+		int distance =0;
+		for(int i=0;i<a.length;i++){
+			if((a[i]-b[i])>0){
+				distance += (a[i]-b[i]);
+			}
+			else distance += (b[i]-a[i]);
+		}
+		return distance;
+		
+	}
+	
 	private class WordFreq{
 		String word;
 		int frequency;
@@ -539,4 +866,58 @@ public class WordCount {
 		}
 		
 	}
+
+	
+	private class Distance{
+		int distance;
+		String site1;
+		String site2;
+		
+		public Distance(String site1, String site2, int distance){
+			this.site1 = site1;
+			this.site2 = site2;
+			this.distance = distance;
+		}
+		
+	}
+	
+	private class ClusterNode{
+		int level;
+		String site;
+		String pulled;
+		int distance;
+		Vector clustertags;
+		
+		public ClusterNode(String site, int level, String pulled, int distance, String tag){
+			this.site = site;
+			this.level = level;
+			this.pulled = pulled;
+			this.distance = distance;
+			clustertags = new Vector();
+			clustertags.addElement(tag);
+		}
+		
+		
+		public void addTag(String tag){
+			clustertags.addElement(tag);
+		}
+		
+		public String getCurrentTag(){
+			clustertags.trimToSize();
+			String s = (String)(clustertags.elementAt(clustertags.size()-1));
+			return s;
+		}
+		
+		public String printTags(){
+			String s="";
+			for(int i=0; i<clustertags.size();i++){
+				s = s + " , " +(String)clustertags.elementAt(i);
+			}
+			return s;
+		}
+	}
+	
+	
 }
+
+

@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="jars/xerces-2_6_0/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="jars/xerces-2_6_0/xmlParserAPIs.jar"/>
 	<classpathentry kind="lib" path="jars/googleapi/googleapi.jar"/>
+	<classpathentry kind="lib" path="jars/jfreechart/jfreechart-0.9.21/jfreechart-0.9.21.jar"/>
+	<classpathentry kind="lib" path="jars/jcommon-0.9.7/jcommon-0.9.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
