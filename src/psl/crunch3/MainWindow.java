@@ -55,8 +55,6 @@ import psl.crunch3.plugins.ProxyFilter;
 public class MainWindow extends Thread {
 	
 	private String currentURL="";
-	private String oldURL = "";
-	// 
 	private boolean isInitialized = false;
 	private boolean listenPortChanged = false;
 	private Vector connections = new Vector();
@@ -1072,6 +1070,22 @@ public class MainWindow extends Thread {
 	public void setURL(String url){
 		currentURL = url;
 	}
+	
+	public String parseURL(String original, String host){
+		
+		try{
+		//original should be in the form GET /... HTTP/1.1
+		int length = original.length()-9;
+		return "http://" + host.trim() + original.substring(4,length).trim();
+		
+		}
+		catch(Exception e){
+			if (Crunch3.settings.isVerbose())
+	    		System.out.println("error parsing the url");
+		}
+		return "";
+	}
+	
 	
 	/**
 	 * @return the main shell

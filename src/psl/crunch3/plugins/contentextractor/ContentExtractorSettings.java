@@ -16,7 +16,9 @@ public class ContentExtractorSettings implements ContentExtractorConstants {
 
 	private String mSettingsFile; //the settings file path
 	private TypedProperties mSettings; //the settings properties file
-
+	private String type; //the name of the settings type
+	
+	
 	//Settings variables
 	boolean ignoreTextLinks;
 	boolean ignoreImages;

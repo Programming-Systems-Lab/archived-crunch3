@@ -40,6 +40,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	public static final int LETTERS_PER_WORD = 5;
 	public static final String SETTINGS_FILE_DEF = "config" + File.separator + "content extractor settings.ini";
 	public static final String NEWS_SETTINGS_FILE_DEF = "config" + File.separator + "news.ini";
+	public static final String NEWS_HP_SETTINGS_FILE_DEF = "config" + File.separator + "news_hp.ini";
 	public static final String SHOPPING_SETTINGS_FILE_DEF = "config" + File.separator + "shopping.ini";
 	public static final String GOVERNMENT_SETTINGS_FILE_DEF = "config" + File.separator + "government.ini";
 	public static final String EDUCATION_SETTINGS_FILE_DEF = "config" + File.separator + "education.ini";
@@ -1533,12 +1534,10 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 	/* (non-Javadoc)
 	 * @see psl.crunch3.plugins.SiteDependentFilter#reportURL(java.lang.String)
+	 * updates the generic image and specific image labels
 	 */
 	public void reportHost(String host) {
-		
-		// TODO Auto-generated method stub
-		
-		
+		// TODO 
 		int index = -1;
 		if ((descriptionGUI != null) && (host !=null) )
 			index = host.indexOf('.');
@@ -1558,10 +1557,26 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 				
 				host = host.toLowerCase().trim().concat(".jpg");
 				descriptionGUI.updateSpecificImage(host);
-			}
+				
 			
-		
-		
+				//randomly choose a generic image
+				int rand = (int)(Math.random()*5.0);
+				switch(rand){
+					case 0: descriptionGUI.updateGenericImage("basic.jpg");
+							break;
+					case 1: descriptionGUI.updateGenericImage("multibodywithadvertisement.jpg");
+							break;
+					case 2: descriptionGUI.updateGenericImage("multisidemenu.jpg");
+							break;
+					case 3: descriptionGUI.updateGenericImage("singlebody.jpg");
+							break;
+					case 4: descriptionGUI.updateGenericImage("threecolumn.jpg");
+							break;
+				    default: descriptionGUI.updateGenericImage("");
+				
+				}
+				
+			}	
 	}
 	
 	
@@ -1572,6 +1587,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		// TODO Auto-generated method stub
 		if (descriptionGUI != null)
 			descriptionGUI.updateReferrerText(referrer);
+		
 	}
 
 	/* (non-Javadoc)
@@ -1581,5 +1597,13 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		// TODO Auto-generated method stub
 		if (descriptionGUI != null)
 			descriptionGUI.updateApplicationText(application);
+		psl.crunch3.util.HomePageTester hpt = new psl.crunch3.util.HomePageTester(Crunch3.mainWindow.getURL().trim());
+		boolean temp = hpt.isHomePage();
+		if (Crunch3.settings.isVerbose()){
+			if (hpt.isHomePage())
+				System.out.println("This is A Homepage!");
+			else System.out.println("This is not a Homepage");
+		}
 	}
+	
 } //ContentExtractor

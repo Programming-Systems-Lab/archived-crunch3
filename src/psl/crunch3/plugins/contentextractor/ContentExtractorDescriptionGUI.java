@@ -284,7 +284,9 @@ public class ContentExtractorDescriptionGUI {
 		// TODO change this to what the last selection was
 		if (ContentExtractor.customLast)
 			customButton.setSelection(true);
-		newsButton.setSelection(true);
+		else{
+			newsButton.setSelection(true);
+		}
 	}
 	
 	private void newsButton_widgetSelected(SelectionEvent e) {
@@ -301,19 +303,18 @@ public class ContentExtractorDescriptionGUI {
 	
 	protected void educationButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.EDUCATION_SETTINGS_FILE_DEF);
-		
 	}
 	
 	protected void textHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.TEXT_HEAVY_SETTINGS_FILE_DEF);	
+		commitSettings(ContentExtractor.TEXT_HEAVY_SETTINGS_FILE_DEF);
 	}
 	
 	protected void linkHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LINK_HEAVY_SETTINGS_FILE_DEF);	
+		commitSettings(ContentExtractor.LINK_HEAVY_SETTINGS_FILE_DEF);
 	}
 	
 	protected void auto_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.AUTOMATIC_SETTINGS_FILE_DEF);	
+		commitSettings(ContentExtractor.AUTOMATIC_SETTINGS_FILE_DEF);
 	}
 	
 	protected void customButton_widgetSelected(SelectionEvent e) {
@@ -358,11 +359,21 @@ public class ContentExtractorDescriptionGUI {
 	}
 	
 	
-	public void updateGenericImage(final Image image){
+	public void updateGenericImage(final String imageName){
 		Crunch3.Display_1.syncExec(new Runnable(){
 			public void run(){
-				if(genericImageLabel != null && !genericImageLabel.isDisposed())
-				specificImageLabel.setImage(image);
+				if(genericImageLabel != null && !genericImageLabel.isDisposed()){
+					Image img = null;
+					InputStream imageData = getImageResourceAsStream("boxedscreenshots/" + imageName);
+					if (imageData != null)
+						img = new Image(Crunch3.Display_1, imageData);
+					else if (new java.io.File("boxedscreenshots/" + imageName).canRead())
+						img = new Image(Crunch3.Display_1, ("boxedscreenshots/" + imageName));
+					else if (Crunch3.settings.isVerbose())
+						System.out.println("MainWindow Warning: Could not find autoscreenshots/" + imageName);
+					//if(img != null)
+					genericImageLabel.setImage(img);
+				}
 			}
 		});
 	}
@@ -424,6 +435,7 @@ public class ContentExtractorDescriptionGUI {
     		}
     	}
     }
+    
     
     /**
      * Changes the filter settings to new settings read from a file.
