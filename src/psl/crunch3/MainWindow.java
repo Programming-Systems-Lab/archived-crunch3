@@ -54,6 +54,8 @@ import psl.crunch3.plugins.ProxyFilter;
  */
 public class MainWindow extends Thread {
 	
+	private String currentURL="";
+	private String oldURL = "";
 	// 
 	private boolean isInitialized = false;
 	private boolean listenPortChanged = false;
@@ -955,12 +957,14 @@ public class MainWindow extends Thread {
 	 *            HttpStream to remove.
 	 */
 	public void removeConnection(final HttpStream hs) {
+		
 		synchronized (connections) {
 			connections.remove(hs);
 		}
 		updateConnections();
 	}
-
+	
+	
 	/**
 	 * Gets a list of the current connections and sends them to the status lists.
 	 *  
@@ -1009,7 +1013,8 @@ public class MainWindow extends Thread {
 			}
 		});
 	}
-
+	
+	
 	public void updateStatus() {
 		// TODO implement update status
 	}
@@ -1059,6 +1064,15 @@ public class MainWindow extends Thread {
 		}
 	}
 
+	public String getURL(){
+		// TODO test 
+		return currentURL.trim();
+	}
+	
+	public void setURL(String url){
+		currentURL = url;
+	}
+	
 	/**
 	 * @return the main shell
 	 */

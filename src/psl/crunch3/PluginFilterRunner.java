@@ -63,8 +63,15 @@ public class PluginFilterRunner {
 			
 			if (plugin instanceof SiteDependentFilter && clientData != null && serverData != null) {
 				SiteDependentFilter sdf = (SiteDependentFilter)plugin;
-				sdf.reportURL(clientData.get("Host"));
-				sdf.reportReferer(clientData.get("Referer"));
+				sdf.reportHost(clientData.get("Host"));
+				String referer = clientData.get("Referer");
+				if (referer != ""){ 
+					Crunch3.mainWindow.setURL(parseURL(clientData.getFirstLine().trim(), clientData.get("Host"))); 
+					sdf.reportReferer(referer);}
+				else {
+					sdf.reportReferer(Crunch3.mainWindow.getURL()); 
+					Crunch3.mainWindow.setURL(parseURL(clientData.getFirstLine().trim(), clientData.get("Host"))); 
+					}
 				sdf.reportApplication(clientData.get("User-Agent"));
 			}
 
@@ -86,6 +93,21 @@ public class PluginFilterRunner {
 		return xMLtoFile(currentDocument);
 	}
 
+	public String parseURL(String original, String host){
+		
+		try{
+		//original should be in the form GET /... HTTP/1.1
+		int length = original.length()-9;
+		return "http://" + host.trim() + original.substring(4,length).trim();
+		
+		}
+		catch(Exception e){
+			if (Crunch3.settings.isVerbose())
+	    		System.out.println("error parsing the url");
+		}
+		return "";
+	}
+	
 	/**
 	 * @param currentDocument
 	 * @return the file the document was written to.

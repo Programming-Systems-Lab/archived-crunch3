@@ -325,14 +325,27 @@ public class ContentExtractorDescriptionGUI {
 		
 	}
 	
-	public void updateSpecificImage(final Image image){
+	public void updateSpecificImage(final String imageName){
 		// FIXME method stub
 		Crunch3.Display_1.syncExec(new Runnable(){
 			public void run(){
-				if(specificImageLabel != null && !specificImageLabel.isDisposed())
-				specificImageLabel.setImage(image);
+				if(specificImageLabel != null && !specificImageLabel.isDisposed()){
+					Image img = null;
+					InputStream imageData = getImageResourceAsStream("autoscreenshots/" + imageName);
+					if (imageData != null)
+						img = new Image(Crunch3.Display_1, imageData);
+					else if (new java.io.File("autoscreenshots/" + imageName).canRead())
+						img = new Image(Crunch3.Display_1, ("autoscreenshots/" + imageName));
+					else if (Crunch3.settings.isVerbose())
+						System.out.println("MainWindow Warning: Could not find autoscreenshots/" + imageName);
+					//if(img != null)
+					specificImageLabel.setImage(img);
+					
+					
+				}
 			}
 		});
+		
 	}
 	public void updateClassificationLabel(final String text){
 		// FIXME method stub
@@ -343,21 +356,36 @@ public class ContentExtractorDescriptionGUI {
 			}
 		});
 	}
+	
+	
 	public void updateGenericImage(final Image image){
-		// FIXME method stub
 		Crunch3.Display_1.syncExec(new Runnable(){
 			public void run(){
 				if(genericImageLabel != null && !genericImageLabel.isDisposed())
-					genericImageLabel.setImage(image);
+				specificImageLabel.setImage(image);
 			}
 		});
 	}
+	
+	private InputStream getImageResourceAsStream(final String name) { // enable image
+		// loading from
+		// jars
+		return getClass().getResourceAsStream("/" + name);
+	}
+	
+	
 	public void updateReferrerText(final String text){
 		// FIXME method stub
 		Crunch3.Display_1.syncExec(new Runnable(){
 			public void run(){
-				if(referrerText != null && !referrerText.isDisposed())
-					referrerText.setText(text);
+				if(referrerText != null && !referrerText.isDisposed()){
+					if(text.equals("")){
+						String currentURL = Crunch3.mainWindow.getURL();
+						if (currentURL !="") referrerText.setText(currentURL);
+						else referrerText.setText("");
+					}
+					else referrerText.setText(text);
+				}
 			}
 		});
 	}
@@ -370,6 +398,7 @@ public class ContentExtractorDescriptionGUI {
 			}
 		});
 	}
+	
 
     /**
      * Copies src file to dst file.  If the dst file does not exist, it is created.

@@ -1534,14 +1534,37 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	/* (non-Javadoc)
 	 * @see psl.crunch3.plugins.SiteDependentFilter#reportURL(java.lang.String)
 	 */
-	public void reportURL(String url) {
-		// TODO Auto-generated method stub
-		// FIXME add info here
+	public void reportHost(String host) {
 		
-		// do stuff here relating to getting images and then update
-		// the description gui using the update image functions
+		// TODO Auto-generated method stub
+		
+		
+		int index = -1;
+		if ((descriptionGUI != null) && (host !=null) )
+			index = host.indexOf('.');
+			if (index != -1){
+				if (host.substring(0,index).equals("www") || host.substring(0,index).equals("www1")) host = host.substring(index+1);
+				index = host.lastIndexOf('.');
+				if(index != -1) 
+					host = host.substring(0,index);
+					String beg, end;
+					//replace all '.' with _ 
+					while (host.indexOf('.') != -1){
+						index = host.indexOf('.');
+						beg = host.substring(0, index);
+						end = host.substring(index+1);
+						host = beg + "_" + end;
+					}
+				
+				host = host.toLowerCase().trim().concat(".jpg");
+				descriptionGUI.updateSpecificImage(host);
+			}
+			
+		
+		
 	}
-
+	
+	
 	/* (non-Javadoc)
 	 * @see psl.crunch3.plugins.SiteDependentFilter#reportReferrer(java.lang.String)
 	 */

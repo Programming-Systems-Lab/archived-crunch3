@@ -94,6 +94,7 @@ public class HttpMetadata {
 		}
 	}
 
+	
 	/**
 	 * Set a new property or replace an old one using an unparsed http header
 	 * line. For example "content-type: text/plain"
@@ -341,5 +342,6 @@ public class HttpMetadata {
 
 		newLine.append(CRLF);
 		firstLine = newLine.toString();
+		
 	}
 }

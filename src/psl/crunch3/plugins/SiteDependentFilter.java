@@ -13,10 +13,10 @@ package psl.crunch3.plugins;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public interface SiteDependentFilter {
-	public void reportURL(String url);
 
 	public void reportReferer(String referer);
 
+	public void reportHost(String host);
 	/**
 	 * @param string
 	 */
