@@ -1,0 +1,274 @@
+Site	URL	Physical Classification (Body)	Physical classification (columns)	Portal	Advertisements	Center Column Data	Physical Classification (Other)	Content Classification	Image name								
+															imagedb.txt		name of webiste <t> url <t> physical classification 1-4 (all tab delimited) <t> content classification <t> image name <t> layout image
+Google News	http://news.google.com	multi	2	1	0	0	link heavy	News	google.jpg								
+CNN	http://www.cnn.com	multi	3	1	1	0	link heavy	News	cnn.jpg								
+DRUDGE REPORT 2004	http://www.drudgereport.com	single	3	0	1	0	link heavy	News	drudge.jpg								
+BBC NEWS | News Front Page	http://www.bbc.com	multi	3	1	0	0	link heavy	News	bbc.jpg								
+My Yahoo!	http://my.yahoo.com	multi	3	1	1	1	link heavy	News	my_yahoo.jpg								
+MSN Slate Magazine	http://slate.msn.com	multi	3	1	0	0	link heavy	News	slate.jpg								
+Strategic Forecasting - Daily Analysis	http://www.stratfor.biz	multi	3	0	0	1		News	stratfor.jpg								
+SpaceDaily.Com - Your Portal To Space	http://www.spacer.com	multi	1	0	1	1	link heavy	News	spacer.jpg								
+FARK.com	http://www.fark.com	multi	3	0	1	1		News	fark.jpg								
+Digital Media Thoughts	http://www.digitalmediathoughts.com	single	3	1	0	1		Blog	dmt.jpg								
+DEBKAfile	http://www.debka.com	multi	3	0	1	1		News	debka.jpg								
+The Gertz File	http://www.gertzfile.com	single	2	0	0	0		News	gertzfile.jpg								
+Economist.com	http://www.economist.com	multi	4	0	1	0	link heavy	News	economist.jpg								
+outlookindia.com	http://www.outlookindia.com	single	4	0	1	0		News	outlookindia.jpg								
+GlobalSecurity.org	http://www.globalsecurity.org	single	4	0	0	0		News	globalsecurity.jpg
+Yahoo	http://www.yahoo.com	single	1	1	1	0	link heavy	Search	yahoo.jpg
+Yahoo! News - Front Page	http://news.yahoo.com	multi	3	1	1	0	link heavy	News	news_yahoo.jpg
+United Press International	http://www.upi.com	single	3	0	0	0		News	upi.jpg
+washingtonpost.com	http://www.washingtonpost.com							News	wpost.jpg
+International Herald Tribune	http://www.iht.com							News	iht.jpg
+PRAVDA.Ru	http://www.pravda.ru							News	pravda.jpg
+TIME.com	http://www.time.com							News	time.jpg
+This is London	http://www.thisislondon.co.uk							News	thisislondon.jpg
+Times Online	http://www.timesonline.com							News	timesonline.jpg
+Jane's Information Group	http://www.janes.com							News	janes.jpg
+CNET News.com	http://www.cnet.com							News	cnet.jpg
+[H]ard|OCP	http://www.hardocp.com							News	hardocp.jpg
+Ars Technica	http://www.arstechnica.com							News	arstechnica.jpg
+Slashdot	http://www.slashdot.org							News	slashdot.jpg
+Pocket PC Thoughts	http://www.pocketpcthoughts.com							News	ppct.jpg
+Smartphone Thoughts	http://www.smartphonethoughts.com							News	spt.jpg
+Infosync	http://www.infosync.no							News	infosync.jpg
+The Register	http://www.theregister.co.uk							News	theregister.jpg
+Gizmodo	http://www.gizmodo.com							News	gizmodo.jpg
+Gawker	http://www.gawker.com							News	gawker.jpg
+The Inquirer	http://www.theinquirer.net							News	theinquirer.jpg
+Gothamist	http://www.gothamist.com							News	gothamist.jpg
+MSN	"http://www.msn,com"							Portal	msn.jpg
+MSN Newsbot	http://uk.newsbot.msn.com							News	msn_newsbot.jpg
+Engadget	http://www.engadget.com							News	engadget.jpg
+KoreaHerald								Articles	
+The Washington Times								Articles	
+The New York Times								Articles	
+The New York Observer								Articles	
+TheMoscowTimes.com								Articles	
+The Associated Press								Articles	
+The Sydney Morning Herald								Articles
+Salon.com								Articles
+NY1 News								Articles
+Los Angeles Times								Articles
+Japan Today								Articles
+EOnline Gossip								Articles
+Chicago Tribune								Articles
+Center For Strategic & International Studies								Articles
+Herald.com								Articles
+FuckedCompany								Articles
+Rediff.com								Articles
+India Abroad								Articles
+HindustanTimes.com								Articles
+The Times of India								Articles
+The Hindu								Articles
+Frontline								Articles
+New York Post Online Edition								Articles
+WORLD TRIBUNE								Articles
+BBG Site								Articles
+Pakistan News Service								Articles
+Newsline								Articles
+ExpressIndia								Articles
+Press Trust of India								Articles
+NDTV.com								Articles
+India Defence Consultants								Articles
+The Sun Newspaper								Articles
+Jang								Articles
+Dawn Frontpage								Articles
+CounterPunch								Articles
+Guardian								Articles
+The Financial Times								Articles
+The Wall Street Journal								Articles
+Deccan Herald								Articles
+Observer India								Articles
+Sify								Articles
+Jerusalem Post								Articles
+The New Republic								Articles
+SpaceToday								Articles
+Space.com								Articles
+SpaceFlightNow								Articles
+SpaceRef								Articles
+Universe Today								Articles
+Mars Exploration Rover Mission								Articles
+Humor.com								
+BBspot								
+Modern Humorist								
+The Onion								
+SportsPickle.com								
+ZUG
+Sinfest
+The Joy of Tech!
+Dilbert
+InkTank
+Kevin & Kell
+Real Life
+Residence Life
+User Friendly
+Penny Arcade!
+Tank McNamara
+Doonesbury
+For Better or For Worse
+Beetle Bailey
+Boondocks
+Dennis The Menace
+Garfield
+Hagar The Horrible
+Marvin
+The Wizard of Id
+Baby Blues
+Calvin and Hobbes
+Captain Ribman
+PvPonline
+MegaTokyo
+8-bit Theatre
+Foxtrot
+VE3D - Voodoo Extreme
+Blue's News
+Tom's Hardware
+AnandTech
+NBA.com
+Yahoo! Sports
+ESPN.com
+SportingNews.com
+New York Post Online Edition: sports
+New York Daily News - Sports
+ProSportsDaily.com
+TechJapan
+eHomeUpgrade
+Akihabara News
+Joystiq
+SpotStop.com
+Engadget
+CNET News.com
+CNET News.com - Personal Technology
+Digital Photography Review (dpreview.com)
+Wired News
+Digital Identity World
+InfoWorld: Top News
+Computerworld News
+The New York Times > Technology
+The Register
+BBC News | Technology | UK Edition
+Christian Science Monitor | Top Stories
+Yahoo! News - Technology
+Slashdot
+kuro5hin.org
+Hack the Planet
+Tomalak's Realm
+PCWorld.com - Latest News Stories
+GrokLaw
+ResearchBuzz
+Gizmodo
+Ars Technica
+infoSync World
+Blue's News
+AnandTech News Channel
+PhotographyBLOG
+Voodoo Extreme
+[H]ardOCP
+eWEEK Technology News
+the INQUIRER
+BensBargains.net
+MobileTracker
+MobileWhack
+PPCW.Net - Where Mobility meets Wireless
+MTekk IT Services
+The Gadgeteer
+shiny shiny
+Windows Mobile Team Blog
+TekGuru
+Tom's Hardware Guide: Article
+Tom's Hardware Guide: News
+Technology Review Feed v2.1
+Technology Review RSS Blog Feed
+Technology Review Reseach News Brief Feed v2.1
+Wired News: Top Stories
+Wired News: Technology
+Wired News: Culture
+Wired News: Politics
+comp.risks
+Techdirt
+
+Space
+SPACE.com
+Universe Today
+SpaceRef.com Headlines
+Spaceflight News
+spacetoday.net
+Rednova News - Space
+SpaceDaily.com
+
+General News
+The New York Times > Home Page
+washingtonpost.com - Today's Highlights
+Salon.com
+NY1 News - Top Stories
+BBC News | News Front Page | World Edition
+Slate Magazine
+INTEL DUMP
+Guardian Unlimited
+Lessig News
+"I, Cringely @ PBS.org"
+The New Republic Weblogs
+Sify.com News
+Sify.com Sports
+Sify.com Finance
+Sify.com Entertainment
+CounterPunch: America's Best Political Newsletter
+Expressindia
+The Indian Express
+The Financial Express
+
+Random
+Dictionary.com Word of the Day
+HeroicStories
+JumboJoke: Humor the Way You Like It
+The Smoking Gun
+BBspot
+
+Blogs
+Gothamist Interviews
+Gothamist Weather
+Gothamist Sports
+Chicagoist
+NewYorkish
+Gothamist
+Gawker
+Wonkette
+Bluejake
+Defamer
+
+Comics
+Comick Update
+MegaTokyo
+Penny Arcade
+Dilbert
+Wizard of Id
+PvPonline
+A Twisted Mind
+Baby Blues
+Beetle Bailey
+Calvin & Hobbes
+Captain Ribman
+Dennis the Menace
+Doonesbury
+Evilish
+Filthy Lies
+For Better or For Worse
+FoxTrot
+Garfield
+General Protection Fault (GPF)
+Hagar the Horrible
+Malakhim
+Marvin
+Real Life
+Tank McNamara
+The Boondocks
+Angst Technology
+Bigger Than Cheeses
+college roomies from hell!
+Fans The Webcomic
+Intershadows
+Mac Hall
+Nowhere Girl
+Piled Higher and Deeper (Phd)
+The Joy of Tech 
