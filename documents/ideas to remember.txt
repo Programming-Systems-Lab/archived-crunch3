@@ -20,3 +20,7 @@ ideas to remember
 - Improve latency and scalability (tab browsers)
 - Use sophisticated NLP techniques as additional heuristics
 - Learn from user’s browsing habits
+
+
+- append multi-page documents into one page. For example, some sites have a "Next Page" at the bottom of a page. We should merge the content from the first page with the content on the subsequent pages.
+- utilize RSS to extract content
