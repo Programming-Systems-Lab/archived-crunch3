@@ -20,6 +20,7 @@ public class WordCount {
 	private int engineNum;
 	private String STOPLIST_FILE = "frequency" + File.separator + "stoplist1.txt";
 	private final String SITES_FILE = "frequency" + File.separator + "sites.txt";
+	private final String SITE_LINKS_FILE = "frequency" + File.separator + "links.txt";
 	private Vector stoplist;
 	private Vector wordlist;
 	private Vector sitewords;
@@ -57,6 +58,7 @@ public class WordCount {
 			}
 			inSites.close();
 			
+			
 			for (int i=0;i<siteNames.size();i++){
 				compare(((Vector)(sitewords.elementAt(i))), keywords, ((String)(siteNames.elementAt(i))));
 			}
@@ -76,6 +78,7 @@ public class WordCount {
 		try{
 			storeBuffer(in);
 			in.close();
+			generateLinks(getWebsite(url),url);
 			//store words from google search.
 			System.out.println("storing google search results...");
 			GoogleSearchResultElement[] re = getGoogle(parseURL(url));
@@ -166,7 +169,7 @@ public class WordCount {
 			else if(i==-1) return cleanLine(s.substring(j+1));
 			else if (i<j) return cleanLine(s.substring(0,i)+ " " + s.substring(j+1));
 			else{
-				System.out.println("parsing error");
+				//System.out.println("parsing error");
 				return s.substring(0,j);
 			}
 		}
@@ -451,7 +454,7 @@ public class WordCount {
 	
 	private void storeDictwords(){
 		try{
-			BufferedReader in = new BufferedReader(new FileReader(new File("frequency" + File.separator +"dictwords.txt")));
+			BufferedReader in = new BufferedReader(new FileReader(new File("frequency" + File.separator +"allwords.txt")));
 			dictwords = new Hashtable();
 			String word = null;
 			while ((word = in.readLine()) != null){
@@ -482,12 +485,48 @@ public class WordCount {
 					if (s==null){
 						//word not in file-- remove it
 						wordlist.removeElementAt(j);
-						System.out.println("removed " + temp.word);
+						//System.out.println("removed " + temp.word);
 						--j;
 					}
 				}
 	
 		}
+	}
+	
+	/**
+	 * writes all links in buffer to a file.
+	 */
+	private void generateLinks(BufferedReader in, String url){
+		
+		try{
+			int index;
+			String line = in.readLine();
+			
+			while(line != null){
+				line.toLowerCase();
+				index = line.indexOf("<a href=\"/");
+				//remove everything before the link
+				if(index!=-1){
+					line = line.substring(index+9);
+					wordlist = new Vector();
+					//generateList(url+line.substring(0,line.indexOf("\"")));
+					line = line.substring(line.indexOf("\"")+1);
+				}
+				else{
+					line = in.readLine();
+				}
+			}
+			in.close();
+			
+		}
+		
+		catch(FileNotFoundException e){
+			e.printStackTrace();
+		}
+		catch(IOException ioe){
+			ioe.printStackTrace();
+		}
+		
 	}
 	
 	private class WordFreq{
