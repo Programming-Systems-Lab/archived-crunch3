@@ -528,6 +528,10 @@ public class WordCount extends JFrame{
 				
 			}
 			out.close();
+			
+			//create the graph
+			
+		    
 			DefaultTableXYDataset xyds = new DefaultTableXYDataset();
             xyds.addSeries(series);
 			
@@ -537,11 +541,11 @@ public class WordCount extends JFrame{
            
             XYPlot plot = chart.getXYPlot();
             ValueAxis yAxis = plot.getRangeAxis();
-            yAxis.setRange(0,100);
+            yAxis.setRange(0,50);
             
             
             BufferedImage image = chart.createBufferedImage(500,300);
-            //ChartUtilities.saveChartAsJPEG(new File("chart.jpg"), chart, 500, 300);
+            ChartUtilities.saveChartAsJPEG(new File("frequency" + File.separator+ site +".jpg"), chart, 500, 300);
             JLabel lblChart = new JLabel();
             lblChart.setIcon(new ImageIcon(image));
             chartPanel.add(lblChart);
@@ -793,19 +797,27 @@ public class WordCount extends JFrame{
 		
 		System.out.println("The clusters are ...  ");
 		ClusterNode cn = null;
-		for(int i=0;i<clusters.size();i++){
-			temp = (Vector)clusters.elementAt(i);
-			System.out.print("The elements in cluster #" + (i+1) + " are: ");
-			for(int j=0;j<temp.size();j++){
-				cn = (ClusterNode)temp.elementAt(j);
-				System.out.println(cn.site + "\t" + cn.level +
-						"\t" + cn.pulled + "\t" + cn.distance +
-						"\t" + cn.printTags());
+		try{
+			DataOutputStream out = new DataOutputStream(new FileOutputStream("frequency" + File.separator + "resutls.txt"));
+			for(int i=0;i<clusters.size();i++){
+				temp = (Vector)clusters.elementAt(i);
+				System.out.print("The elements in cluster #" + (i+1) + " are: ");
+				out.writeBytes("The elements in cluster #" + (i+1) + " are: \n");
+				for(int j=0;j<temp.size();j++){
+					cn = (ClusterNode)temp.elementAt(j);
+					System.out.println(cn.site + "\t" + cn.level +
+						"\t" + cn.pulled + "\t" + cn.distance);
+					out.writeBytes(cn.site + "\t" + cn.level +
+							"\t" + cn.pulled + "\t" + cn.distance + "\n");
 				
+				}
+				out.writeBytes("\n");
 			}
 			
 		}
-		
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**

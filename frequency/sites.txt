@@ -17,14 +17,13 @@ timesofindia.indiatimes.com
 www.abqjournal.com
 www.ajc.com
 www.allsports.com
-www.amazon.com
 www.anandtech.com
+www.amazon.com
 www.ap.org 
 www.arstechnica.com
 www.azcentral.com
 www.baltimoresun.com
-www.bbc.co.uk  
-www.bensbargains.net  
+www.bbc.co.uk    
 www.bluesnews.com
 www.boston.com
 www.buy.com
@@ -76,7 +75,6 @@ www.janes.com
 www.japantoday.com 
 www.joystiq.com 
 www.jpost.com 
-www.koreaherald.co.kr
 www.kuro5hin.org
 www.latimes.com 
 www.miami.com/mld/miamiherald 
@@ -95,7 +93,6 @@ www.observerindia.com
 www.orlandosentinel.com
 www.outlookindia.com
 www.overstock.com 
-www.pbs.org/cringely 
 www.pcworld.com
 www.philly.com/mld/philly
 www.photographyblog.com
@@ -125,8 +122,7 @@ www.tallahassee.com/mld/tallahassee
 www.tampatrib.com
 www.techdirt.com
 www.techjapan.com
-www.techreview.com 
-www.tekguru.com  
+www.techreview.com   
 www.theinquirer.net
 www.themoscowtimes.com 
 www.theregister.com  

@@ -314,6 +314,7 @@ public class ContentExtractorDescriptionGUI {
 	}
 	
 	protected void auto_widgetSelected(SelectionEvent e) {
+		//check which cluster the current site is closest to
 		commitSettings(ContentExtractor.AUTOMATIC_SETTINGS_FILE_DEF);
 	}
 	
@@ -465,58 +466,99 @@ public class ContentExtractorDescriptionGUI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    	newFilter.changeSetting(ContentExtractorConstants.ONLY_TEXT, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.ONLY_TEXT, ContentExtractorConstants.ONLY_TEXT_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_ADS,Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_ADS, ContentExtractorConstants.IGNORE_ADS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_BUTTON_TAGS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_BUTTON_TAGS, ContentExtractorConstants.IGNORE_BUTTON_TAGS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_FORMS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_FORMS, ContentExtractorConstants.IGNORE_FORMS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_IFRAME_TAGS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_IFRAME_TAGS, ContentExtractorConstants.IGNORE_IFRAME_TAGS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_IMAGE_LINKS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_IMAGE_LINKS, ContentExtractorConstants.IGNORE_IMAGE_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS, ContentExtractorConstants.DISPLAY_IMAGE_ALTS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_TEXT_LINKS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_TEXT_LINKS, ContentExtractorConstants.IGNORE_TEXT_LINKS_DEF)));
+    	newFilter.changeSetting(ContentExtractorConstants.ONLY_TEXT, Boolean.toString
+    			(nSettings.getProperty(ContentExtractorConstants.ONLY_TEXT, ContentExtractorConstants.ONLY_TEXT_DEF)));
+    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_ADS,Boolean.toString
+    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_ADS, ContentExtractorConstants.IGNORE_ADS_DEF)));
+    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_BUTTON_TAGS, Boolean.toString
+    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_BUTTON_TAGS, ContentExtractorConstants.IGNORE_BUTTON_TAGS_DEF)));
+    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_FORMS, Boolean.toString
+    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_FORMS, ContentExtractorConstants.IGNORE_FORMS_DEF)));
+    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_IFRAME_TAGS, Boolean.toString
+    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_IFRAME_TAGS, ContentExtractorConstants.IGNORE_IFRAME_TAGS_DEF)));
+    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_IMAGE_LINKS, Boolean.toString
+    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_IMAGE_LINKS, ContentExtractorConstants.IGNORE_IMAGE_LINKS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS, ContentExtractorConstants.DISPLAY_IMAGE_ALTS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_TEXT_LINKS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_TEXT_LINKS, ContentExtractorConstants.IGNORE_TEXT_LINKS_DEF)));
 
 		
-		newFilter.changeSetting(ContentExtractorConstants.DISPLAY_IMAGE_ALTS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.DISPLAY_IMAGE_ALTS, ContentExtractorConstants.DISPLAY_IMAGE_ALTS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_IMAGES, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_IMAGES, ContentExtractorConstants.IGNORE_IMAGES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_INPUT_TAGS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_INPUT_TAGS, ContentExtractorConstants.IGNORE_INPUT_TAGS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_LINK_CELLS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_LINK_CELLS, ContentExtractorConstants.IGNORE_LINK_CELLS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.DISPLAY_IMAGE_ALTS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.DISPLAY_IMAGE_ALTS, ContentExtractorConstants.DISPLAY_IMAGE_ALTS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_IMAGES, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_IMAGES, ContentExtractorConstants.IGNORE_IMAGES_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_INPUT_TAGS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_INPUT_TAGS, ContentExtractorConstants.IGNORE_INPUT_TAGS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_LINK_CELLS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_LINK_CELLS, ContentExtractorConstants.IGNORE_LINK_CELLS_DEF)));
 
 		
-		newFilter.changeSetting(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS, ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS, ContentExtractorConstants.LC_IGNORE_TEXT_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO, Double.toString(nSettings.getProperty(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO, ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT, ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS, ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS, ContentExtractorConstants.LC_IGNORE_TEXT_LINKS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO, Double.toString
+				(nSettings.getProperty(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO, ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT, ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT_DEF)));
 
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_META, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_META, ContentExtractorConstants.IGNORE_META_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_SCRIPTS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_SCRIPTS, ContentExtractorConstants.IGNORE_SCRIPTS_DEF)));
-
-		
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS, ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS_DEF)));
-
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_SELECT_TAGS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_SELECT_TAGS, ContentExtractorConstants.IGNORE_SELECT_TAGS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS, ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_DIV_STYLES, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_DIV_STYLES, ContentExtractorConstants.IGNORE_DIV_STYLES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES, ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLES, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_STYLES, ContentExtractorConstants.IGNORE_STYLES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_CELL_WIDTH, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_CELL_WIDTH, ContentExtractorConstants.IGNORE_CELL_WIDTH_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_META, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_META, ContentExtractorConstants.IGNORE_META_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_SCRIPTS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_SCRIPTS, ContentExtractorConstants.IGNORE_SCRIPTS_DEF)));
 
 		
-		newFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.REMOVE_EMPTY_TABLES, ContentExtractorConstants.REMOVE_EMPTY_TABLES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_BUTTON, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_BUTTON, ContentExtractorConstants.SUBSTANCE_BUTTON_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_FORM, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_FORM, ContentExtractorConstants.SUBSTANCE_FORM_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IFRAME, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_IFRAME, ContentExtractorConstants.SUBSTANCE_IFRAME_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IMAGE, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_IMAGE, ContentExtractorConstants.SUBSTANCE_IMAGE_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_INPUT, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_INPUT, ContentExtractorConstants.SUBSTANCE_INPUT_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_LINKS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_LINKS, ContentExtractorConstants.SUBSTANCE_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_SELECT, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_SELECT, ContentExtractorConstants.SUBSTANCE_SELECT_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_TEXTAREA, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_TEXTAREA, ContentExtractorConstants.SUBSTANCE_TEXTAREA_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, Integer.toString(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.REMOVE_EMPTY_TABLES, ContentExtractorConstants.REMOVE_EMPTY_TABLES_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS, ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS_DEF)));
 
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_EMBED_TAGS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_EMBED_TAGS, ContentExtractorConstants.IGNORE_EMBED_TAGS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_FLASH, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.IGNORE_FLASH, ContentExtractorConstants.IGNORE_FLASH_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, ContentExtractorConstants.ADD_LINKS_TO_BOTTOM_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LIMIT_LINEBREAKS, Boolean.toString(nSettings.getProperty(ContentExtractorConstants.LIMIT_LINEBREAKS, ContentExtractorConstants.LIMIT_LINEBREAKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.MAX_LINEBREAKS, Integer.toString(nSettings.getProperty(ContentExtractorConstants.MAX_LINEBREAKS, ContentExtractorConstants.MAX_LINEBREAKS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_SELECT_TAGS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_SELECT_TAGS, ContentExtractorConstants.IGNORE_SELECT_TAGS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS, ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_DIV_STYLES, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_DIV_STYLES, ContentExtractorConstants.IGNORE_DIV_STYLES_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES, ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLES, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_STYLES, ContentExtractorConstants.IGNORE_STYLES_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_CELL_WIDTH, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_CELL_WIDTH, ContentExtractorConstants.IGNORE_CELL_WIDTH_DEF)));
+
+		
+		newFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.REMOVE_EMPTY_TABLES, ContentExtractorConstants.REMOVE_EMPTY_TABLES_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_BUTTON, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_BUTTON, ContentExtractorConstants.SUBSTANCE_BUTTON_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_FORM, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_FORM, ContentExtractorConstants.SUBSTANCE_FORM_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IFRAME, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_IFRAME, ContentExtractorConstants.SUBSTANCE_IFRAME_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IMAGE, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_IMAGE, ContentExtractorConstants.SUBSTANCE_IMAGE_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_INPUT, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_INPUT, ContentExtractorConstants.SUBSTANCE_INPUT_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_LINKS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_LINKS, ContentExtractorConstants.SUBSTANCE_LINKS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_SELECT, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_SELECT, ContentExtractorConstants.SUBSTANCE_SELECT_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_TEXTAREA, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_TEXTAREA, ContentExtractorConstants.SUBSTANCE_TEXTAREA_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, Integer.toString
+				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.REMOVE_EMPTY_TABLES, ContentExtractorConstants.REMOVE_EMPTY_TABLES_DEF)));
+
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_EMBED_TAGS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_EMBED_TAGS, ContentExtractorConstants.IGNORE_EMBED_TAGS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.IGNORE_FLASH, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.IGNORE_FLASH, ContentExtractorConstants.IGNORE_FLASH_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, ContentExtractorConstants.ADD_LINKS_TO_BOTTOM_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.LIMIT_LINEBREAKS, Boolean.toString
+				(nSettings.getProperty(ContentExtractorConstants.LIMIT_LINEBREAKS, ContentExtractorConstants.LIMIT_LINEBREAKS_DEF)));
+		newFilter.changeSetting(ContentExtractorConstants.MAX_LINEBREAKS, Integer.toString
+				(nSettings.getProperty(ContentExtractorConstants.MAX_LINEBREAKS, ContentExtractorConstants.MAX_LINEBREAKS_DEF)));
 
 		newFilter.saveSettings();
 		
