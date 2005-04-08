@@ -4,6 +4,7 @@
  */
 package psl.crunch3;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -61,7 +62,8 @@ public class MainWindow extends Thread {
 	private Vector connections = new Vector();
 	private Thread updateThread = null;
 	private Thread trayShutdownHook = null;
-
+	private ContentExtractorDescriptionGUI gui = null;
+	
 	// START VISUALS_DECLARATION
 	public Image crunchIcon = null;
 	public Image crunchIconActive = null;
@@ -883,8 +885,8 @@ public class MainWindow extends Thread {
 				windowHeight);
 			if(Crunch3.settings.isGUISet())
 			mainShell.open();
-			//this opens crunch without GUI and loads one settings file for the whole session
-			else{
+			
+			else{//this opens crunch without GUI and loads one settings file for the whole session
 				processNoGUI();
 			}
 			isInitialized = true;
@@ -1144,7 +1146,32 @@ public class MainWindow extends Thread {
 	}
 
 	private void processNoGUI(){
-		ContentExtractorDescriptionGUI dg = new ContentExtractorDescriptionGUI(mainShell);
+		gui = new ContentExtractorDescriptionGUI(mainShell);
+		
+	}
+	
+	public void setGUIHomepage(){
+		Crunch3.Display_1.syncExec(new Runnable(){
+			public void run(){
+				if(gui != null){					
+					gui.commitSettings("config" + File.separator + "level8.ini", 8);
+					gui.setSettingsLevel(8);
+				}
+			}
+		});
+		
+	}
+	
+	public void setGUINoHomepage(){
+		Crunch3.Display_1.syncExec(new Runnable(){
+			public void run(){
+				if(gui != null){
+					gui.commitSettings("config" + File.separator + "level2.ini", 2);
+					gui.setSettingsLevel(2);
+				}
+			}
+		});
+		
 	}
 	
 	private String[] split(final String text, final String delimiters) {

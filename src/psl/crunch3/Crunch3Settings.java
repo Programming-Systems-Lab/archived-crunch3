@@ -27,7 +27,8 @@ public class Crunch3Settings {
 	public static final String[] FILTER_TYPES_DEF = { "text/html" };
 	public static final boolean FILTER_HOMEPAGES_DEF = true;
 	public static final boolean PROXY_MODE_DEF = true;
-	public static String SETTINGS_FILE = "custom.ini";
+	public static String SETTINGS_FILE = "config/level2.ini";
+	public static final boolean CHECK_HOMEPAGE_DEF = false;
 
 	//internal variables
 	private String[] arguments;
@@ -73,7 +74,12 @@ public class Crunch3Settings {
 	
 	private boolean settingsFile;
 	private boolean settingsFileSet = false;
+	
+	private boolean checkHomePage;
+	private boolean checkHomePageSet = false;
 
+	
+	
 	/**
 	 * Constructs a new Crunch3Settings using a given set of arguments. Usually
 	 * the arguments given will be from the main function.
@@ -169,8 +175,11 @@ public class Crunch3Settings {
 		} else if ("-g".equals(argument) || "--gui".equals(argument)) {
 			setGUI(true);
 		} else if ("-f".equals(argument) || "--file".equals(argument)){
-			SETTINGS_FILE = arguments[argNumber+1];
+			setSettingsFile(arguments[argNumber+1]);
+		} else if ("-h".equals(argument) || "--homepage".equals(argument)){
+			setHomePageCheck(true);
 		}
+		
 		else {
 			additionalArgs.add(argument);
 		}
@@ -376,6 +385,14 @@ public class Crunch3Settings {
 		guiSet = true;
 	}
 
+	public void setHomePageCheck(boolean b){
+		if(!settingsFileSet){
+			checkHomePage = true;
+			checkHomePageSet = true;
+		}
+		
+	}
+	
 	/**
 	 * @return the time the server socket should wait for data before timing
 	 *         out
@@ -463,6 +480,14 @@ public class Crunch3Settings {
 		}
 	}
 	
+	public void setSettingsFile(String s){
+		SETTINGS_FILE = s;
+		settingsFileSet = true;
+		if(checkHomePageSet == true){
+			checkHomePage = false;
+		}
+	}
+	
 	/**
 	 * @param b whether or not to filter content.
 	 */
@@ -532,6 +557,11 @@ public class Crunch3Settings {
 	public void setFilterHomepages(boolean b) {
 		filterHomepages = b;
 		filterHomepagesSet = true;
+	}
+	
+	public boolean isHomePageCheck(){
+		return checkHomePage;
+		
 	}
 
 }

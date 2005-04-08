@@ -1749,7 +1749,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		
 		currentAddress = URL;
 		
-		if (!Crunch3.settings.isGUISet()) return;
+		//if (!Crunch3.settings.isGUISet()) return;
 		psl.crunch3.util.HomePageTester hpt = new psl.crunch3.util.HomePageTester(Crunch3.mainWindow.getURL().trim());
 		if (Crunch3.settings.isVerbose()){
 			if (hpt.isHomePage())
@@ -1757,7 +1757,18 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			else System.out.println("This is not a Homepage");
 		}
 		
-		
+		if(descriptionGUI == null) {
+			 
+			if(Crunch3.settings.isHomePageCheck()){
+			if( hpt.isHomePage()){
+			 	 Crunch3.mainWindow.setGUIHomepage();
+			 }
+			 else {
+			 	 Crunch3.mainWindow.setGUINoHomepage();
+			 }
+			}
+			return;
+		}
 		if (descriptionGUI.isAuto()){
 			//check what cluster the site belongs to and determine the correct filter.
 			int cluster = 0;
@@ -1812,7 +1823,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		else{
 			if(descriptionGUI.checkFrontPage() && hpt.isHomePage()){
 				
-				if((descriptionGUI.getSettingsLabel()).equals("news")){
+				if((descriptionGUI.getSettingsLabel()).equals("shopping")){
 					descriptionGUI.commitSettings("config" + File.separator + "level9.ini", 9);
 					descriptionGUI.setSettingsLevel(9);
 				}

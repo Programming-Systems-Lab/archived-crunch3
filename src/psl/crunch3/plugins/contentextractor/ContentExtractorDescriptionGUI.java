@@ -451,7 +451,8 @@ public class ContentExtractorDescriptionGUI {
 		normalButton.setSelection(true);
 		
 		if(!(Crunch3.settings.isGUISet())){
-			commitSettings(Crunch3.settings.getSettings(), 0);
+			commitSettings(Crunch3.settings.getSettings(), 2);
+			settingsLabel = "news";
 		}
 	}
 	
