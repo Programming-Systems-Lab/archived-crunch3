@@ -1166,12 +1166,11 @@ public class MainWindow extends Thread {
 		Crunch3.Display_1.syncExec(new Runnable(){
 			public void run(){
 				if(gui != null){
-					gui.commitSettings("config" + File.separator + "level2.ini", 2);
-					gui.setSettingsLevel(2);
+					gui.commitSettings("config" + File.separator + "level4.ini", 4);
+					gui.setSettingsLevel(4);
 				}
 			}
 		});
-		
 	}
 	
 	private String[] split(final String text, final String delimiters) {

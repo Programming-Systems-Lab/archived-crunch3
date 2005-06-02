@@ -95,6 +95,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	private boolean detectRandomSurfing = false;
 	private String linkToAppend = null;
 	private String currentAddress = null;
+	private int counter=1; //counts the number of pages to append
 	
 	/**
 	 * Creates a new instance without any input stream and the default settings file.
@@ -148,10 +149,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			mTree = parser.getDocument();
 			extractContent(mTree);
 			
-			
-			
 		} 
-		
 		catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -161,8 +159,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		if (child) {
 			if (mTree == null)
 				mTree = (Document) iNode;
+			counter = counter + 1; 
 			extract(iNode, mTree);
-			
 			
 			org.cyberneko.html.parsers.DOMParser parser = new org.cyberneko.html.parsers.DOMParser();
 			String address = null;
@@ -170,7 +168,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			Document newTree;
 			InputStream in;
 			try{
-				/**if((linkToAppend !=null) && (linkToAppend != address)){
+				while((linkToAppend !=null) && (linkToAppend != address)){
+					
 					
 					System.out.println("*** " + linkToAppend);
 					address = linkToAppend;
@@ -184,11 +183,18 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 							
 							if(currentAddress == null)
 								currentAddress = Crunch3.mainWindow.getURL();
+								String temp = currentAddress.substring(7);
 								
-								site = new URL (currentAddress + address);
+								int index = temp.indexOf("/");
+								
+								String first = currentAddress.substring(0,index+7);
+								
+								if(!(first.endsWith("/")) && !(address.startsWith("/"))) first = first + "/";
+								site = new URL (first + address);
 								
 							
 						}
+						
 						catch(Exception e){
 							e.printStackTrace();
 							//break;
@@ -200,13 +206,19 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 					parser.parse(new InputSource(reader));
 					newTree = parser.getDocument();
 					linkToAppend = null;
-					extract(newTree,newTree);
-					if(linkToAppend != null) System.out.println("*** " + linkToAppend);
-					//prettyPrint(newTree, System.out);
-					appendDocument(newTree, mTree);
-					//prettyPrint(mTree, System.out);
 					
-				}**/
+					extract(newTree,newTree);
+					if(linkToAppend != null) System.out.println("***## " + linkToAppend);
+					
+					//prettyPrint(newTree, System.out);					
+					System.out.println((mTree.getFirstChild()).getNodeName() + "*************");
+					appendDocument(newTree, mTree);
+					
+					
+				}
+			}
+			catch(FileNotFoundException fe){
+				
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -952,9 +964,9 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	private String getNextLink(final Node iNode){
 		Node temp = iNode.getFirstChild(); 
 		if((temp != null) && (temp.getNodeType() == Node.TEXT_NODE)){
-			
+			String num = Integer.toString(counter);
 			String text = ((temp.getNodeValue()).trim()).toLowerCase();
-			if (text.startsWith("next")){
+			if ((text.startsWith("next")) || (text.trim()).startsWith(num)){
 				String s = ((Element)iNode).getAttribute("href");
 				return s;
 			}
@@ -1307,39 +1319,47 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	
 	private void appendDocument(Document from, Document to){
 	
-		//Node newNode = to.importNode(from.getDocumentElement(), true);
-		Node fromCurrent = (from.getFirstChild()).getFirstChild();
-		Node toCurrent;
-		while(fromCurrent != null){
-			System.out.println(fromCurrent.getNodeName());
-			if ((fromCurrent.getNodeName()).equals("BODY")){
-				
-				toCurrent = (to.getDocumentElement()).getFirstChild();
-				
-				System.out.println("before loop" + toCurrent.getNodeName());
-				while(toCurrent != null){
-					if ((toCurrent.getNodeName()).equals("BODY")){
-						
-						//append all children of fromCurrent to toCurrent
-						fromCurrent = fromCurrent.getFirstChild();
-						while (fromCurrent !=null){
-							toCurrent.appendChild(to.importNode(fromCurrent, true));
-							fromCurrent = fromCurrent.getNextSibling();
-						}
-						toCurrent = null;
-					}
-					else{
-						System.out.println(toCurrent.getNodeName());
-						toCurrent = toCurrent.getNextSibling();
-					}
-				}
-				
-				fromCurrent = null;
-			}
-			else fromCurrent = fromCurrent.getNextSibling();
-			
+		Node fromBody = ((from.getFirstChild()).getFirstChild());
+		
+		System.out.println(from.getNodeName());
+		
+		while (!((fromBody.getNodeName()).equals("BODY")) && !(fromBody == null)){
+			fromBody = fromBody.getNextSibling();
 		}
 		
+		
+		from.removeChild(from.getFirstChild());
+		
+		Node toBody = ((to.getDocumentElement()).getFirstChild()); 
+		
+		
+		while (!((toBody.getNodeName()).equals("BODY")) && !(toBody == null)){
+			toBody = toBody.getNextSibling();
+		}
+		
+		append(to,fromBody, toBody);
+		
+		
+	}
+	
+	
+	
+	private void append(Document doc, Node n, Node to){
+		
+		NodeList children = n.getChildNodes();
+		Node newNode;
+		for (int i=0; i<children.getLength();i++){
+			try{
+				newNode = doc.importNode(children.item(i),false);
+				to.appendChild(newNode);
+				append(doc,children.item(i), newNode);
+			}
+			catch(Exception e){
+				System.out.println(children.item(i));
+			}
+			
+			
+		}
 	}
 	
 	
@@ -1757,6 +1777,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			else System.out.println("This is not a Homepage");
 		}
 		
+		//handles frontpage detection for GUI-less crunch
 		if(descriptionGUI == null) {
 			 
 			if(Crunch3.settings.isHomePageCheck()){
@@ -1769,8 +1790,10 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			}
 			return;
 		}
+		
+		//compute closes cluster to current URL and apply appropriate filter settings
 		if (descriptionGUI.isAuto()){
-			//check what cluster the site belongs to and determine the correct filter.
+			
 			int cluster = 0;
 			
 			//check if the site is already clustered.
@@ -1778,29 +1801,28 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 				System.out.println(URL +" is already clustered");
 			}
 			else{
-			
+				//create a new wordcount object that is used to generate the word-frequency map for the current site
 				WordCount wc = new WordCount(URL.substring(7), descriptionGUI.getFrequencies(),
 						descriptionGUI.getKeys(), descriptionGUI.getSites(), descriptionGUI.getEngineNumber());
+				
+				//get the site closest to URL from preclustered list
 				String closest = wc.getClosestSite();
 				if(closest !=null)
 					cluster = descriptionGUI.getCluster(closest);
 				else cluster = 0;
-				
-				System.out.println(cluster);
-			
-			
 			}
 			
+			//keep track of visited clusters for random surfing detection
 		    visitedClusters.addElement(new Integer(cluster));
 		    if(visitedClusters.size()>3){
 		    	visitedClusters.removeElementAt(0);
 		    }
 		    
-		    //this method should be changed after each run of WordCount.
+		    //apply filter settings based on the cluster number
 		    applySettings(cluster);
 
 			
-			//if the page is a news home page change the setting to level 6
+			//if the page is a news home page relax the settings
 			if(hpt.isHomePage()){
 				int level = descriptionGUI.getSettingLevel();
 				if(level ==2){
@@ -1820,12 +1842,14 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			
 			
 		}
+		
+		//if settings aren't automatic, just apply regular front-page detection proc
 		else{
 			if(descriptionGUI.checkFrontPage() && hpt.isHomePage()){
 				
-				if((descriptionGUI.getSettingsLabel()).equals("shopping")){
-					descriptionGUI.commitSettings("config" + File.separator + "level9.ini", 9);
-					descriptionGUI.setSettingsLevel(9);
+				if((descriptionGUI.getSettingsLabel()).equals("news")){
+					descriptionGUI.commitSettings("config" + File.separator + "level6.ini", 6);
+					descriptionGUI.setSettingsLevel(6);
 				}
 				
 				
@@ -1839,14 +1863,24 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		}
 	}
 	
+	
 	private void relax(){
 		descriptionGUI.commitSettings("config" + File.separator + "level" + 9 + ".ini", 9);
 	}
 	
+	
+	/**
+	 * Selects the custom button and deselects any other options in the description GUI
+	 */
 	public void selectCustom(){
 		descriptionGUI.selectCustom();
 	}
 	
+	
+	/**
+	 * Apply the correct filter settings determined manually, given the cluster number. 
+	 * @param cluster
+	 */
 	private void applySettings(int cluster){
 		switch(cluster){
 		
@@ -1899,6 +1933,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		descriptionGUI.updateSettingsLevel();
 	}
 	
+	
+	/**
+	 * If the last three sites visited are different from each other, 
+	 * switch to randon surfing mode
+	 * @return
+	 */
 	private boolean isRandomSurfing(){
 		int current = ((Integer)(visitedClusters.elementAt(2))).intValue();
 		int prev1 = ((Integer)(visitedClusters.elementAt(1))).intValue();
