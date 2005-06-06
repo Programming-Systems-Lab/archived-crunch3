@@ -459,7 +459,7 @@ public class ContentExtractorDescriptionGUI {
 	private void newsButton_widgetSelected(SelectionEvent e) {
 		commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF, 0);
 		settingsLabel = "news";
-		relax.setSelection(1);
+		relax.setSelection(2);
 		isAuto = false;
 	}
 	
