@@ -167,8 +167,10 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			URL site =null; 
 			Document newTree;
 			InputStream in;
+			
+			
 			try{
-				while((linkToAppend !=null) && (linkToAppend != address)){
+				while((linkToAppend !=null) && (linkToAppend != address) ){
 					
 					
 					System.out.println("*** " + linkToAppend);
@@ -207,7 +209,9 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 					newTree = parser.getDocument();
 					linkToAppend = null;
 					
+					counter++;
 					extract(newTree,newTree);
+					System.out.println(linkToAppend + ",,,,,,,,,,");
 					if(linkToAppend != null) System.out.println("***## " + linkToAppend);
 					
 					//prettyPrint(newTree, System.out);					
@@ -1795,6 +1799,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		if (descriptionGUI.isAuto()){
 			
 			int cluster = 0;
+			
+			System.out.println("******************************* "+ (WordCount.parseURL(URL.substring(7),true)));
 			
 			//check if the site is already clustered.
 			if((cluster = descriptionGUI.getCluster(WordCount.parseURL(URL.substring(7),true))) != 0){

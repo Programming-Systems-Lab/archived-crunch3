@@ -79,7 +79,7 @@ public class ContentExtractorDescriptionGUI {
 	private Label relaxLabel = null;
 	private Label toughenLabel = null; 
 	private Button frontPageCheck = null;
-	
+	private Button nextPageCheck = null;
 	
 	private ContentExtractorSettings newFilter = ContentExtractorSettings.getInstance();
 	private boolean isAuto = false;
@@ -90,6 +90,7 @@ public class ContentExtractorDescriptionGUI {
 	private int engineNumber = 5;
 	private int settingLevel = 0;
 	private boolean frontPage = true;
+	private boolean nextPage = true;
 	private String settingsLabel;
 	
 	/**
@@ -151,7 +152,7 @@ public class ContentExtractorDescriptionGUI {
 		infoButton = new Button(userSettingsGroup, SWT.RADIO);
 		pdaButton = new Button(userSettingsGroup, SWT.RADIO);
 		frontPageCheck = new Button(userSettingsGroup, SWT.CHECK);
-		
+		nextPageCheck = new Button(userSettingsGroup, SWT.CHECK);
 		
 		ContentPluginSeparator2 = new Sash(mainComposite, SWT.HORIZONTAL | SWT.BORDER);
 		automaticGroup = new Group(mainComposite, SWT.NULL);
@@ -301,6 +302,9 @@ public class ContentExtractorDescriptionGUI {
 		impairedButton.setText("Visually Impaired");
 		frontPageCheck.setText("Detect Front Page");
 		frontPageCheck.setSelection(true);
+		nextPageCheck.setText("Append Next Page");
+		nextPageCheck.setSelection(true);
+		
 		
 		ContentPluginSeparator2.setLayoutData(ContentSeparator2);
 		specificImageLabel.setLayoutData(specificImageLabelGridData);
@@ -340,37 +344,52 @@ public class ContentExtractorDescriptionGUI {
 
 		// START EVENT_INITIALIZATION
 		newsButton.addSelectionListener(new SelectionAdapter() {
+			
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				newsButton_widgetSelected(e);
 			}
 		});
 		shoppingButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				shoppingButton_widgetSelected(e);
 			}
 		});
 		governmentButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				governmentButton_widgetSelected(e);
 			}
 		});
 		educationButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				educationButton_widgetSelected(e);
 			}
 		});
 		textHeavyButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				textHeavyButton_widgetSelected(e);
 			}
 		});
 		linkHeavyButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				linkHeavyButton_widgetSelected(e);
 			}
 		});
 		autoButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
+				frontPageCheck.setSelection(true);
+		 		frontPage = true;
 				auto_widgetSelected(e);
 			}
 		});
@@ -433,6 +452,18 @@ public class ContentExtractorDescriptionGUI {
 				}
 				else{
 					frontPage = false;
+				}
+			}	
+		});
+		
+		nextPageCheck.addSelectionListener(new SelectionAdapter(){
+			
+			public void widgetSelected(SelectionEvent e){
+				if (nextPageCheck.getSelection() == true){
+					nextPage = true;
+				}
+				else{
+					nextPage = false;
 				}
 			}	
 		});
@@ -772,6 +803,10 @@ public class ContentExtractorDescriptionGUI {
     	return frontPage;
     }
 
+    public boolean checkNextPage(){
+    	return nextPage;
+    }
+    
     public String getSettingsLabel(){
     	return settingsLabel;
     }
