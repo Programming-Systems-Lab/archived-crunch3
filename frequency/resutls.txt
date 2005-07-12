@@ -1,177 +1,191 @@
 The elements in cluster #1 are: 
-the-times+co	0		0
-timesonline+co	0		0
+dictionary	0		0
+m-w	0		0
+thefreedictionary	1	m-w	542
+reference	2	thefreedictionary	665
+mtekk+com	1	m-w	742
 
 The elements in cluster #2 are: 
-pricewatch	0		0
-streetprices	0		0
-epinions	1	pricewatch	478
-pricegrabber	1	streetprices	484
-BizRate	2	epinions	491
-nextag	2	epinions	501
-Shopzilla	2	epinions	519
-shopping	2	epinions	533
-tesco	2	epinions	547
-anandtech	2	epinions	548
-fatwallet	2	epinions	549
-shopping+yahoo	2	epinions	609
-auctions+yahoo	1	streetprices	619
-resellerratings	1	streetprices	636
-ebay	2	auctions+yahoo	668
-SpotStop	1	pricewatch	685
-overstock	2	epinions	712
-bhphotovideo	1	streetprices	750
-buy	1	streetprices	770
-amazon	2	epinions	772
-tomshardware	1	streetprices	826
-newegg	2	epinions	855
+expressindia	0		0
+indianexpress	0		0
 
 The elements in cluster #3 are: 
 indiaabroad	0		0
 rediff	0		0
-outlookindia	1	indiaabroad	580
-hindustantimes	2	outlookindia	777
-thesun+co	1	indiaabroad	794
-timesofindia+indiatimes	1	indiaabroad	852
-ndtv	1	indiaabroad	884
+hindustantimes	1	indiaabroad	673
+timesofindia+indiatimes	1	indiaabroad	728
 
 The elements in cluster #4 are: 
-expressindia	0		0
-indianexpress	0		0
-observerindia	1	indianexpress	780
+eonline	0		0
+gertzfile	0		0
+hinduonnet	1	gertzfile	554
+catless+ncl+ac	1	gertzfile	570
+marsrovers+jpl+nasa	1	gertzfile	584
+worldtribune	1	gertzfile	594
+outlookindia	2	hinduonnet	611
+imdb	1	eonline	616
+connection	1	eonline	628
+tnr	1	eonline	629
+anandtech	1	gertzfile	632
+urbandictionary	1	gertzfile	637
+ny1	1	gertzfile	643
+kuro5hin	1	gertzfile	648
+webmd	1	eonline	651
+drudgereport	1	gertzfile	658
+heroicstories	1	gertzfile	659
+arstechnica	1	gertzfile	663
+nextag	1	eonline	672
+prosportsdaily	1	gertzfile	676
+rednova	1	eonline	682
+thestate	1	gertzfile	687
+newyorkpost	2	ny1	689
+pricegrabber	2	nextag	689
+cnn	2	ny1	691
+pricewatch	2	nextag	694
+space	1	gertzfile	703
+techjapan	1	gertzfile	707
+theunionleader	1	gertzfile	707
+warehouse	2	connection	713
+mapquest	1	eonline	714
+themoscowtimes	2	hinduonnet	716
+cbc	1	eonline	721
+mobiletracker	1	gertzfile	722
+azcentral	1	eonline	723
+mobilewhack	1	gertzfile	723
+theinquirer	1	eonline	727
+suntimes	2	ny1	729
+spacetoday	1	gertzfile	730
+epinions	2	nextag	730
+target	1	eonline	737
+thesun+co	1	eonline	740
+newyorkish	1	gertzfile	742
+chicagotribune	2	azcentral	743
+apple	1	eonline	747
+billboard	1	eonline	752
+observer	2	hinduonnet	752
+theregister	1	gertzfile	754
+timesunion	1	gertzfile	758
+nydailynews	2	ny1	760
+wonkette	1	gertzfile	771
+infosyncworld	2	catless+ncl+ac	772
+ppcw	1	gertzfile	772
+techreview	1	eonline	774
+thisislondon+co	1	eonline	778
+groklaw	1	gertzfile	779
+slate+msn	1	gertzfile	786
+weather	1	eonline	791
+counterpunch	2	tnr	791
+slashdot	2	kuro5hin	795
+spaceDaily	2	spacetoday	795
+stltoday	1	eonline	798
+indystar	2	thestate	799
+orlandosentinel	1	eonline	804
+fatwallet	1	gertzfile	804
+fark	1	gertzfile	807
+streetprices	2	nextag	809
+amazon	2	nextag	812
+tampatrib	2	hinduonnet	812
+tesco	1	eonline	812
+bhphotovideo	2	catless+ncl+ac	818
+japantoday	2	hinduonnet	822
+smh+com	1	eonline	823
+walmart	2	target	824
+digitalidworld	1	gertzfile	829
+fleet	1	eonline	831
+shopping+yahoo	2	nextag	836
+pressherald+mainetoday	2	theunionleader	839
+washingtonpost	2	ny1	841
+washingtontimes	1	gertzfile	844
+csmonitor	2	hinduonnet	853
+ap	1	eonline	857
+abqjournal	1	eonline	863
+worldbank	1	eonline	868
+fuckedcompany	1	gertzfile	868
+sfgate	2	azcentral	876
+globalsecurity	1	gertzfile	880
+pcworld	1	eonline	883
+gothamist	2	newyorkish	884
+gizmodo	1	eonline	884
+ebay	2	nextag	888
+auctions+yahoo	2	nextag	894
+baltimoresun	1	eonline	897
+engadget	1	eonline	898
+insight	2	connection	901
+tallahassee	2	thestate	906
+tech+nytimes	1	eonline	907
+spaceflightnews	2	spacetoday	911
+buy	1	eonline	915
+wired	1	eonline	924
+gawker	2	newyorkish	932
+salon	1	eonline	937
+philly	2	thestate	940
+SpotStop	1	gertzfile	950
+zones	1	eonline	971
+spaceflightnow	2	spacetoday	981
+latimes	2	azcentral	989
+usatoday	1	eonline	991
 
 The elements in cluster #5 are: 
 news+bbc+co	0		0
 bbc+co	0		0
-news+yahoo	1	news+bbc+co	516
-news+ft	1	bbc+co	539
-cnn	1	bbc+co	543
-ap	1	bbc+co	587
-cbc	2	cnn	632
-suntimes	2	news+ft	634
-sports+yahoo	1	bbc+co	639
-allsports	2	sports+yahoo	655
-news+com	1	news+bbc+co	701
-wired	1	bbc+co	706
-usatoday	2	cnn	713
-pcworld	2	wired	779
-economist	2	wired	779
-sportingnews	2	wired	797
-sun-sentinel	2	news+ft	891
-cbs+sportsline	2	sports+yahoo	909
+news+ft	1	news+bbc+co	767
+news+com	1	news+bbc+co	860
+ndtv	1	news+bbc+co	934
 
 The elements in cluster #6 are: 
-hp	0		0
-ibm	0		0
-apple	1	ibm	546
-dell	2	apple	629
-target	2	apple	659
-walmart	2	apple	713
+the-times+co	0		0
+timesonline+co	0		0
 
 The elements in cluster #7 are: 
-iht	0		0
-tomalak	0		0
-tnr	1	iht	549
-prosportsdaily	1	tomalak	564
-hinduonnet	1	iht	566
-washingtontimes	1	iht	570
-drudgereport	1	iht	574
-theregister	1	tomalak	578
-marsrovers+jpl+nasa	1	tomalak	585
-heroicstories	1	iht	592
-techreview	2	theregister	608
-csmonitor	1	iht	615
-themoscowtimes	1	iht	615
-kuro5hin	1	tomalak	617
-catless+ncl+ac	1	tomalak	618
-techjapan	1	tomalak	622
-arstechnica	2	theregister	629
-theinquirer	1	iht	658
-slate+msn	2	tnr	683
-globalsecurity	2	tnr	696
-pressherald+mainetoday	1	iht	703
-worldtribune	1	iht	716
-digitalidworld	2	tnr	743
-groklaw	2	kuro5hin	755
-japantoday	1	iht	768
-fark	2	kuro5hin	803
-hardocp	2	techjapan	823
-blogs+msdn	2	techjapan	832
-space	2	theregister	838
-fuckedcompany	1	tomalak	876
-gertzfile	2	tnr	885
-researchbuzz	2	techjapan	910
-slashdot	2	techjapan	945
-mobilewhack	2	techjapan	949
+BizRate	0		0
+Shopzilla	0		0
+resellerratings	1	BizRate	782
+shopping	1	BizRate	800
+newegg	2	resellerratings	952
 
 The elements in cluster #8 are: 
-connection	0		0
-warehouse	0		0
-zones	1	connection	649
-insight	1	connection	677
-time	2	zones	747
-computerworld	2	insight	907
-infoworld	1	connection	909
-eweek	2	infoworld	953
+cbs+sportsline	0		0
+espn	0		0
+sports+yahoo	1	cbs+sportsline	718
+allsports	1	cbs+sportsline	753
+sportingnews	1	cbs+sportsline	951
 
 The elements in cluster #9 are: 
-newyorkpost	0		0
-ny1	0		0
-stltoday	1	newyorkpost	595
-observer	1	newyorkpost	596
-timesunion	1	newyorkpost	606
-chicagotribune	1	newyorkpost	609
-orlandosentinel	2	chicagotribune	620
-eonline	1	newyorkpost	624
-theunionleader	2	timesunion	637
-azcentral	2	chicagotribune	658
-tampatrib	2	chicagotribune	663
-latimes	2	chicagotribune	672
-smh+com	2	chicagotribune	679
-thisislondon+co	1	newyorkpost	692
-tech+nytimes	1	newyorkpost	695
-sfgate	1	newyorkpost	697
-thestate	2	chicagotribune	699
-jpost	1	newyorkpost	720
-cleveland	2	chicagotribune	748
-baltimoresun	2	chicagotribune	773
-salon	1	newyorkpost	798
-nytimes	1	newyorkpost	813
-dallasnews	2	chicagotribune	842
-nydailynews	1	newyorkpost	910
-indystar	2	chicagotribune	931
-ajc	2	chicagotribune	996
+hp	0		0
+ibm	0		0
+dell	1	hp	763
+overstock	2	dell	973
 
 The elements in cluster #10 are: 
-spaceflightnews	0		0
-spacetoday	0		0
-universetoday	1	spacetoday	569
-spaceDaily	1	spacetoday	633
-rednova	1	spaceflightnews	694
-spaceflightnow	1	spacetoday	806
-spaceref	1	spacetoday	836
-
-The elements in cluster #11 are: 
-infosyncworld	0		0
-mtekk+com	0		0
-ppcw	1	mtekk+com	716
-dpreview	1	mtekk+com	777
-mobiletracker	1	infosyncworld	894
-
-The elements in cluster #12 are: 
-defamer	0		0
-gawker	0		0
-wonkette	1	defamer	687
-gizmodo	1	defamer	770
-
-The elements in cluster #13 are: 
 pocketpcthoughts	0		0
 smartphonethoughts	0		0
-digitalmediathoughts	1	smartphonethoughts	698
-eHomeUpgrade	2	digitalmediathoughts	793
+digitalmediathoughts	1	smartphonethoughts	802
+eHomeUpgrade	2	digitalmediathoughts	809
+blogs+msdn	1	smartphonethoughts	945
+
+The elements in cluster #11 are: 
+dpreview	0		0
+photographyblog	0		0
+
+The elements in cluster #12 are: 
+priceline	0		0
+expedia	0		0
+
+The elements in cluster #13 are: 
+citibank	0		0
+chase	0		0
+mbna	1	citibank	787
+bankone	1	chase	847
+bankofamerica	2	bankone	981
 
 The elements in cluster #14 are: 
+computerworld	0		0
+infoworld	0		0
+eweek	1	infoworld	978
+
+The elements in cluster #15 are: 
 charlotte	0		0
-tallahassee	0		0
-miami	1	charlotte	813
+cleveland	0		0
+boston	1	cleveland	918
+miami	1	cleveland	989
 

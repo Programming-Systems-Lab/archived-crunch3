@@ -56,6 +56,7 @@ import psl.crunch3.plugins.contentextractor.ContentExtractorDescriptionGUI;
  */
 public class MainWindow extends Thread {
 	
+	private MainControl control;
 	private String currentURL="";
 	private boolean isInitialized = false;
 	private boolean listenPortChanged = false;
@@ -167,6 +168,9 @@ public class MainWindow extends Thread {
 	private Color tableItemDisabledColor = null;
 	// END VISUALS_DECLARATION
 
+	
+	
+	
 	private void createControls() {
 		// START VISUALS_INITIALIZATION
 		// init visuals
@@ -699,6 +703,7 @@ public class MainWindow extends Thread {
 			mainShell.setActive();
 		
 	}
+	
 	private void mainTrayItem_menuDetect(final Event e) {
 		if (Crunch3.settings.isVerbose())
 			System.out.println("mainTrayItem_menuDetect: " + e);
@@ -706,6 +711,7 @@ public class MainWindow extends Thread {
 		trayFilterMenuItem.setSelection(Crunch3.settings.isFilterContent());
 		trayMenu.setVisible(true);
 	}
+	
 	private void trayOpenMenuItem_widgetSelected(final SelectionEvent e){
 		if (Crunch3.settings.isVerbose())
 			System.out.println("trayOpenMenuItem_widgetSelected: " + e);
@@ -713,6 +719,7 @@ public class MainWindow extends Thread {
 		mainShell.setVisible(true);
 		mainShell.setActive();
 	}
+	
 	private void trayFilterMenuItem_widgetSelected(final SelectionEvent e){
 		if (Crunch3.settings.isVerbose())
 			System.out.println("trayFilterMenuItem_widgetSelected: " + e);
@@ -725,6 +732,7 @@ public class MainWindow extends Thread {
 		
 		revertSettings();
 	}
+	
 	private void trayExitMenuItem_widgetSelected(final SelectionEvent e){
 		if (Crunch3.settings.isVerbose()){
 			System.out.println("trayExitMenuItem_widgetSelected: " + e);
@@ -750,6 +758,7 @@ public class MainWindow extends Thread {
 				}
 			}.start();
 	}
+	
 	private void exitMenuItem_widgetSelected(final SelectionEvent e) {
 		if (Crunch3.settings.isVerbose())
 			System.out.println("exitMenuItem_widgetSelected: " + e);
@@ -759,11 +768,13 @@ public class MainWindow extends Thread {
 			}
 		}.start();
 	}
+	
 	private void aboutMenuItem_widgetSelected(final SelectionEvent e) {
 		if (Crunch3.settings.isVerbose())
 			System.out.println("aboutMenuItem_widgetSelected: " + e);
 		AboutShell.showAboutShell();
 	}
+	
 	private void useProxyCheck_widgetSelected(final SelectionEvent e) {
 		if (Crunch3.settings.isVerbose())
 			System.out.println("useProxyCheck_widgetSelected: " + e);
@@ -856,8 +867,10 @@ public class MainWindow extends Thread {
 	}
 	// END EVENT_HANDLING
 	
-	public MainWindow() {
+	public MainWindow(MainControl control) {
+		
 		super("MainWindowDisplayThread");
+		this.control = control;
 		this.start();
 
 		//don't release control until the gui is initialize

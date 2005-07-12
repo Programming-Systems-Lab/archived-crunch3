@@ -1890,16 +1890,17 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	private void applySettings(int cluster){
 		switch(cluster){
 		
-			case 1: descriptionGUI.commitSettings(ContentExtractor.LEVEL10_SETTINGS_FILE_DEF, 10);
+			case 1: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					descriptionGUI.updateClassificationLabel("shopping");
+					break;
+			case 2: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
 					descriptionGUI.updateClassificationLabel("news");
 					break;
-			case 2: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					break;
-			case 3: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("world news");
+			case 3: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					descriptionGUI.updateClassificationLabel("news");
 					break;
 			case 4: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("world news");
+					descriptionGUI.updateClassificationLabel("shopping");
 					break;
 			case 5: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
 					descriptionGUI.updateClassificationLabel("news");
@@ -1908,22 +1909,22 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 					descriptionGUI.updateClassificationLabel("shopping");
 					break;
 			case 7: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+					descriptionGUI.updateClassificationLabel("world news");
 					break;
-			case 8: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("shopping");
+			case 8: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					descriptionGUI.updateClassificationLabel("news");
 					break;
 			case 9: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
 					descriptionGUI.updateClassificationLabel("news");
 					break;
-			case 10: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
-					descriptionGUI.updateClassificationLabel("space");
-				 	 break;
+			case 10: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					 descriptionGUI.updateClassificationLabel("news");
+					 break;
 			case 11: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
-					descriptionGUI.updateClassificationLabel("tech news");
+					descriptionGUI.updateClassificationLabel("blogs");
 					 break;
 			case 12: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("gossip");
+					descriptionGUI.updateClassificationLabel("blogs");
 					 break;
 			case 13: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
 					descriptionGUI.updateClassificationLabel("blogs");

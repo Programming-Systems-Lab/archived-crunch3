@@ -40,7 +40,6 @@ www.csis.org
 www.csmonitor.com 
 www.dallasnews.com
 www.debka.com 
-www.defamer.com
 www.digitalidworld.com 
 www.digitalmediathoughts.com
 www.dpreview.com 
@@ -64,7 +63,6 @@ www.hardocp.com
 www.heroicstories.com 
 www.hinduonnet.com 
 www.hindustantimes.com 
-www.iht.com/pages
 www.indiaabroad.com  
 www.indianexpress.com 
 www.indystar.com
@@ -73,7 +71,6 @@ www.infoworld.com
 www.janes.com
 www.japantoday.com 
 www.joystiq.com 
-www.jpost.com 
 www.kuro5hin.org
 www.latimes.com 
 www.miami.com/mld/miamiherald 
@@ -87,8 +84,7 @@ www.newyorkpost.com
 www.ny1.com 
 www.nydailynews.com
 www.nytimes.com
-www.observer.com 
-www.observerindia.com 
+www.observer.com  
 www.orlandosentinel.com
 www.outlookindia.com
 www.overstock.com 
@@ -100,7 +96,6 @@ www.ppcw.net
 www.prosportsdaily.com 
 www.rediff.com 
 www.rednova.com 
-www.researchbuzz.com
 www.salon.com 
 www.sfgate.com/chronicle 
 www.shopping.com
@@ -134,11 +129,9 @@ www.time.com
 www.timesonline.co.uk
 www.timesunion.com
 www.tnr.com 
-www.tomalak.org
 www.tomshardware.com 
 www.universetoday.com 
 www.usatoday.com
-ve3d.ign.com
 www.washingtonpost.com 
 www.washingtontimes.com
 www.wired.com 
@@ -168,3 +161,22 @@ www.hp.com
 www.ibm.com
 www.warehouse.com
 auctions.yahoo.com
+www.bankofamerica.com
+www.worldbank.org
+www.bankone.com
+www.citibank.com
+www.fleet.com
+www.chase.com
+www.mbna.com
+www.reference.com
+www.dictionary.com
+www.weather.com
+www.imdb.com
+www.mapquest.com
+www.priceline.com
+www.expedia.com
+www.webmd.com
+www.billboard.com
+www.m-w.com
+www.urbandictionary.com
+www.thefreedictionary.com

@@ -16,12 +16,11 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.axis.*;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
 
 /**
  * @author hb2143
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class WordCount extends JFrame{
 
@@ -57,7 +56,7 @@ public class WordCount extends JFrame{
 		//use this constructor for generating the key (not used from crunch)
 		fromCrunch = false;
 		
-		drawGraphs=true;
+		drawGraphs=false;
 		cp = this.getContentPane();
 		chartPanel = new JPanel();
 		
@@ -194,7 +193,7 @@ public class WordCount extends JFrame{
 	 */
 	private void generateList(String url, boolean isRoot){
 		System.out.println("generating word list for " + url);
-		BufferedReader in = getWebsite(url);
+		InputStreamReader in = getWebsite(url);
 		InputStreamReader read;
 		try{
 			storeBuffer(in);
@@ -294,7 +293,7 @@ public class WordCount extends JFrame{
 			sitewords.addElement(wordlist);
 			
 			
-			//add words of frequency 5 and above to keywords vector
+			//add words of frequency 10 and above to keywords vector
 			for (int j=0;j<wordlist.size();j++){
 				if((((WordFreq)wordlist.elementAt(j)).frequency > 9) && 
 						!(inVector(keywords, ((WordFreq)wordlist.elementAt(j)).word))){
@@ -338,48 +337,53 @@ public class WordCount extends JFrame{
 	}
 	
 	
+	//replace storeBuffer...
 	
-	private void storeBuffer(BufferedReader in){
+	private void storeBuffer(InputStreamReader in){
+		
+	    
 		try{
-			String line = null;
-			String leftover="";
-			boolean bodyFound = false;
-			while((line = in.readLine()) != null){
-				
-				if(!bodyFound){
-					//try to extract information from the title
-					if(line.indexOf("<title>") != -1){
-						line = line.substring(line.indexOf("<title>")+7);
-						if(line.indexOf("</")!= -1) {
-							line = line.substring(0,line.indexOf("</"));
-							store(removePunctuations(line));
-						}
-					}
-					
-					//check if line contains body tag
-					if(line.toLowerCase().indexOf("<body") != -1){
-						store(removePunctuations(cleanLine(line)));
-						bodyFound=true;
-					}
-						
-					//otherwise skip line...
-					
-				}
-				else{
-					
-					leftover = cleanLine(line);
-					store(removePunctuations(leftover));
-				}
-			}
-			in.close();
+			org.cyberneko.html.parsers.DOMParser parser = new org.cyberneko.html.parsers.DOMParser();
+			parser.parse(new InputSource(in));
+			Document tree = parser.getDocument();
+			storeTextNodes(tree);
+			
+			
 		}
-		catch(Exception e){
-			System.out.println(e.getMessage());
-		}
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    }
 	}
 	
 	
-	
+	private void storeTextNodes(Node root){
+		
+		if(((root.getNodeType()) == Node.TEXT_NODE)&& !((root.getParentNode()).getNodeName()).equals("SCRIPT")){
+			store(root.getNodeValue());
+		}
+		
+		if((root.getNodeType()) == Node.ELEMENT_NODE){
+			
+			if((root.getNodeName()).equals("IMG")){
+				
+				NamedNodeMap map = root.getAttributes();
+				if((map.getNamedItem("alt")) != null){
+					store((map.getNamedItem("alt")).getNodeValue());
+				}
+			}
+			
+		}
+		
+		NodeList children = root.getChildNodes();
+		for(int i=0;i<children.getLength();i++){
+			
+			storeTextNodes(children.item(i));
+			
+		}
+		
+		
+		
+	}
 	
 	
 	/*
@@ -498,10 +502,10 @@ public class WordCount extends JFrame{
 		}
 	}
 	
-	private BufferedReader getYahoo(String address){
+	private InputStreamReader getYahoo(String address){
 		try{
 			URL url = new URL("http://search.yahoo.com/search?ei=UTF-8&fr=sfp&p=" + address.trim());
-			return new BufferedReader(new InputStreamReader(url.openStream()));
+			return (new InputStreamReader(url.openStream()));
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -510,10 +514,10 @@ public class WordCount extends JFrame{
 		
 	}
 	
-	private BufferedReader getDogPile(String address){
+	private InputStreamReader getDogPile(String address){
 		try{
 			URL url = new URL("http://www.dogpile.com/info.dogpl/search/web/" + address.trim());
-			return new BufferedReader(new InputStreamReader(url.openStream()));
+			return (new InputStreamReader(url.openStream()));
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -522,10 +526,10 @@ public class WordCount extends JFrame{
 		
 	}
 	
-	private BufferedReader getMSN(String address){
+	private InputStreamReader getMSN(String address){
 		try{
 			URL url = new URL("http://search.msn.com/results.aspx?q=" + address.trim());
-			return new BufferedReader(new InputStreamReader(url.openStream()));
+			return (new InputStreamReader(url.openStream()));
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -533,10 +537,10 @@ public class WordCount extends JFrame{
 		}
 		
 	}	
-	private BufferedReader getAltaVista(String address){
+	private InputStreamReader getAltaVista(String address){
 		try{
 			URL url = new URL("http://www.altavista.com/web/results?q=" + address.trim());
-			return new BufferedReader(new InputStreamReader(url.openStream()));
+			return (new InputStreamReader(url.openStream()));
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -544,11 +548,11 @@ public class WordCount extends JFrame{
 		}
 	}
 	
-	private BufferedReader getLycos(String address){ 
+	private InputStreamReader getLycos(String address){ 
 		  
 		try{ 
 		 URL url = new URL("http://search.lycos.com/default.asp?query=" + address.trim()); 
-		 return new BufferedReader(new InputStreamReader(url.openStream())); 
+		 return (new InputStreamReader(url.openStream())); 
 		} 
 		  
 		catch(Exception e){ 
@@ -557,11 +561,11 @@ public class WordCount extends JFrame{
 		} 
 		 
 	} 
-		private BufferedReader getExcite(String address){ 
+		private InputStreamReader getExcite(String address){ 
 		  
 		try{ 
 		 URL url = new URL("http://msxml.excite.com/info.xcite/search/web/" + address.trim()); 
-		 return new BufferedReader(new InputStreamReader(url.openStream())); 
+		 return (new InputStreamReader(url.openStream())); 
 		} 
 		  
 		catch(Exception e){ 
@@ -605,11 +609,11 @@ public class WordCount extends JFrame{
 	 * @param address of the website
 	 * @return the buffered reader containing the source or null if connection was not made
 	 */
-	public BufferedReader getWebsite(String address){
+	public InputStreamReader getWebsite(String address){
 		try{
 			URL url = new URL("http://" + address);
 			
-			return new BufferedReader(new InputStreamReader(url.openStream()));
+			return (new InputStreamReader(url.openStream()));
 		}
 		catch(Exception e){
 			e.printStackTrace();

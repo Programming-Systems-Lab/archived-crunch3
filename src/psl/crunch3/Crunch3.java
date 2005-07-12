@@ -35,7 +35,7 @@ public class Crunch3 {
 			System.out.println("Crunch3 Started...");
 			
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-		mainWindow = new MainWindow();
+		//mainWindow = new MainWindow();
 		
 		proxy = new Proxy(settings.getListenPort());		
 		
