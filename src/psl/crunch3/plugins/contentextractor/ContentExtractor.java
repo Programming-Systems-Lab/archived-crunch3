@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import psl.crunch3.Crunch3;
 import psl.crunch3.plugins.EnhancedProxyFilter;
-import psl.crunch3.plugins.ProxyFilterSettings;
+//import psl.crunch3.plugins.ProxyFilterSettings;
 import psl.crunch3.plugins.SiteDependentFilter;
 import psl.crunch3.util.WordCount;
 
@@ -74,13 +74,13 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	private boolean child = false;
 	private InputStream mIn; //the inputstream to filter
 	private Document mTree; //the DOM tree for HTML
-	private LinkedList mLinksSource;
+	private LinkedList<String> mLinksSource;
 	//hashtable of all the removed link sources
-	private LinkedList mLinksText; //hashtable of all the removed link texts
-	private LinkedList mLinksSourceAll; //hashtable of ALL link sources
-	private LinkedList mLinksTextAll; //hashtable of ALL link texts
-	private LinkedList mImagesSource; //hashtable of ALL image sources
-	private ProxyFilterSettings mSettingsGUI; //the settings JPanel
+	private LinkedList<String> mLinksText; //hashtable of all the removed link texts
+	private LinkedList<String> mLinksSourceAll; //hashtable of ALL link sources
+	private LinkedList<String> mLinksTextAll; //hashtable of ALL link texts
+	private LinkedList<String> mImagesSource; //hashtable of ALL image sources
+	//private ProxyFilterSettings mSettingsGUI; //the settings JPanel
 	private boolean mCheckChildren;
 	//boolean to see if children nodes should be checked
 	private String textPrintBuffer; //the line to print when text printing
@@ -91,11 +91,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 
 	ContentExtractorSettings settings; // the settings
 	ContentExtractorDescriptionGUI descriptionGUI; // the description GUI
-	private Vector visitedClusters;
+	private Vector<Integer> visitedClusters;
 	private boolean detectRandomSurfing = false;
 	private String linkToAppend = null;
 	private String currentAddress = null;
 	private int counter=1; //counts the number of pages to append
+	private ContentExtractorDescription ceDescription;
 	
 	/**
 	 * Creates a new instance without any input stream and the default settings file.
@@ -120,13 +121,14 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		//mSettingsGUI = SettingsEditor.getInstance();
 		textPrintBuffer = "";
 		numberBlankLines = 0;
-		mLinksSource = new LinkedList();
-		mLinksText = new LinkedList();
-		mLinksSourceAll = new LinkedList();
-		mLinksTextAll = new LinkedList();
-		mImagesSource = new LinkedList();
+		mLinksSource = new LinkedList<String>();
+		mLinksText = new LinkedList<String>();
+		mLinksSourceAll = new LinkedList<String>();
+		mLinksTextAll = new LinkedList<String>();
+		mImagesSource = new LinkedList<String>();
 		
-		visitedClusters = new Vector();
+		visitedClusters = new Vector<Integer>();
+		ceDescription = new ContentExtractorDescription();
 	}
 
 	
@@ -184,7 +186,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 						try{
 							
 							if(currentAddress == null)
-								currentAddress = Crunch3.mainWindow.getURL();
+								currentAddress = Crunch3.mainControl.getCurrentURL();
 								String temp = currentAddress.substring(7);
 								
 								int index = temp.indexOf("/");
@@ -211,11 +213,8 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 					
 					counter++;
 					extract(newTree,newTree);
-					System.out.println(linkToAppend + ",,,,,,,,,,");
 					if(linkToAppend != null) System.out.println("***## " + linkToAppend);
 					
-					//prettyPrint(newTree, System.out);					
-					System.out.println((mTree.getFirstChild()).getNodeName() + "*************");
 					appendDocument(newTree, mTree);
 					
 					
@@ -802,11 +801,11 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 * @param iValue
 	 *            the value of the attribute
 	 */
-	private void addAttribute(final Node iNode, final String iName, final String iValue) {
+	/**private void addAttribute(final Node iNode, final String iName, final String iValue) {
 		Attr attr = mTree.createAttribute(iName);
 		attr.setValue(iValue);
 		iNode.getAttributes().setNamedItem(attr);
-	} //addAttribute
+	} //addAttribute**/
 
 	/**
 	 * Checks to see if an attribute exists in an Element node
@@ -960,9 +959,9 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 *            the the domain to check
 	 * @return true if the domain is an ad domain, false if it is not.
 	 */
-	private boolean isAdDomain(final String iDomain) {
+	/*private boolean isAdDomain(final String iDomain) {
 		return AdsServerList.isAdsServer(iDomain);
-	} //isAdDomain
+	} //isAdDomain**/
 
 	
 	private String getNextLink(final Node iNode){
@@ -1692,7 +1691,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	public Composite getDescriptionGUI(Composite c) {
 		// FIXME Auto-generated method stub
 		if (descriptionGUI == null)
-			descriptionGUI = new ContentExtractorDescriptionGUI(c);
+			descriptionGUI = new ContentExtractorDescriptionGUI(c,ceDescription);
 		return descriptionGUI.getComposite();
 	}
 
@@ -1771,10 +1770,12 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	 */
 	public void reportURL(String URL){
 		
+		ceDescription.setCurrentURL(URL);
 		currentAddress = URL;
 		
-		//if (!Crunch3.settings.isGUISet()) return;
-		psl.crunch3.util.HomePageTester hpt = new psl.crunch3.util.HomePageTester(Crunch3.mainWindow.getURL().trim());
+		
+		
+		psl.crunch3.util.HomePageTester hpt = new psl.crunch3.util.HomePageTester(Crunch3.mainControl.getCurrentURL().trim());
 		if (Crunch3.settings.isVerbose()){
 			if (hpt.isHomePage())
 				System.out.println("This is A Homepage!");
@@ -1782,7 +1783,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		}
 		
 		//handles frontpage detection for GUI-less crunch
-		if(descriptionGUI == null) {
+		/**if(descriptionGUI == null) {
 			 
 			if(Crunch3.settings.isHomePageCheck()){
 			if( hpt.isHomePage()){
@@ -1793,28 +1794,26 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			 }
 			}
 			return;
-		}
+		}**/
 		
 		//compute closes cluster to current URL and apply appropriate filter settings
-		if (descriptionGUI.isAuto()){
+		if (ceDescription.getAutomatic()){
 			
 			int cluster = 0;
 			
-			System.out.println("******************************* "+ (WordCount.parseURL(URL.substring(7),true)));
-			
 			//check if the site is already clustered.
-			if((cluster = descriptionGUI.getCluster(WordCount.parseURL(URL.substring(7),true))) != 0){
+			if((cluster = ceDescription.getCluster(WordCount.parseURL(URL.substring(7),true))) != 0){
 				System.out.println(URL +" is already clustered");
 			}
 			else{
 				//create a new wordcount object that is used to generate the word-frequency map for the current site
-				WordCount wc = new WordCount(URL.substring(7), descriptionGUI.getFrequencies(),
-						descriptionGUI.getKeys(), descriptionGUI.getSites(), descriptionGUI.getEngineNumber());
+				WordCount wc = new WordCount(URL.substring(7), ceDescription.getFrequencies(),
+						ceDescription.getKeys(), ceDescription.getSites(), ceDescription.getEngineNumber());
 				
 				//get the site closest to URL from preclustered list
 				String closest = wc.getClosestSite();
 				if(closest !=null)
-					cluster = descriptionGUI.getCluster(closest);
+					cluster = ceDescription.getCluster(closest);
 				else cluster = 0;
 			}
 			
@@ -1830,11 +1829,11 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			
 			//if the page is a news home page relax the settings
 			if(hpt.isHomePage()){
-				int level = descriptionGUI.getSettingLevel();
+				int level = ceDescription.getSettingsLevel();
 				if(level ==2){
 					level+=4;
 					System.out.println("Setting level " + level);
-					descriptionGUI.commitSettings("config" + File.separator + "level" + level + ".ini", level);
+					ceDescription.commitSettings("config" + File.separator + "level" + level + ".ini", level);
 				}
 			}
 			
@@ -1851,19 +1850,19 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		
 		//if settings aren't automatic, just apply regular front-page detection proc
 		else{
-			if(descriptionGUI.checkFrontPage() && hpt.isHomePage()){
+			if(ceDescription.getCheckFrontPage() && hpt.isHomePage()){
 				
-				if((descriptionGUI.getSettingsLabel()).equals("news")){
-					descriptionGUI.commitSettings("config" + File.separator + "level6.ini", 6);
-					descriptionGUI.setSettingsLevel(6);
+				if((ceDescription.getSettingsLabel()).equals("news")){
+					ceDescription.commitSettings("config" + File.separator + "level6.ini", 6);
+					ceDescription.setSettingsLevel(6);
 				}
 				
 				
 			}
-			else if(descriptionGUI.checkFrontPage() && !hpt.isHomePage()){
-				if((descriptionGUI.getSettingsLabel()).equals("news")){
-					descriptionGUI.commitSettings("config" + File.separator + "level2.ini", 2);
-					descriptionGUI.setSettingsLevel(2);
+			else if(ceDescription.getCheckFrontPage() && !hpt.isHomePage()){
+				if((ceDescription.getSettingsLabel()).equals("news")){
+					ceDescription.commitSettings("config" + File.separator + "level2.ini", 2);
+					ceDescription.setSettingsLevel(2);
 				}
 			}
 		}
@@ -1871,7 +1870,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	
 	
 	private void relax(){
-		descriptionGUI.commitSettings("config" + File.separator + "level" + 9 + ".ini", 9);
+		ceDescription.commitSettings("config" + File.separator + "level" + 9 + ".ini", 9);
 	}
 	
 	
@@ -1890,54 +1889,54 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 	private void applySettings(int cluster){
 		switch(cluster){
 		
-			case 1: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("shopping");
+			case 1: ceDescription.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					ceDescription.setSettingsLabel("shopping");
 					break;
-			case 2: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+			case 2: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("news");
 					break;
-			case 3: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+			case 3: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("news");
 					break;
-			case 4: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("shopping");
+			case 4: ceDescription.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					ceDescription.setSettingsLabel("shopping");
 					break;
-			case 5: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+			case 5: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("news");
 					break;
-			case 6: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("shopping");
+			case 6: ceDescription.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					ceDescription.setSettingsLabel("shopping");
 					break;
-			case 7: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("world news");
+			case 7: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("world news");
 					break;
-			case 8: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+			case 8: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("news");
 					break;
-			case 9: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+			case 9: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("news");
 					break;
-			case 10: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					 descriptionGUI.updateClassificationLabel("news");
+			case 10: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					 ceDescription.setSettingsLabel("news");
 					 break;
-			case 11: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
-					descriptionGUI.updateClassificationLabel("blogs");
+			case 11: ceDescription.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10); 
+					ceDescription.setSettingsLabel("blogs");
 					 break;
-			case 12: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("blogs");
+			case 12: ceDescription.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					ceDescription.setSettingsLabel("blogs");
 					 break;
-			case 13: descriptionGUI.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
-					descriptionGUI.updateClassificationLabel("blogs");
+			case 13: ceDescription.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 10);
+					ceDescription.setSettingsLabel("blogs");
 					break;
-			case 14: descriptionGUI.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
-					descriptionGUI.updateClassificationLabel("news");
+			case 14: ceDescription.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+					ceDescription.setSettingsLabel("news");
 					 break;
-			default: descriptionGUI.commitSettings(ContentExtractor.LEVEL12_SETTINGS_FILE_DEF , 12); 
-						descriptionGUI.updateClassificationLabel("misc");
+			default: ceDescription.commitSettings(ContentExtractor.LEVEL12_SETTINGS_FILE_DEF , 12); 
+					ceDescription.setSettingsLabel("misc");
 					break;
 		
 		}
-		descriptionGUI.updateSettingsLevel();
+		if(descriptionGUI != null) descriptionGUI.update();
 	}
 	
 	

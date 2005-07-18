@@ -21,8 +21,8 @@ public class Proxy implements Runnable {
 	private boolean initialized = false;
 	private Thread transferThread;
 	private ServerSocket serverSocket;
-	private LinkedList transfers;
-	private Vector plugins = new Vector();
+	//private LinkedList transfers;
+	private Vector<ProxyFilter> plugins = new Vector<ProxyFilter>();
 
 	public Proxy(int port) {
 		//ensure the port given is in the proper range
@@ -84,6 +84,7 @@ public class Proxy implements Runnable {
 			return false;
 		}
 
+		if(Crunch3.mainWindow !=null)
 		Crunch3.mainWindow.setListeningOn(serverSocket.getInetAddress().toString(), listenPort);
 
 		return true;
@@ -94,7 +95,8 @@ public class Proxy implements Runnable {
 	 *  
 	 */
 	private void mainLoop() {
-		Crunch3.mainWindow.setProxyStatus("Listening for requests.");
+		if(Crunch3.mainWindow !=null)
+			Crunch3.mainWindow.setProxyStatus("Listening for requests.");
 		while (true) {
 			boolean exception = false;
 
@@ -176,7 +178,7 @@ public class Proxy implements Runnable {
 	 */
 	public void registerPlugin(final ProxyFilter plugin) {
 		plugins.add(plugin);
-		Crunch3.mainWindow.addPlugin(plugin);
+		if(Crunch3.mainWindow != null) Crunch3.mainWindow.addPlugin(plugin);
 	}
 
 	public ProxyFilter[] getPlugins() {

@@ -9,11 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -45,6 +43,9 @@ import psl.crunch3.TypedProperties;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class ContentExtractorDescriptionGUI {
+	
+	private ContentExtractorDescription control=null;
+	
 	private Composite parentComposite = null;
 	private Composite mainComposite = null;
 	private Sash ContentPluginSeparator1;
@@ -81,23 +82,13 @@ public class ContentExtractorDescriptionGUI {
 	private Button frontPageCheck = null;
 	private Button nextPageCheck = null;
 	
-	private ContentExtractorSettings newFilter = ContentExtractorSettings.getInstance();
-	private boolean isAuto = false;
-	private int [][] frequencies;
-	private Vector keywords;
-	private Vector names;
-	private Hashtable clusters;
-	private int engineNumber = 5;
-	private int settingLevel = 0;
-	private boolean frontPage = true;
-	private boolean nextPage = true;
-	private String settingsLabel;
-	
 	/**
 	 * @param c
 	 */
-	public ContentExtractorDescriptionGUI(Composite c) {
+	public ContentExtractorDescriptionGUI(Composite c, ContentExtractorDescription d) {
 		parentComposite = c;
+		
+		control = d; 
 		
 		if (Crunch3.settings.isVerbose())
 			System.out.println("Creating ContentExtractorDescriptionGUI");
@@ -347,49 +338,49 @@ public class ContentExtractorDescriptionGUI {
 			
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+				control.checkFrontPage(true);
 				newsButton_widgetSelected(e);
 			}
 		});
 		shoppingButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+				control.checkFrontPage(true);
 				shoppingButton_widgetSelected(e);
 			}
 		});
 		governmentButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+				control.checkFrontPage(true);
 				governmentButton_widgetSelected(e);
 			}
 		});
 		educationButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+		 		control.checkFrontPage(true);
 				educationButton_widgetSelected(e);
 			}
 		});
 		textHeavyButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+				control.checkFrontPage(true);
 				textHeavyButton_widgetSelected(e);
 			}
 		});
 		linkHeavyButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+				control.checkFrontPage(true);
 				linkHeavyButton_widgetSelected(e);
 			}
 		});
 		autoButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e){
 				frontPageCheck.setSelection(true);
-		 		frontPage = true;
+				control.checkFrontPage(true);
 				auto_widgetSelected(e);
 			}
 		});
@@ -426,7 +417,7 @@ public class ContentExtractorDescriptionGUI {
 		engineCombo.addSelectionListener(new SelectionAdapter() {
 		    public void widgetSelected(SelectionEvent e){
 		      Character c = new Character((engineCombo.getText()).charAt(0));
-		      engineNumber = Integer.parseInt(c.toString());
+		      control.setEngineNumber(Integer.parseInt(c.toString()));
 		    }
 		});
 		
@@ -436,10 +427,10 @@ public class ContentExtractorDescriptionGUI {
 		 	{
 		 		autoButton.setSelection(false);
 		 		selectCustom();
-		 		isAuto = false;
+		 		control.setAutomatic(false);
 		 		frontPageCheck.setSelection(false);
-		 		frontPage = false;
-				commitSettings("config" + File.separator + "level" + relax.getSelection() + ".ini", relax.getSelection());    
+		 		control.checkFrontPage(false);
+				control.commitSettings("config" + File.separator + "level" + relax.getSelection() + ".ini", relax.getSelection());    
 		 	}
 			}
 		);
@@ -448,10 +439,10 @@ public class ContentExtractorDescriptionGUI {
 			
 			public void widgetSelected(SelectionEvent e){
 				if (frontPageCheck.getSelection() == true){
-					frontPage = true;
+					control.checkFrontPage(true);
 				}
 				else{
-					frontPage = false;
+					control.checkFrontPage(false);
 				}
 			}	
 		});
@@ -460,10 +451,10 @@ public class ContentExtractorDescriptionGUI {
 			
 			public void widgetSelected(SelectionEvent e){
 				if (nextPageCheck.getSelection() == true){
-					nextPage = true;
+					control.checkNextPage(true);
 				}
 				else{
-					nextPage = false;
+					control.checkNextPage(false);
 				}
 			}	
 		});
@@ -471,62 +462,62 @@ public class ContentExtractorDescriptionGUI {
 		// TODO 
 		if (ContentExtractor.customLast){
 			customButton.setSelection(true);
-			settingsLabel = "custom";
+			control.setSettingsLabel("custom");
 		}
 		else{
 			newsButton.setSelection(true);
-			settingsLabel = "news";
+			control.setSettingsLabel("news");
 			relax.setSelection(2);
 		}
 		
 		normalButton.setSelection(true);
 		
 		if(!(Crunch3.settings.isGUISet())){
-			commitSettings(Crunch3.settings.getSettings(), 2);
-			settingsLabel = "news";
+			control.commitSettings(Crunch3.settings.getSettings(), 2);
+			control.setSettingsLabel("news");
 		}
 	}
 	
 	private void newsButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF, 0);
-		settingsLabel = "news";
+		control.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF, 2);
+		control.setSettingsLabel("news");
 		relax.setSelection(2);
-		isAuto = false;
+		control.setAutomatic(false);
 	}
 	
 	protected void shoppingButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LEVEL7_SETTINGS_FILE_DEF , 0);
-		settingsLabel = "shopping";
+		control.commitSettings(ContentExtractor.LEVEL7_SETTINGS_FILE_DEF , 7);
+		control.setSettingsLabel("shopping");
 		relax.setSelection(7);
-		isAuto = false;
+		control.setAutomatic(false);
 	}
 	
 	protected void governmentButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LEVEL5_SETTINGS_FILE_DEF , 0);
-		settingsLabel = "government";
+		control.commitSettings(ContentExtractor.LEVEL5_SETTINGS_FILE_DEF , 5);
+		control.setSettingsLabel("government");
 		relax.setSelection(5);
-		isAuto = false;
+		control.setAutomatic(false);
 	}
 	
 	protected void educationButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 0);
-		settingsLabel = "education";
+		control.commitSettings(ContentExtractor.LEVEL6_SETTINGS_FILE_DEF , 6);
+		control.setSettingsLabel("education");
 		relax.setSelection(6);
-		isAuto = false;
+		control.setAutomatic(false);
 	}
 	
 	protected void textHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 0);
-		settingsLabel = "text heavy";
+		control.commitSettings(ContentExtractor.LEVEL2_SETTINGS_FILE_DEF , 2);
+		control.setSettingsLabel("text heavy");
 		relax.setSelection(2);
-		isAuto = false;
+		control.setAutomatic(false);
 	}
 	
 	protected void linkHeavyButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.LEVEL10_SETTINGS_FILE_DEF, 0);
-		settingsLabel = "link heavy";
+		control.commitSettings(ContentExtractor.LEVEL10_SETTINGS_FILE_DEF, 10);
+		control.setSettingsLabel("link heavy");
 		relax.setSelection(10);
-		isAuto = false;
+		control.setAutomatic(false);
 	}
 	
 	protected void normalButton_widgetSelected(SelectionEvent e) {
@@ -550,75 +541,17 @@ public class ContentExtractorDescriptionGUI {
 	 * @param e
 	 */
 	protected void auto_widgetSelected(SelectionEvent e) {
-		isAuto = true;
-		settingsLabel = "automatic";
+		control.setAutomatic(true);
+		control.setSettingsLabel("automatic");
 		
-		//store cluster information 
-		try{
-			
-			String part1;
-			String word = null;
-			int index1, index2;
-			clusters = new Hashtable();
-			BufferedReader in = new BufferedReader(new FileReader(new File("clusters.txt")));
-			while((word =in.readLine())!=null){
-				index1 = word.indexOf(" ");
-				part1 = word.substring(index1+1);
-				index2 = part1.indexOf(" ");
-				clusters.put(word.substring(0,index1), 
-						new ClusterInfo((Integer.parseInt(part1.substring(0,index2))),
-								(Integer.parseInt(part1.substring(index2+1))))
-						);
-			}
-			in.close();
-			
-			
-			BufferedReader inSites = new BufferedReader(new FileReader(new File("keyinfo.txt")));
-			String site = null;
-			
-			//the file should be in the same format as written by the WordCount
-			int numSites = Integer.parseInt(inSites.readLine());
-			int keySize = Integer.parseInt(inSites.readLine());
-			frequencies = new int[numSites+1][keySize];
 		
-			//read in the list of sites
-			StringTokenizer st;
-			names = new Vector();
-			for(int i=1;(site = inSites.readLine()) !=null;i++){
-				st = new StringTokenizer(site);
-				word = st.nextToken();
-				if(clusters.get(word) !=null){
-					names.addElement(word);
-					for(int j=0;st.hasMoreElements();j++){
-						frequencies[i][j] = Integer.parseInt(st.nextToken());
-					}
-				}
-			}
-			
-			inSites.close();
-		
-			in = new BufferedReader(new FileReader(new File("key.txt")));
-			
-			keywords = new Vector();
-			while((word =in.readLine())!=null){
-				keywords.addElement(word);
-			}
-			in.close();
-			
-			
-			
-			
-		}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}
-		
+		control.storeClustersInfo();
 	}
 	
 	protected void customButton_widgetSelected(SelectionEvent e) {
-		commitSettings(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF , 0);
-		isAuto = false;
-		settingsLabel = "custom";
+		control.commitSettings(ContentExtractor.CUSTOM_SETTINGS_FILE_DEF , 0);
+		control.setAutomatic(false);
+		control.setSettingsLabel("custom");
 	}
 	
 	
@@ -683,7 +616,7 @@ public class ContentExtractorDescriptionGUI {
 			public void run(){
 				if(referrerText != null && !referrerText.isDisposed()){
 					if(text.equals("")){
-						String currentURL = Crunch3.mainWindow.getURL();
+						String currentURL = Crunch3.mainControl.getCurrentURL();
 						if (currentURL !="") referrerText.setText(currentURL);
 						else referrerText.setText("");
 					}
@@ -713,8 +646,8 @@ public class ContentExtractorDescriptionGUI {
 	}
 	
 	 public void updateSettingsLevel(){
-	 	final int level = this.settingLevel;
-	 	setSettingsLevel(level);
+	 	final int level = control.getSettingsLevel();
+	 	control.setSettingsLevel(level);
     	
     }
 	
@@ -728,6 +661,22 @@ public class ContentExtractorDescriptionGUI {
     }
 	 
 
+	 
+	 
+	 public void update(){
+		 Crunch3.Display_1.syncExec(new Runnable(){
+				public void run(){
+					if(relax != null && !relax.isDisposed())
+						relax.setSelection(control.getSettingsLevel());
+					
+					if(classificationLabel != null && !classificationLabel.isDisposed())
+						classificationLabel.setText(control.getSettingsLabel());
+					
+					
+					
+				}
+			});
+	 }
 	
 	//selects the custom button
 	public void selectCustom(){
@@ -740,209 +689,6 @@ public class ContentExtractorDescriptionGUI {
 		linkHeavyButton.setSelection(false);
 		autoButton.setSelection(false);
 	}
-
-    /**
-     * Copies src file to dst file.  If the dst file does not exist, it is created.
-     **/
-    private void copy(File src, File dst) {
-    	try {
-    		InputStream in = new FileInputStream(src);
-    		OutputStream out = new FileOutputStream(dst);
-    
-    		// Transfer bytes from in to out
-    		byte[] buf = new byte[1024];
-    		int len;
-    		while ((len = in.read(buf)) > 0) {
-    			out.write(buf, 0, len);
-    		}
-    		in.close();
-    		out.close();
-    	}
-    	catch(Exception e){
-    		if (Crunch3.settings.isVerbose()){
-    			System.out.println("Error copying files: " + "source file:" + src + " destination file:" + dst);
-    			e.printStackTrace();
-    		}
-    	}
-    }
     
     
-    public boolean isAuto(){
-    	return isAuto;
-    }
-    
-    public int[][] getFrequencies(){
-    	return frequencies;
-    }
-    
-    
-    public Vector getKeys(){
-    	return keywords;
-    }
-    
-    public Vector getSites(){
-    	return names;
-    }
-    
-    public int getCluster(String closest){
-    	ClusterInfo temp = (ClusterInfo)clusters.get(closest);
-    	if (temp != null)
-    		return temp.clusterNum;
-    	else return 0;
-    }
-    
-    public int getEngineNumber(){
-    	return engineNumber;
-    }
-    
-    public int getSettingLevel(){
-    	return settingLevel;
-    }
-    
-    public boolean checkFrontPage(){
-    	return frontPage;
-    }
-
-    public boolean checkNextPage(){
-    	return nextPage;
-    }
-    
-    public String getSettingsLabel(){
-    	return settingsLabel;
-    }
-    
-    
-    
-   
-    
-    /**
-     * Changes the filter settings to new settings read from a file.
-     * @param fileName the file containing the new filter settings. 
-     */
-    public void commitSettings(String fileName , int level) {
-    	File nSettingsFile = new File(fileName);
-    	TypedProperties nSettings = new TypedProperties();
-    	try {
-			nSettings.load(new FileInputStream(nSettingsFile));
-		} catch (FileNotFoundException e) {
-			//Don't load the settings if the file doesn't exist
-			System.out.println("ContentExtractor: WARNING: Settings file not found: " + nSettingsFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-		settingLevel = level;
-		
-		
-    	newFilter.changeSetting(ContentExtractorConstants.ONLY_TEXT, Boolean.toString
-    			(nSettings.getProperty(ContentExtractorConstants.ONLY_TEXT, ContentExtractorConstants.ONLY_TEXT_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_ADS,Boolean.toString
-    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_ADS, ContentExtractorConstants.IGNORE_ADS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_BUTTON_TAGS, Boolean.toString
-    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_BUTTON_TAGS, ContentExtractorConstants.IGNORE_BUTTON_TAGS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_FORMS, Boolean.toString
-    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_FORMS, ContentExtractorConstants.IGNORE_FORMS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_IFRAME_TAGS, Boolean.toString
-    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_IFRAME_TAGS, ContentExtractorConstants.IGNORE_IFRAME_TAGS_DEF)));
-    	newFilter.changeSetting(ContentExtractorConstants.IGNORE_IMAGE_LINKS, Boolean.toString
-    			(nSettings.getProperty(ContentExtractorConstants.IGNORE_IMAGE_LINKS, ContentExtractorConstants.IGNORE_IMAGE_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS, ContentExtractorConstants.DISPLAY_IMAGE_ALTS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_TEXT_LINKS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_TEXT_LINKS, ContentExtractorConstants.IGNORE_TEXT_LINKS_DEF)));
-
-		
-		newFilter.changeSetting(ContentExtractorConstants.DISPLAY_IMAGE_ALTS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.DISPLAY_IMAGE_ALTS, ContentExtractorConstants.DISPLAY_IMAGE_ALTS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_IMAGES, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_IMAGES, ContentExtractorConstants.IGNORE_IMAGES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_INPUT_TAGS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_INPUT_TAGS, ContentExtractorConstants.IGNORE_INPUT_TAGS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_LINK_CELLS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_LINK_CELLS, ContentExtractorConstants.IGNORE_LINK_CELLS_DEF)));
-
-		
-		newFilter.changeSetting(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS, ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS, ContentExtractorConstants.LC_IGNORE_TEXT_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO, Double.toString
-				(nSettings.getProperty(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO, ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT, ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT_DEF)));
-
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_META, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_META, ContentExtractorConstants.IGNORE_META_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_SCRIPTS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_SCRIPTS, ContentExtractorConstants.IGNORE_SCRIPTS_DEF)));
-
-		
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS, ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS_DEF)));
-
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_SELECT_TAGS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_SELECT_TAGS, ContentExtractorConstants.IGNORE_SELECT_TAGS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS, ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_DIV_STYLES, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_DIV_STYLES, ContentExtractorConstants.IGNORE_DIV_STYLES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES, ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLES, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_STYLES, ContentExtractorConstants.IGNORE_STYLES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_CELL_WIDTH, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_CELL_WIDTH, ContentExtractorConstants.IGNORE_CELL_WIDTH_DEF)));
-
-		
-		newFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.REMOVE_EMPTY_TABLES, ContentExtractorConstants.REMOVE_EMPTY_TABLES_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_BUTTON, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_BUTTON, ContentExtractorConstants.SUBSTANCE_BUTTON_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_FORM, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_FORM, ContentExtractorConstants.SUBSTANCE_FORM_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IFRAME, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_IFRAME, ContentExtractorConstants.SUBSTANCE_IFRAME_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IMAGE, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_IMAGE, ContentExtractorConstants.SUBSTANCE_IMAGE_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_INPUT, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_INPUT, ContentExtractorConstants.SUBSTANCE_INPUT_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_LINKS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_LINKS, ContentExtractorConstants.SUBSTANCE_LINKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_SELECT, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_SELECT, ContentExtractorConstants.SUBSTANCE_SELECT_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_TEXTAREA, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_TEXTAREA, ContentExtractorConstants.SUBSTANCE_TEXTAREA_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, Integer.toString
-				(nSettings.getProperty(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.REMOVE_EMPTY_TABLES, ContentExtractorConstants.REMOVE_EMPTY_TABLES_DEF)));
-
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_EMBED_TAGS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_EMBED_TAGS, ContentExtractorConstants.IGNORE_EMBED_TAGS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.IGNORE_FLASH, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.IGNORE_FLASH, ContentExtractorConstants.IGNORE_FLASH_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM, ContentExtractorConstants.ADD_LINKS_TO_BOTTOM_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.LIMIT_LINEBREAKS, Boolean.toString
-				(nSettings.getProperty(ContentExtractorConstants.LIMIT_LINEBREAKS, ContentExtractorConstants.LIMIT_LINEBREAKS_DEF)));
-		newFilter.changeSetting(ContentExtractorConstants.MAX_LINEBREAKS, Integer.toString
-				(nSettings.getProperty(ContentExtractorConstants.MAX_LINEBREAKS, ContentExtractorConstants.MAX_LINEBREAKS_DEF)));
-
-		newFilter.saveSettings();
-		
-	}
-    
-    
-    class ClusterInfo{
-    	private int clusterNum;
-    	private int level;
-    	
-    	ClusterInfo(int num, int level){
-    		clusterNum = num;
-    		this.level = level;
-    	}
-    	
-    }
 }

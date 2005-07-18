@@ -6,21 +6,37 @@
  */
 package psl.crunch3;
 
-//import java.util.Scanner;
+import java.util.Scanner;
+import java.io.*;
+
+import psl.crunch3.plugins.contentextractor.ContentExtractor;
+import psl.crunch3.plugins.sample.SamplePlugin;
+import psl.crunch3.plugins.sizemodifier.SizeModifier;
 /**
  * @author Hila Becker
  *
  * Controls the main operations of Crunch
  * includes a command line interface
  */
-public class MainControl {
+public class MainControl extends Thread{
 
 	boolean GUIActive;
+	String currentURL;
 	
-	public MainControl(){
+	
+	public MainControl(boolean gui){
 		
-		GUIActive = false;
-		menuLoop();
+		super("MainControlThread");
+		GUIActive = gui;
+		this.start();
+		
+	}
+	
+	
+	public void run(){
+		if(!GUIActive){
+			menuLoop();
+		}
 	}
 	
 	
@@ -31,44 +47,37 @@ public class MainControl {
 	private void menuLoop(){
 		
 		int choice = -1; //corresponds to the menu item number
+		Scanner in = new Scanner(System.in);
+		
 		
 		//only active as long as the GUI is off and the user doesn't want to exit
 		while ((GUIActive ==false) && (choice !=0)){
 			System.out.println("please choose one of the following options:");
 			System.out.println("0. Exit the program");
-			System.out.println("1. Exit the program");
-			System.out.println("2. Exit the program");
-			System.out.println("3. Exit the program");
-			System.out.println("4. Exit the program");
-			System.out.println("5. Exit the program");
-			System.out.println("6. Exit the program");
+			System.out.println("1. load settings file");
+			System.out.println("2. Activate GUI");
 			
 			
-			
+			choice = in.nextInt();
 				
 			switch(choice){
 			
-				case 0: System.out.println("Thank you for using Cruch. GoodBye.");
+				case 0: System.out.println("Thank you for using Crunch. GoodBye.");
+						System.exit(0);
 						break;
-				
+				case 1: System.out.println("Please specify the name and location of the file");
+						loadFile(in.next());
+						break;
+				case 2: System.out.println("Activating GUI");
+						activateGUI();
+						break;
 			
 			
-			
-			}
-			
-			
-			
-			
+			}	
 		}
 	}
 	
-	/**
-	 * Creates a new GUI window 
-	 * @return
-	 */
-	//public MainWindow activateGUI(){
-		//return new MainWindow(this);
-	//}
+
 	
 	
 	/**
@@ -90,7 +99,64 @@ public class MainControl {
 		
 	}
 	
+	public String parseURL(String original, String host){
+		
+		try{
+		//original should be in the form GET /... HTTP/1.1
+		int length = original.length()-9;
+		return "http://" + host.trim() + original.substring(4,length).trim();
+		
+		}
+		catch(Exception e){
+			if (Crunch3.settings.isVerbose())
+	    		System.out.println("error parsing the url");
+		}
+		return "";
+	}
 	
+	public String getCurrentURL(){
+		return currentURL;
+	}
+	
+	public void setCurrentURL(String url){
+		currentURL = url;
+	}
+	
+	
+	/**
+	 * set the Crunch3Settings settings file to the specified file
+	 * @param file
+	 */
+	private void loadFile(String file){
+		
+		//try to read the file
+		try{
+			
+			FileReader reader = new FileReader(file);
+			reader.close();
+			Crunch3.settings.setSettingsFile(file);
+		}
+		catch(Exception e){
+			System.out.println("error reading the file, please verify the name and location of your file and try again");
+		}
+		
+		
+	}
+	
+	/**
+	 * Activate the GUI
+	 */
+	private void activateGUI(){
+		
+		GUIActive = true;
+		Crunch3.settings.setGUI(true);
+		
+		Crunch3.mainWindow = new MainWindow(this);		
+		
+		Crunch3.proxy.registerPlugin(new ContentExtractor());
+		Crunch3.proxy.registerPlugin(new SamplePlugin());
+		Crunch3.proxy.registerPlugin(new SizeModifier());
+	}
 	
 	
 }

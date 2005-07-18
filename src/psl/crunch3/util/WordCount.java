@@ -7,7 +7,7 @@ import com.google.soap.search.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.StringTokenizer;
+
 import javax.swing.*;
 import java.awt.image.*;
 import java.awt.*;
@@ -30,19 +30,21 @@ public class WordCount extends JFrame{
 	private int engineNum;
 	private String STOPLIST_FILE = "frequency" + File.separator + "stoplist1.txt";
 	private final String SITES_FILE = "frequency" + File.separator + "sites.txt";
-	private final String SITE_LINKS_FILE = "frequency" + File.separator + "links.txt";
-	private Vector stoplist;
-	private Vector wordlist;
-	private Vector sitewords;
-	private Vector keywords; 
-	private Vector siteNames; //stores the names of the sites
+	//private final String SITE_LINKS_FILE = "frequency" + File.separator + "links.txt";
+	private Vector<String> stoplist;
+	private Vector<WordFreq> wordlist;
+	private Vector<Vector> sitewords;
+	private Vector<String> keywords; 
+	private Vector<String> siteNames; //stores the names of the sites
 	private Hashtable dictwords;
 	private Container cp;
 	private JPanel chartPanel;
 	private int[][] frequencies;
-	private Vector distances;
+	private Vector<Distance> distances;
 	private Vector clusters;
 	private String closestSite;
+	
+	 private static final long serialVersionUID = 0;
 	
 	public static void main(String[] args) {
 		//if ((args[0] != null) && (args[1] != null))
@@ -77,18 +79,18 @@ public class WordCount extends JFrame{
 			BufferedReader inSites = new BufferedReader(new FileReader(new File(SITES_FILE)));
 			String site = null;
 			engineNum = 5;
-			keywords = new Vector();
-			sitewords = new Vector();
-			siteNames = new Vector();
+			keywords = new Vector<String>();
+			sitewords = new Vector<Vector>();
+			siteNames = new Vector<String>();
 			while((site = inSites.readLine()) != null){
-				wordlist = new Vector();
+				wordlist = new Vector<WordFreq>();
 				generateList(site, true);
 			}
 			inSites.close();
 			
 			chartPanel.setLayout(new GridLayout(siteNames.size(),1));
 			frequencies = new int[siteNames.size()][keywords.size()];
-			distances = new Vector();
+			distances = new Vector<Distance>();
 			for (int i=0;i<siteNames.size();i++){
 				compare(i);
 			}
@@ -125,7 +127,7 @@ public class WordCount extends JFrame{
 	}
 	
 	
-	public WordCount(String URL, int[][]freq, Vector keys, Vector names, int engines){
+	public WordCount(String URL, int[][]freq, Vector<String> keys, Vector<String> names, int engines){
 		
 		//call this constructor from crunch to get closest site to requested url
 		fromCrunch = true;
@@ -139,27 +141,28 @@ public class WordCount extends JFrame{
 			//read site list from file
 			System.out.println("reading the site list...");
 			
-			keywords = new Vector();
-			sitewords = new Vector();
-			siteNames = names;
+			keywords = new Vector<String>();
+			sitewords = new Vector<Vector>();
+			Vector<String> vector = names;
+			siteNames = vector;
 			frequencies = freq;
 			
 			engineNum = engines;
 			String site;
 			if((site = URL) != null){
-				wordlist = new Vector();
+				wordlist = new Vector<WordFreq>();
 				generateList(site, true);
 			}
 			
 			
-			distances = new Vector();
+			distances = new Vector<Distance>();
 			keywords = keys;
 			
 			
 			compare(0);
 			
 			
-			int pos = siteNames.size()-1;
+			//int pos = siteNames.size()-1;
 			
 			for(int i=1;i<siteNames.size();i++){
 				distances.addElement(new Distance((String)siteNames.elementAt(i), 
@@ -178,7 +181,7 @@ public class WordCount extends JFrame{
 				closestSite = temp.site1;
 			else
 				closestSite = null;
-			names.removeElementAt(0);
+			vector.removeElementAt(0);
 			
 		}
 		catch(Exception e){
@@ -194,7 +197,7 @@ public class WordCount extends JFrame{
 	private void generateList(String url, boolean isRoot){
 		System.out.println("generating word list for " + url);
 		InputStreamReader in = getWebsite(url);
-		InputStreamReader read;
+		//InputStreamReader read;
 		try{
 			storeBuffer(in);
 			in.close();
@@ -269,7 +272,7 @@ public class WordCount extends JFrame{
 				removeNotDictwords();
 			}
 			
-			WordFreq temp; int i;
+			WordFreq temp;
 			
 			//delete words with less than 3 letters, delete numbers
 			for(int j=0;j<wordlist.size();j++){

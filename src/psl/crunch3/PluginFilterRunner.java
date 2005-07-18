@@ -56,6 +56,12 @@ public class PluginFilterRunner {
 
 		currentDocument = copyDocument(originalDocument);
 
+		
+		//keep track of the current URL in the program's main control 
+		String previousURL = Crunch3.mainControl.getCurrentURL();
+		String currentURL = Crunch3.mainControl.parseURL(clientData.getFirstLine().trim(), clientData.get("Host"));
+		Crunch3.mainControl.setCurrentURL(currentURL);
+		
 		for (int i = 0; i < plugins.length; i++) {
 			ProxyFilter plugin = plugins[i];
 			if (!plugin.isEnabled())
@@ -68,13 +74,13 @@ public class PluginFilterRunner {
 				if (referer != ""){  
 					sdf.reportReferer(referer);}
 				else {
-					sdf.reportReferer(Crunch3.mainWindow.getURL()); 
+					sdf.reportReferer(previousURL); 
 				}
-				Crunch3.mainWindow.setURL(Crunch3.mainWindow.parseURL(clientData.getFirstLine().trim(), clientData.get("Host")));
+				
 				sdf.reportApplication(clientData.get("User-Agent"));
 				
 				
-				sdf.reportURL(Crunch3.mainWindow.parseURL(clientData.getFirstLine().trim(), clientData.get("Host")));
+				sdf.reportURL(currentURL);
 				
 			}
 

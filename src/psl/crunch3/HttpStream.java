@@ -83,7 +83,7 @@ public class HttpStream extends Thread {
 
 	public void run() {
 		// display new connection on gui
-		Crunch3.mainWindow.addNewConnection(this);
+		if(Crunch3.mainWindow != null) Crunch3.mainWindow.addNewConnection(this);
 
 		try {
 			clientSocket.setSoTimeout(soTimeout);
@@ -103,7 +103,7 @@ public class HttpStream extends Thread {
 			shutdown();
 
 			// remove connection from gui
-			Crunch3.mainWindow.removeConnection(this);
+			if(Crunch3.mainWindow != null) Crunch3.mainWindow.removeConnection(this);
 		}
 	}
 

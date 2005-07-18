@@ -59,8 +59,8 @@ public class MainWindow extends Thread {
 	private MainControl control;
 	private String currentURL="";
 	private boolean isInitialized = false;
-	private boolean listenPortChanged = false;
-	private Vector connections = new Vector();
+	//private boolean listenPortChanged = false;
+	private Vector<HttpStream> connections = new Vector<HttpStream>();
 	private Thread updateThread = null;
 	private Thread trayShutdownHook = null;
 	private ContentExtractorDescriptionGUI gui = null;
@@ -873,7 +873,7 @@ public class MainWindow extends Thread {
 		this.control = control;
 		this.start();
 
-		//don't release control until the gui is initialize
+		//don't release control until the gui is initialized
 		while (!isInitialized && this.isAlive()) {
 			yield();
 		}
@@ -883,9 +883,8 @@ public class MainWindow extends Thread {
 
 	public void run() {
 		try {
-			//int windowHeight = 509;
+			
 			int windowHeight = 760;
-			//int windowWidth = 447;
 			int windowWidth = 515;
 			
 			createControls();
@@ -896,12 +895,8 @@ public class MainWindow extends Thread {
 				Crunch3.Display_1.getBounds().height / 2 - mainShell.getBounds().height / 2,
 				windowWidth,
 				windowHeight);
-			if(Crunch3.settings.isGUISet())
-			mainShell.open();
 			
-			else{//this opens crunch without GUI and loads one settings file for the whole session
-				processNoGUI();
-			}
+			mainShell.open();
 			isInitialized = true;
 			
 
@@ -1088,30 +1083,8 @@ public class MainWindow extends Thread {
 			}
 		}
 	}
-
-	public String getURL(){
-		// TODO test 
-		return currentURL.trim();
-	}
 	
-	public void setURL(String url){
-		currentURL = url;
-	}
 	
-	public String parseURL(String original, String host){
-		
-		try{
-		//original should be in the form GET /... HTTP/1.1
-		int length = original.length()-9;
-		return "http://" + host.trim() + original.substring(4,length).trim();
-		
-		}
-		catch(Exception e){
-			if (Crunch3.settings.isVerbose())
-	    		System.out.println("error parsing the url");
-		}
-		return "";
-	}
 	
 	
 	public void setCustom(){
@@ -1156,34 +1129,6 @@ public class MainWindow extends Thread {
 		filterCheck.setSelection(Crunch3.settings.isFilterContent());
 		filterTypesText.setText(Crunch3.settings.getFilterTypes());
 		filterHomepagesCheck.setSelection(Crunch3.settings.isFilterHomepages());
-	}
-
-	private void processNoGUI(){
-		gui = new ContentExtractorDescriptionGUI(mainShell);
-		
-	}
-	
-	public void setGUIHomepage(){
-		Crunch3.Display_1.syncExec(new Runnable(){
-			public void run(){
-				if(gui != null){					
-					gui.commitSettings("config" + File.separator + "level8.ini", 8);
-					gui.setSettingsLevel(8);
-				}
-			}
-		});
-		
-	}
-	
-	public void setGUINoHomepage(){
-		Crunch3.Display_1.syncExec(new Runnable(){
-			public void run(){
-				if(gui != null){
-					gui.commitSettings("config" + File.separator + "level4.ini", 4);
-					gui.setSettingsLevel(4);
-				}
-			}
-		});
 	}
 	
 	private String[] split(final String text, final String delimiters) {

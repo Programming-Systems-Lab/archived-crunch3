@@ -23,6 +23,7 @@ public class Crunch3 {
 	public static Crunch3Settings settings;
 	public static Proxy proxy;
 	public static MainWindow mainWindow;
+	public static MainControl mainControl;
 	public static Display Display_1;
 	
 	public static void main(String[] args){
@@ -35,7 +36,9 @@ public class Crunch3 {
 			System.out.println("Crunch3 Started...");
 			
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-		//mainWindow = new MainWindow();
+		
+		mainControl = new MainControl(Crunch3.settings.isGUISet());
+		if(Crunch3.settings.isGUISet()) mainWindow = new MainWindow(mainControl);
 		
 		proxy = new Proxy(settings.getListenPort());		
 		
