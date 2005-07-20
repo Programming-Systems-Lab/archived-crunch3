@@ -96,6 +96,7 @@ public class HttpStream extends Thread {
 
 		try {
 			readClientFirstLine();
+			Crunch3.mainControl.printStatus();
 		} catch (Exception e) {
 			if (Crunch3.settings.isVerbose())
 				e.printStackTrace();

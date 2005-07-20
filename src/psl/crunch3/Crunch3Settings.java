@@ -488,6 +488,10 @@ public class Crunch3Settings {
 		}
 	}
 	
+	public String getSettingsFile(){
+		return SETTINGS_FILE;
+	}
+	
 	/**
 	 * @param b whether or not to filter content.
 	 */

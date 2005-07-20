@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.io.*;
 
 import psl.crunch3.plugins.contentextractor.ContentExtractor;
+import psl.crunch3.plugins.contentextractor.ContentExtractorDescription;
 import psl.crunch3.plugins.sample.SamplePlugin;
 import psl.crunch3.plugins.sizemodifier.SizeModifier;
 /**
@@ -22,7 +23,7 @@ public class MainControl extends Thread{
 
 	boolean GUIActive;
 	String currentURL;
-	
+	ContentExtractorDescription description = null;
 	
 	public MainControl(boolean gui){
 		
@@ -48,10 +49,19 @@ public class MainControl extends Thread{
 		
 		int choice = -1; //corresponds to the menu item number
 		Scanner in = new Scanner(System.in);
+		ContentExtractor ce = new ContentExtractor();
+		description = ce.getControl();
+		yield();
+		Crunch3.proxy.registerPlugin(ce);
+	
+		if(description == null) description = new ContentExtractorDescription();
+		description.commitSettings((Crunch3.settings).getSettingsFile(), 0);
 		
 		
 		//only active as long as the GUI is off and the user doesn't want to exit
 		while ((GUIActive ==false) && (choice !=0)){
+			
+			
 			System.out.println("please choose one of the following options:");
 			System.out.println("0. Exit the program");
 			System.out.println("1. load settings file");
@@ -87,6 +97,24 @@ public class MainControl extends Thread{
 		return GUIActive;
 	}
 	
+	
+	
+	
+	public void printStatus(){
+		System.out.println("***********************************************************");
+		System.out.println();
+		
+		System.out.println("check for front page: " + description.getCheckFrontPage());
+		System.out.println("check for next page links: " + description.getCheckNextPage());
+		System.out.println("current url: " + description.getCurrentURL());
+		System.out.println("settings level: " + description.getSettingsLevel());
+		System.out.println("settings file: " + Crunch3.settings.getSettingsFile());
+		System.out.println("settings label: " + description.getSettingsLabel());
+		System.out.println("***********************************************************");
+		
+		
+		
+	}
 	
 	
 	/**
@@ -135,6 +163,7 @@ public class MainControl extends Thread{
 			FileReader reader = new FileReader(file);
 			reader.close();
 			Crunch3.settings.setSettingsFile(file);
+			description.commitSettings(file, 0);
 		}
 		catch(Exception e){
 			System.out.println("error reading the file, please verify the name and location of your file and try again");
@@ -153,7 +182,6 @@ public class MainControl extends Thread{
 		
 		Crunch3.mainWindow = new MainWindow(this);		
 		
-		Crunch3.proxy.registerPlugin(new ContentExtractor());
 		Crunch3.proxy.registerPlugin(new SamplePlugin());
 		Crunch3.proxy.registerPlugin(new SizeModifier());
 	}

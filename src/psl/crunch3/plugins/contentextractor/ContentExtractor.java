@@ -1685,13 +1685,23 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 		return currentDocument;
 	}
 
+	
+	public ContentExtractorDescription getControl(){
+		
+		if(ceDescription == null) 
+			ceDescription = new ContentExtractorDescription();
+		
+		return ceDescription;
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see psl.crunch3.plugins.EnhancedProxyFilter#getDescriptionGUI()
 	 */
 	public Composite getDescriptionGUI(Composite c) {
 		// FIXME Auto-generated method stub
 		if (descriptionGUI == null)
-			descriptionGUI = new ContentExtractorDescriptionGUI(c,ceDescription);
+			descriptionGUI = new ContentExtractorDescriptionGUI(c,getControl());
 		return descriptionGUI.getComposite();
 	}
 
@@ -1782,19 +1792,7 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			else System.out.println("This is not a Homepage");
 		}
 		
-		//handles frontpage detection for GUI-less crunch
-		/**if(descriptionGUI == null) {
-			 
-			if(Crunch3.settings.isHomePageCheck()){
-			if( hpt.isHomePage()){
-			 	 Crunch3.mainWindow.setGUIHomepage();
-			 }
-			 else {
-			 	 Crunch3.mainWindow.setGUINoHomepage();
-			 }
-			}
-			return;
-		}**/
+		
 		
 		//compute closes cluster to current URL and apply appropriate filter settings
 		if (ceDescription.getAutomatic()){
