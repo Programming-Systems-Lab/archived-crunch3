@@ -23,6 +23,7 @@ public class MainControl extends Thread{
 
 	boolean GUIActive;
 	String currentURL;
+	ContentExtractor ce;
 	ContentExtractorDescription description = null;
 	
 	public MainControl(boolean gui){
@@ -49,7 +50,7 @@ public class MainControl extends Thread{
 		
 		int choice = -1; //corresponds to the menu item number
 		Scanner in = new Scanner(System.in);
-		ContentExtractor ce = new ContentExtractor();
+		ce = new ContentExtractor();
 		description = ce.getControl();
 		yield();
 		Crunch3.proxy.registerPlugin(ce);
@@ -155,7 +156,7 @@ public class MainControl extends Thread{
 	 * set the Crunch3Settings settings file to the specified file
 	 * @param file
 	 */
-	private void loadFile(String file){
+	public void loadFile(String file){
 		
 		//try to read the file
 		try{
@@ -184,6 +185,7 @@ public class MainControl extends Thread{
 		
 		Crunch3.proxy.registerPlugin(new SamplePlugin());
 		Crunch3.proxy.registerPlugin(new SizeModifier());
+		Crunch3.proxy.registerPlugin(ce);
 	}
 	
 	

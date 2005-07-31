@@ -21,5 +21,23 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
 		<nature>net.sourceforge.metrics.nature</nature>
+		<nature>com.sysdeo.eclipse.tomcat.tomcatnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>output</name>
+			<type>2</type>
+			<location>C:/Program Files/Tomcat 5.5/webapps/Crunch/WEB-INF/classes</location>
+		</link>
+		<link>
+			<name>WEB-INF</name>
+			<type>2</type>
+			<location>C:/Program Files/Tomcat 5.5/webapps/Crunch/WEB-INF</location>
+		</link>
+		<link>
+			<name>website</name>
+			<type>2</type>
+			<location>C:/Documents and Settings/hb2143/Desktop/crunchsite_files</location>
+		</link>
+	</linkedResources>
 </projectDescription>

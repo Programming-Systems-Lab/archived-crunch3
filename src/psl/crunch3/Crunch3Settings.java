@@ -27,7 +27,7 @@ public class Crunch3Settings {
 	public static final String[] FILTER_TYPES_DEF = { "text/html" };
 	public static final boolean FILTER_HOMEPAGES_DEF = true;
 	public static final boolean PROXY_MODE_DEF = true;
-	public static String SETTINGS_FILE = "config/level2.ini";
+	public static String SETTINGS_FILE = "config/content extractor settings.ini";
 	public static final boolean CHECK_HOMEPAGE_DEF = false;
 
 	//internal variables

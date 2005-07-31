@@ -392,10 +392,13 @@ public class ContentExtractorSettings implements ContentExtractorConstants {
 	 */
 	public void saveSettings() {
 		saveProperties();
-
+		
 		try {
-			mSettings.store(new FileOutputStream(new File(mSettingsFile)), "Content Extractor Settings File");
+			FileOutputStream fos = new FileOutputStream(new File(mSettingsFile));
+			mSettings.store(fos, "Content Extractor Settings File");
+			fos.close();
 		} catch (Exception e) {
+			
 			if (Crunch3.settings.isVerbose())
 				e.printStackTrace();
 		}
@@ -414,9 +417,29 @@ public class ContentExtractorSettings implements ContentExtractorConstants {
 		} catch (Exception e) {
 			if (Crunch3.settings.isVerbose())
 				e.printStackTrace();
+			
 		}
+		
 		
 	}
 	
+	
+	public void save(String f){
+		saveProperties();
+
+		
+		try {
+			File temp = new File(f);
+			File settings = new File(mSettingsFile);
+			mSettings.store(new FileOutputStream(f), "Content Extractor Settings File");
+						
+		} catch (Exception e) {
+			if (Crunch3.settings.isVerbose())
+				e.printStackTrace();
+			
+		}
+		
+		
+	}
 	
 }

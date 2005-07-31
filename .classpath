@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="psl/crunch3/util/wrapperinduction/" kind="src" path="src"/>
+	<classpathentry excluding="psl/crunch3/util/wrapperinduction/" output="output" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jars/swt.jar"/>
 	<classpathentry kind="lib" path="jars/nekohtml-0.8.2/nekohtml.jar"/>
@@ -9,5 +9,8 @@
 	<classpathentry kind="lib" path="jars/googleapi/googleapi.jar"/>
 	<classpathentry kind="lib" path="jars/jfreechart/jfreechart-0.9.21/jfreechart-0.9.21.jar"/>
 	<classpathentry kind="lib" path="jars/jfreechart/jfreechart-0.9.21/lib/jcommon-0.9.6.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/jasper-runtime.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/jsp-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
