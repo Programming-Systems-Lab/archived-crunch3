@@ -1,0 +1,7 @@
+Rapid advances in information technology have dramatically transformed the world during the past several decades. Access to
+computers and the World Wide Web is increasingly required for education and employment, as well as for many activities of
+daily living. While these changes have improved society in many respects, they present an obstacle for visually disabled
+patients who may have significant difficulty processing the visual cues presented by modern graphical user interfaces. This
+paper reviews the specific barriers to computer and Web access faced by visually disabled patients, describes clinical
+evaluation methods, summarizes traditional low vision methods as well as newer assistive computer technologies for universal
+accessibility, and discusses emerging technologies and future directions in this area.

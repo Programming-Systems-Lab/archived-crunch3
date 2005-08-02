@@ -3,7 +3,6 @@ package psl.crunch3.web;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
-import java.util.*;
 
 public class SettingsServlet extends HttpServlet {
   private static final String CONTENT_TYPE = "text/html";

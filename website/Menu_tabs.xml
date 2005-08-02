@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<NAV main_onColor="#000000" main_offColor="#666666" sub_onColor="#000000" sub_offColor="#ffffff" navWidth="740" x_padding="50" y_padding="10">
+   <MAIN text="About">
+      
+   </MAIN>
+    <MAIN text="People">
+      
+   </MAIN>
+   <MAIN text="Publications">
+      
+   </MAIN>
+   <MAIN text="Software">
+      <SUB title="Download">
+	  
+	  </SUB>
+	  <SUB title="Hmmmm">
+	  
+	  </SUB>
+   </MAIN>
+   <MAIN text="Register">
+ 
+   </MAIN>
+   
+</NAV>

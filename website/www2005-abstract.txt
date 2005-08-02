@@ -1,0 +1,10 @@
+Web pages contain clutter (such as ads, unnecessary images and extraneous links) around the body of an article, which
+distracts a user from actual content. Extraction of “useful and relevant” content from web pages has many applications,
+including cell phone and PDA browsing, speech rendering for the visually impaired, reducing noise for information retrieval
+systems and to generally improve the web browsing experience. In our previous work [16], we developed a framework that
+employed an easily extensible set of techniques that incorporated results from our earlier work on content extraction [16].
+Our insight was to work with DOM trees, rather than raw HTML markup. We present here filters that reduce human involvement
+in applying heuristic settings for websites and instead automate the job by detecting and utilizing the physical layout and
+content genre of a given website. We also present work we have done towards improving the usability and performance of our
+content extraction proxy as well as the quality and accuracy of the heuristics that act as filters for inferring the context
+of a webpage.

@@ -12,5 +12,7 @@
 	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/jasper-runtime.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/jstl.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Tomcat 5.5/common/lib/standard.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

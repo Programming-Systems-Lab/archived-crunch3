@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>Crunch</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1"><LINK 
+href="crunch.css" type=text/css rel=stylesheet>
+<SCRIPT language=JavaScript type=text/JavaScript>
+<!--
+
+<!--
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_nbGroup(event, grpName) { //v6.0
+  var i,img,nbArr,args=MM_nbGroup.arguments;
+  if (event == "init" && args.length > 2) {
+    if ((img = MM_findObj(args[2])) != null && !img.MM_init) {
+      img.MM_init = true; img.MM_up = args[3]; img.MM_dn = img.src;
+      if ((nbArr = document[grpName]) == null) nbArr = document[grpName] = new Array();
+      nbArr[nbArr.length] = img;
+      for (i=4; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+        if (!img.MM_up) img.MM_up = img.src;
+        img.src = img.MM_dn = args[i+1];
+        nbArr[nbArr.length] = img;
+    } }
+  } else if (event == "over") {
+    document.MM_nbOver = nbArr = new Array();
+    for (i=1; i < args.length-1; i+=3) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = (img.MM_dn && args[i+2]) ? args[i+2] : ((args[i+1])? args[i+1] : img.MM_up);
+      nbArr[nbArr.length] = img;
+    }
+  } else if (event == "out" ) {
+    for (i=0; i < document.MM_nbOver.length; i++) {
+      img = document.MM_nbOver[i]; img.src = (img.MM_dn) ? img.MM_dn : img.MM_up; }
+  } else if (event == "down") {
+    nbArr = document[grpName];
+    if (nbArr)
+      for (i=0; i < nbArr.length; i++) { img=nbArr[i]; img.src = img.MM_up; img.MM_dn = 0; }
+    document[grpName] = nbArr = new Array();
+    for (i=2; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = img.MM_dn = (args[i+1])? args[i+1] : img.MM_up;
+      nbArr[nbArr.length] = img;
+  } }
+}
+//-->
+</SCRIPT>
+
+<META content="MSHTML 6.00.2900.2668" name=GENERATOR></HEAD>
+<BODY 
+onload="MM_preloadImages('../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c1_f3.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c1_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c2_f3.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c2_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c3_f3.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c3_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c4_f3.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c4_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c5_f3.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c5_f2.gif')">
+<DIV id=wrapper><BR><IMG height=124 src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/title.png" width=740> 
+<TABLE cellSpacing=0 cellPadding=0 width=740 align=center border=0><!-- fwtable fwsrc="menu.png" fwbase="menu.gif" fwstyle="Dreamweaver" fwdocid = "742308039" fwnested="0" -->
+  <TBODY>
+  <TR>
+    <TD><IMG height=1 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=148 
+      border=0></TD>
+    <TD><IMG height=1 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=148 
+      border=0></TD>
+    <TD><IMG height=1 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=148 
+      border=0></TD>
+    <TD><IMG height=1 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=148 
+      border=0></TD>
+    <TD><IMG height=1 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=148 
+      border=0></TD>
+    <TD><IMG height=1 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=1 
+    border=0></TD></TR>
+  <TR>
+    <TD><A 
+      onmouseover="MM_nbGroup('over','menu_r1_c1','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c1_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c1_f3.gif',1)" 
+      onclick="MM_nbGroup('down','navbar1','menu_r1_c1','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c1_f3.gif',1)" 
+      onmouseout="MM_nbGroup('out');" 
+      href="about.htm" 
+      target=_top><IMG height=30 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/menu_r1_c1.gif" 
+      width=148 border=0 name=menu_r1_c1></A></TD>
+    <TD><A 
+      onmouseover="MM_nbGroup('over','menu_r1_c2','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c2_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c2_f3.gif',1)" 
+      onclick="MM_nbGroup('down','navbar1','menu_r1_c2','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c2_f3.gif',1)" 
+      onmouseout="MM_nbGroup('out');" 
+      href="people.htm" 
+      target=_top><IMG height=30 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/menu_r1_c2.gif" 
+      width=148 border=0 name=menu_r1_c2></A></TD>
+    <TD><A 
+      onmouseover="MM_nbGroup('over','menu_r1_c3','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c3_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c3_f3.gif',1)" 
+      onclick="MM_nbGroup('down','navbar1','menu_r1_c3','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c3_f3.gif',1)" 
+      onmouseout="MM_nbGroup('out');" 
+      href="publications.htm" 
+      target=_top><IMG height=30 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/menu_r1_c3.gif" 
+      width=148 border=0 name=menu_r1_c3></A></TD>
+    <TD><A 
+      onmouseover="MM_nbGroup('over','menu_r1_c4','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c4_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c4_f3.gif',1)" 
+      onclick="MM_nbGroup('down','navbar1','menu_r1_c4','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c4_f3.gif',1)" 
+      onmouseout="MM_nbGroup('out');" 
+      href="software.htm" 
+      target=_top><IMG height=30 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/menu_r1_c4.gif" 
+      width=148 border=0 name=menu_r1_c4></A></TD>
+    <TD><A 
+      onmouseover="MM_nbGroup('over','menu_r1_c5','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c5_f2.gif','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c5_f3.gif',1)" 
+      onclick="MM_nbGroup('down','navbar1','menu_r1_c5','../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/images/menu_r1_c5_f3.gif',1)" 
+      onmouseout="MM_nbGroup('out');" 
+      href="register.htm" 
+      target=_top><IMG height=30 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/menu_r1_c5.gif" 
+      width=148 border=0 name=menu_r1_c5></A></TD>
+    <TD><IMG height=30 alt="" src="../../../../eclipse/workspace/crunch3/src/psl/crunch3/web/interface_files/spacer.gif" width=1 
+      border=0></TD></TR></TBODY></TABLE>
+<DIV class=box>
+<DIV class=bi>
+<DIV class=bt>
+<DIV></DIV></DIV>
+<H1>Crunch Settings</H1>
+<FORM action="http://localhost:8080/Crunch/settings.html" method=post>
+<TABLE width="90%" border=0>
+  <TBODY>
+  <TR>
+    <TH bgColor=#afe4e4>
+      <DIV align=center>CSS Settings</DIV></TH>
+    <TH bgColor=#afe4e4>Ads and Scripts</TH>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreExternalStylesheets> Ignore External Stylesheets</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreAds> Ignore All Advertisements</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreStyles> Ignore Styles</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreScripts> Ignore Scripts</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreStyleAttributes> Ignore Style Attribute in ALL tags</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreNoscript> Ignore &lt;NOSCRIPT&gt; tag</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreStyleInDiv> Ignore Style Attribute in &lt;DIV&gt; tag</DIV></TD>
+    <TD class=settd>
+      <DIV align=left></DIV></TD></TR></TBODY></TABLE>
+<TABLE width="90%" border=0>
+  <TBODY>
+  <TR>
+    <TH bgColor=#afe4e4>
+      <DIV align=center>Images</DIV></TH>
+    <TH bgColor=#afe4e4>Ignore Tags</TH>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreImages> Ignore Non-Link Images</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreInput> Ignore &lt;INPUT&gt; tags</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=displayAltTags> Display ALT Text</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreSelect> Ignore &lt;SELECT&gt; tags</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreImageLinks> Ignore Image Links</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreIframe> Ignore &lt;IFRAME&gt; tags</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=displayImageLinkAlts> Display ALT Links</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreEmbed> Ignore &lt;EMBED&gt; tags</DIV></TD></TR>
+  <TR>
+    <TD class=settd>&nbsp;</TD>
+    <TD class=settd><INPUT type=checkbox
+      name=ignoreButton> Ignore &lt;BUTTON&gt; tags</TD></TR>
+  <TR>
+    <TD class=settd>&nbsp;</TD>
+    <TD class=settd><INPUT type=checkbox
+      name=ignoreMeta> Ignore &lt;META&gt; tags</TD></TR></TBODY></TABLE>
+<TABLE width="90%" border=0>
+  <TBODY>
+  <TR>
+    <TH bgColor=#afe4e4>
+      <DIV align=center>Lists of Links</DIV></TH>
+    <TH bgColor=#afe4e4>Empty Tables</TH>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreLinkLists> Ignore Link Lists</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox CHECKED
+      name=removeEmptyTables> Remove Empty Tables</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreLLTextLinks> Text Links</DIV></TD>
+    <TD class=settd>
+      <DIV align=center><STRONG><SPAN align="left">Tags to Consider as 
+      Substance</SPAN></STRONG></DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox
+      name=ignoreLLImageLinks> Image Links</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox CHECKED
+      name=substanceImage> &lt;IMG&gt; <INPUT type=checkbox CHECKED 
+       name=substanceLinks> &lt;A&gt;</DIV></TD></TR>
+  <TR>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox 
+      name=ignoreOnlyTextAndLinks> Ignore Only Text and Links</DIV></TD>
+    <TD class=settd>
+      <DIV align=left><INPUT type=checkbox CHECKED 
+      name=substanceInput> &lt;INPUT&gt; <INPUT type=checkbox CHECKED 
+       name=substanceSelect> &lt;SELECT&gt;</DIV></TD></TR>
+  <TR>
+    <TD class=settd>Link/Text removal ratio <INPUT value=0.25 
+    name=linkTextRatio></TD>
+    <TD class=settd><INPUT type=checkbox CHECKED 
+      name=substanceTextarea> &lt;TEXTAREA&gt; <INPUT type=checkbox CHECKED 
+       name=substanceButton> &lt;BUTTON&gt;</TD></TR>
+  <TR>
+    <TD class=settd>&nbsp;</TD>
+    <TD class=settd><INPUT type=checkbox CHECKED 
+      name=substanceForm> &lt;FORM&gt; <INPUT type=checkbox CHECKED 
+      name=substanceIFrame> &lt;IFRAME&gt;</TD></TR>
+  <TR>
+    <TD class=settd>&nbsp;</TD>
+    <TD class=settd>Minimum Text Length <INPUT value=12 
+  name=minimumTextLength></TD></TR></TBODY></TABLE>
+        <TABLE width="90%" border=0>
+          <TBODY>
+            <TR> 
+              <TH bgColor=#afe4e4> <DIV align=center>Output Format</DIV></TH>
+              <TH bgColor=#afe4e4> <DIV align=center>Ignore Misc.</DIV></TH>
+            <TR> 
+              <TD class=settd> <DIV align=left>
+                  <INPUT value="htmlOutput" type=radio CHECKED 
+      name="output">
+                  HTML</DIV></TD>
+              <TD class=settd> <DIV align=left>
+                  <INPUT type=checkbox 
+      name=ignoreTextLinks>
+                  Ignore Text Links</DIV></TD>
+            </TR>
+            <TR> 
+              <TD class=settd> <DIV align=left>
+                  <INPUT class=output type=radio value="textOutput" 
+      name="output">
+                  Text </DIV></TD>
+              <TD class=settd> <DIV align=left>
+                  <INPUT type=checkbox 
+      name=ignoreForms>
+                  Ignore Forms</DIV></TD>
+            </TR>
+            <TR> 
+              <TD class=settd> <DIV align=left>
+                  <INPUT type=checkbox 
+      name=appendLinks>
+                  Append Links to Bottom of Page</DIV></TD>
+              <TD class=settd> <DIV align=left>
+                  <INPUT type=checkbox 
+      name=ignoreTableCellWidths>
+                  Ignore Table Cell Width</DIV></TD>
+            </TR>
+            <TR> 
+              <TD class=settd> <DIV align=left>
+                  <INPUT type=checkbox 
+      name=limitLineBreaks>
+                  Limit the Number of Line Breaks</DIV></TD>
+              <TD class=settd> <DIV align=left>
+                  <INPUT type=checkbox  
+      name=ignoreFlash>
+                  Ignore Flash</DIV></TD>
+            </TR>
+            <TR> 
+              <TD class=settd>Maximum Number of Line Breaks 
+                <INPUT value=2 
+      name=maxLineBreaks></TD>
+              <TD class=settd> <DIV align=right>
+                  <INPUT type=submit value=Submit name=Submit>
+                </DIV></TD>
+            </TR>
+          </TBODY>
+        </TABLE>
+<P>&nbsp;</P></FORM>
+<P>&nbsp;</P>
+<P align=center><A 
+href="index.html">Home</A> 
+| <A 
+href="about.htm">About</A> 
+| <A 
+href="people.htm">People</A> 
+| <A 
+href="publications.htm">Publications</A> 
+| <A 
+href="software.htm">Software</A> 
+| <A 
+href="register.htm">Register</A></P>
+<DIV class=bb>
+<DIV></DIV></DIV></DIV></DIV>
+<DIV>
+<DIV align=center>Copyright (c) 2005: The Trustees of Columbia University in the 
+City of New York. All Rights Reserved.</DIV></DIV></DIV></BODY></HTML>

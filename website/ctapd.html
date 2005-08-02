@@ -1,0 +1,82 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0048)http://www.psl.cs.columbia.edu/crunch/ctapd.html -->
+<HTML><HEAD><TITLE>CRUNCH ? Web-based Collaboration for Persons with Disabilities</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content="MSHTML 6.00.2900.2668" name=GENERATOR></HEAD>
+<BODY>
+<CENTER><FONT size=3><B>CRUNCH ? Web-based Collaboration for Persons with 
+Disabilities</B></FONT><BR><FONT size=2>Suhit Gupta, Gail Kaiser <A 
+href="mailto:{suhit|kaiser}@cs.columbia.edu">{suhit|kaiser}@cs.columbia.edu</A><BR>Columbia 
+University, Dept. of Computer Science</FONT></CENTER><FONT size=2>
+<P><U>Use case</U>: Some members of a group of researchers are disabled. The 
+group is collaborating on a project and is using a threading-enabled web-based 
+message board for communication. However, since some of the researchers are 
+disabled, they use screen readers, text magnifiers or voice-to-text engines in 
+order to participate. These varied resources may be inconvenient and may hinder 
+the user from participating conveniently and fully. With screen readers, the 
+user would have to listen to large amounts of extra information on the webboard 
+before gaining access to the information he/she is seeking. Similarly, text 
+magnifiers increase not only the size of the text that the user wants, but also 
+the text that he/she isn?t interested in or has already read. Lastly, in case of 
+annotations and replies to previously posted messages, the user may have to 
+start scanning from the beginning of the message board to read the latest 
+additions, which would be excessively time consuming. 
+<P><U>Our Research</U>: Collaboration with disabled members of the group may be 
+difficult since the formats in which data can be displayed are inappropriate. 
+For example, both the message board itself as well as the web pages they link to 
+may contain clutter, such as pop-up ads, unnecessary images and extraneous links 
+around the body of an article that distract a user from actual content. 
+Additionally, messages, annotations and replies to team members? messages are 
+rarely posted in real time and usually require team members to go back to the 
+message to look for replies. Participants using tools designed for the disabled 
+would have to tediously scan through the entire message board for messages with 
+additions. In order to solve this problem, one may trivially design different 
+versions of the same message board, each specifically suited for the user. But 
+we believe that for good collaborative work to take place, it is imperative to 
+create a system that can be used simply by all members of a team in a WYSIWIS 
+(what you see is what I see) format. It should not only support all the advanced 
+features of the message board, but also make the space simple and easily 
+?accessible? for all users. 
+<P>Content Extraction of the ?useful and relevant? parts from web pages has many 
+applications, including cell phone and PDA browsing, speech rendering for the 
+visually impaired, and text summarization. Most approaches to removing clutter 
+or making content more readable involve changing font size or removing HTML and 
+data components such as images, which takes away from a webpage?s inherent look 
+and feel. Unlike ?Content Reformatting?, which aims to reproduce the entire 
+webpage in a more convenient form, our solution directly addresses Content 
+Extraction. We have developed a framework that employs an easily extensible set 
+of techniques that incorporate advantages of previous work on content 
+extraction. Our key insight is to work with the Document Object Model tree, 
+rather than with raw HTML markup. We have implemented our approach in a publicly 
+available Web proxy to extract content from HTML web pages. 
+<P>In order to analyze a web page for content extraction, the page is first 
+passed through an HTML parser that corrects the HTML and creates a Document 
+Object Model tree representation of the web page. Once processed, the resulting 
+DOM document can be seamlessly shown as a webpage to the end-user as if it were 
+HTML. The DOM tree is hierarchically arranged and can be analyzed in sections or 
+as a whole, providing a wide range of flexibility for our extraction algorithm. 
+Our content extractor then navigates the DOM tree recursively, using a series of 
+different filtering techniques to remove and modify specific nodes and leave 
+only the content behind. There are two sets of filters, with different levels of 
+granularity. The first set of filters simply disregards tags or specific 
+attributes within tags. These filters allow images, links, scripts, styles, and 
+other such elements to be quickly removed from the web page. The second set of 
+filters is more complex and algorithmic, consisting of the advertisement 
+remover, the link list remover, the empty table remover, and the removed link 
+retainer. 
+<P>CRUNCH is implemented as a proxy that filters webpages before they are loaded 
+into the users? browsers. It simply treats webpages as an accordion, removing 
+less or more extraneous content from a webpage based on the user?s settings. The 
+server version is multi-threaded and can support multiple clients with different 
+settings. Therefore a participant has the option of looking at the message board 
+without any reductions in the ?clutter? on the screen, while a disabled 
+participant can tune his/her proxy to look only at the content of the page. The 
+proxy is also fitted with an event monitoring system that keeps track of changes 
+to the website. Therefore, disabled as well as non-disabled users can either be 
+notified only of the changes (along with the context of the change and the 
+related messages to the responses and annotations). If a participant joins the 
+message board late, then the event notification system can call on Natural 
+Language Processing summarization algorithms to give a quick summary of all the 
+changes that have taken place to bring the user up to speed. The results will 
+still be piped through the proxy in order to display the changes efficiently. 
+</FONT></P></BODY></HTML>

@@ -1,0 +1,84 @@
+body { background-color: #84939A;
+     text-align:center; 
+}
+
+div#wrapper {
+text-align:left;
+width:740px; 
+align: center;
+}
+
+div#main { background-color: white;
+           height: 800px;
+		   width: 740px;
+}
+
+a:link {font-weight: bold;
+		color: black;
+		text-decoration: none;}
+
+a:visited {        
+		font-weight: bold;
+		color: black;
+		text-decoration: none;
+}
+
+a:hover {color: #FDC255}
+
+ 
+
+.box {
+		padding:0 12px 0 0;
+		background:#84939A url(borders.gif) 100% 0 repeat-y;
+	}
+	.bi {
+		padding:0 0 0 12px;
+		background:#fff url(borders.gif) 0 0 repeat-y;
+	}
+	.bt {
+		height:17px;
+		margin:0 -12px;
+		background:url(box2.gif) 100% 0 no-repeat;
+	}
+	.bt div {
+		width:18px;
+		height:17px;
+		background:url(box2.gif) 0 0 no-repeat;
+	}
+	.bb {
+		height:17px;
+		margin:0 -12px;
+		background:url(box2.gif) 100% 100% no-repeat;
+	}
+	.bb div {
+		width:18px;
+		height:17px;
+		background:url(box2.gif) 0 100% no-repeat;
+	}
+	.box h1 {
+		margin:0;
+		padding:0.3em 10px;
+		background:#FDC255;
+		font:bold 1.2em/1 Arial, Helvetica, sans-serif;
+	}
+	.box p, .box ul, .box table , .box form{
+		margin:0;
+		padding:4px 10px;
+		background:#fff;
+	}
+	.box li {
+		margin:0 0 0 2em;
+		padding:20px;
+		background:#fff;
+	}
+	
+	.box image {
+	    
+		background:#fff;
+	}		
+	
+	td.settd {
+		width: 50%; 
+		height: 20px;
+	
+	}	
