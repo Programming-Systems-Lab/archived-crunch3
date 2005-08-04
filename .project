@@ -27,12 +27,12 @@
 		<link>
 			<name>output</name>
 			<type>2</type>
-			<location>C:/Program Files/Tomcat 5.5/webapps/Crunch/WEB-INF/classes</location>
+			<location>/usr/local/jakarta-tomcat-5.5.9/webapps/crunch/WEB-INF/classes</location>
 		</link>
 		<link>
 			<name>Crunch_WebApp</name>
 			<type>2</type>
-			<location>C:/Program Files/Tomcat 5.5/webapps/Crunch</location>
+			<location>/usr/local/jakarta-tomcat-5.5.9/webapps/crunch</location>
 		</link>
 	</linkedResources>
 </projectDescription>

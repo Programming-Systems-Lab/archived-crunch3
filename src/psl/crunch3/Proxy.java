@@ -4,6 +4,7 @@
  */
 package psl.crunch3;
 import java.util.*;
+import java.sql.*;
 import java.net.*;
 import java.io.*;
 
@@ -24,6 +25,8 @@ public class Proxy implements Runnable {
 	//private LinkedList transfers;
 	private Vector<ProxyFilter> plugins = new Vector<ProxyFilter>();
 
+	private Connection con = null;
+	
 	public Proxy(int port) {
 		//ensure the port given is in the proper range
 		if (port < 0 || port > 65536) {
@@ -189,4 +192,38 @@ public class Proxy implements Runnable {
 
 		return pfArray;
 	}
+	
+	/**
+	 * returns a Connection object that connnects to the crunch database
+	 */
+	public Connection getConnection(){
+		
+		if(con == null){
+			//connect to DB
+			 try {
+					
+				 
+				 //Register the JDBC driver for MySQL.
+			
+				
+				 Class.forName("org.gjt.mm.mysql.Driver");
+				 
+			     String url = "jdbc:mysql://localhost:3306/crunch";
+
+				 System.out.println("point 2");
+
+		        con = DriverManager.getConnection(url, "admin", "test"); 
+		           
+		     } 
+			 catch (Exception ex) {
+				
+				 	con=null;
+				 	ex.printStackTrace();
+		     }
+			 
+			
+		}
+		return con;
+	}
+	
 }

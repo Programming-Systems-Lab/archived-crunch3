@@ -4,6 +4,7 @@
  */
 package psl.crunch3;
 
+import java.sql.*;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,6 +57,9 @@ public class HttpStream extends Thread {
 
 	private String status;
 
+	private Connection con;
+	
+	
 	public HttpStream(final Socket socket) {
 		super("HttpStreamThread");
 		if (socket == null)
@@ -78,6 +82,11 @@ public class HttpStream extends Thread {
 					+ "\n");
 		}
 
+		
+		//get associated username with client InetAddress
+		if(Crunch3.settings.RUN_ON_SERVER){
+			getUsernameFromDB();
+		}
 		this.start();
 	}
 
@@ -617,6 +626,47 @@ public class HttpStream extends Thread {
 
 	public void setStatus(final String status) {
 		this.status = status;
+	}
+	
+	/**
+	 * connects to the database and fetches the username that is associated with the IP address
+	 * of the client
+	 */
+	private void getUsernameFromDB(){
+		con = Crunch3.proxy.getConnection();
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		if (Crunch3.settings.isVerbose()){
+    		System.out.println("changing settings");
+    		System.out.println();
+    	}
+		System.out.println("********************working working");
+		
+		if(con != null){
+			try{
+				System.out.println("**********");
+				stmt = con.createStatement();
+	            
+	            stmt.execute("select user from connected where ip='" + clientSocket.getInetAddress() + "'");
+	            
+	            rs= stmt.getResultSet();
+	            if(!rs.next()){
+	            	//load default settings
+	            }
+	            else{
+	            	String username=rs.getString(1);
+	            	Crunch3.mainControl.loadFile("config" +File.separator+ username+".ini");
+	            	if (Crunch3.settings.isVerbose()){
+	            		System.out.println("settings file loaded for user " + username);
+	            	}
+	            }
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		
+		}
 	}
 
 }

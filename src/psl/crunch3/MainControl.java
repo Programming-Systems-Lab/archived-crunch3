@@ -159,6 +159,7 @@ public class MainControl extends Thread{
 	public void loadFile(String file){
 		
 		//try to read the file
+		System.out.println("changing settings from loadFile ******");
 		try{
 			
 			FileReader reader = new FileReader(file);

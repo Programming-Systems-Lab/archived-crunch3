@@ -3,7 +3,9 @@ package psl.crunch3.web;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+
 import java.io.*;
+import java.net.InetAddress;
 import java.util.*;
 
 public class RegisterServlet extends HttpServlet{
@@ -55,14 +57,22 @@ public class RegisterServlet extends HttpServlet{
 	        r.forward(request, response);
 	    }
 	    else{
-	    	response.setContentType(CONTENT_TYPE);
-
-	        PrintWriter out = response.getWriter();
-	        out.println(DOC_TYPE);
-	        out.println("<html>");
-	        out.println("<head> <title>" + "</title> </head>");
-	        out.println("<body> <H2> " + "Changes Submitted</H2> </body></html>");
 	    	
+	    	
+	        if(rb.writeToDB()){
+	        	
+	        	Cookie c = new Cookie("crunch", rb.getUsername());
+	        	InetAddress remoteInetAddress = InetAddress.getByName(request.getRemoteAddr()); 
+	        	rb.login(remoteInetAddress);
+	        	response.addCookie(c);
+	        	RequestDispatcher r = getServletContext().getRequestDispatcher(
+		          "/success.jsp");
+		        r.forward(request, response);
+	        }
+	        else {RequestDispatcher r = getServletContext().getRequestDispatcher(
+	          "/Register.jsp");
+	        r.forward(request, response);
+	        }
 	    }
 	    
 	    
