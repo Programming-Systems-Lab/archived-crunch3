@@ -3,13 +3,17 @@ package psl.crunch3.web;
 import java.io.Serializable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
+
+import java.io.*;
 
 import psl.crunch3.Crunch3;
 import psl.crunch3.plugins.contentextractor.ContentExtractorConstants;
@@ -63,6 +67,7 @@ public class SettingsBean implements Serializable {
 	private boolean limitLineBreaks;
 	private int	maxLineBreaks;
 	
+	private String username; //only registered users can change crunch settings
 	
 	private ContentExtractorSettings mFilter;
 	
@@ -72,6 +77,9 @@ public class SettingsBean implements Serializable {
 	}
 	
 	
+	public void setUsername(String name){
+		username = name;
+	}
 	
 	
 	public void setAppendLinks(String appendLinks) {
@@ -442,6 +450,10 @@ public class SettingsBean implements Serializable {
 	 * GET methods
 	 *************************************************************/
 
+	public String getUsername(){
+		return username;
+	}
+	
 	public String getAppendLinks() {
 		return Boolean.toString(appendLinks);
 	}
@@ -652,8 +664,8 @@ public class SettingsBean implements Serializable {
 		mFilter.changeSetting(ContentExtractorConstants.IGNORE_STYLES, Boolean.toString(ignoreStyles));
 		mFilter.changeSetting(ContentExtractorConstants.IGNORE_CELL_WIDTH, Boolean.toString(ignoreTableCellWidths));
 
+		mFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString(removeEmptyTables));
 		if (removeEmptyTables) {
-			mFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString(removeEmptyTables));
 			mFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_BUTTON, Boolean.toString(substanceButton));
 			mFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_FORM, Boolean.toString(substanceForm));
 			mFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_IFRAME, Boolean.toString(substanceIFrame));
@@ -664,8 +676,7 @@ public class SettingsBean implements Serializable {
 			mFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_TEXTAREA, Boolean.toString(substanceTextarea));
 			mFilter.changeSetting(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH, Integer.toString(minimumTextLength));
 		} //if
-		else
-			mFilter.changeSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES, Boolean.toString(removeEmptyTables));
+		
 
 		mFilter.changeSetting(ContentExtractorConstants.IGNORE_EMBED_TAGS, Boolean.toString(ignoreEmbed));
 		mFilter.changeSetting(ContentExtractorConstants.IGNORE_FLASH, Boolean.toString(ignoreFlash));
@@ -676,11 +687,63 @@ public class SettingsBean implements Serializable {
 
 			
 			
-		 mFilter.save("/eclipse/workspace/crunch3/config/content.ini");
-		 if(Crunch3.mainControl != null)
-		 Crunch3.mainControl.loadFile("/eclipse/workspace/crunch3/config/content.ini");
-		//return mFilter.getSetting(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO);
+		 mFilter.save("/home/hila/eclipse/workspace/crunch3/users/" + username +".ini");
+		 
 		
+	}
+	
+	
+	public void loadUserSettings(String user){
+		
+		if(user !=null){ 
+		
+		mFilter = ContentExtractorSettings.getInstance();
+		mFilter.changeFile("/home/hila/eclipse/workspace/crunch3/users/" + user +".ini");
+		
+		
+		ignoreAds = (mFilter.getSetting(ContentExtractorConstants.IGNORE_ADS).equals("true"));
+		ignoreScripts = (mFilter.getSetting(ContentExtractorConstants.IGNORE_SCRIPTS).equals("true"));
+		ignoreNoscript=(mFilter.getSetting(ContentExtractorConstants.IGNORE_NOSCRIPT_TAGS).equals("true"));
+		ignoreExternalStylesheets=(mFilter.getSetting(ContentExtractorConstants.IGNORE_EXTERNAL_STYLESHEETS).equals("true"));
+		ignoreStyles=(mFilter.getSetting(ContentExtractorConstants.IGNORE_STYLES).equals("true"));
+		ignoreStyleAttributes=(mFilter.getSetting(ContentExtractorConstants.IGNORE_STYLE_ATTRIBUTES).equals("true"));
+		ignoreStyleInDiv=(mFilter.getSetting(ContentExtractorConstants.IGNORE_DIV_STYLES).equals("true"));
+	    ignoreImages=(mFilter.getSetting(ContentExtractorConstants.IGNORE_IMAGES).equals("true"));
+		displayAltTags = (mFilter.getSetting(ContentExtractorConstants.DISPLAY_IMAGE_ALTS).equals("true"));
+		ignoreImageLinks=(mFilter.getSetting(ContentExtractorConstants.IGNORE_IMAGE_LINKS).equals("true"));
+		displayImageLinkAlts=(mFilter.getSetting(ContentExtractorConstants.DISPLAY_IMAGE_LINK_ALTS).equals("true"));
+		ignoreTextLinks=(mFilter.getSetting(ContentExtractorConstants.IGNORE_TEXT_LINKS).equals("true"));
+		ignoreForms=(mFilter.getSetting(ContentExtractorConstants.IGNORE_FORMS).equals("true"));
+		ignoreInput=(mFilter.getSetting(ContentExtractorConstants.IGNORE_INPUT_TAGS).equals("true"));
+		ignoreButton=(mFilter.getSetting(ContentExtractorConstants.IGNORE_BUTTON_TAGS).equals("true"));
+		ignoreSelect=(mFilter.getSetting(ContentExtractorConstants.IGNORE_SELECT_TAGS).equals("true"));
+		ignoreMeta=(mFilter.getSetting(ContentExtractorConstants.IGNORE_META).equals("true"));
+		ignoreIframe=(mFilter.getSetting(ContentExtractorConstants.IGNORE_IFRAME_TAGS).equals("true"));
+		ignoreTableCellWidths=(mFilter.getSetting(ContentExtractorConstants.IGNORE_CELL_WIDTH).equals("true"));
+		ignoreEmbed=(mFilter.getSetting(ContentExtractorConstants.IGNORE_EMBED_TAGS).equals("true"));
+		ignoreFlash=(mFilter.getSetting(ContentExtractorConstants.IGNORE_FLASH).equals("true"));
+		ignoreLinkLists=(mFilter.getSetting(ContentExtractorConstants.IGNORE_LINK_CELLS).equals("true"));
+		
+		ignoreLLTextLinks=(mFilter.getSetting(ContentExtractorConstants.LC_IGNORE_TEXT_LINKS).equals("true"));
+		ignoreLLImageLinks=(mFilter.getSetting(ContentExtractorConstants.LC_IGNORE_IMAGE_LINKS).equals("true"));
+		ignoreOnlyTextAndLinks=(mFilter.getSetting(ContentExtractorConstants.LC_ONLY_LINKS_AND_TEXT).equals("true"));
+		linkTextRatio=Double.parseDouble(mFilter.getSetting(ContentExtractorConstants.LINK_TEXT_REMOVAL_RATIO));
+		removeEmptyTables=(mFilter.getSetting(ContentExtractorConstants.REMOVE_EMPTY_TABLES).equals("true"));
+		substanceImage=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_IMAGE).equals("true"));
+		substanceTextarea=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_TEXTAREA).equals("true"));
+		substanceLinks=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_LINKS).equals("true"));
+		substanceButton=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_BUTTON).equals("true"));
+		substanceInput=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_INPUT).equals("true"));
+		substanceForm=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_FORM).equals("true"));
+		substanceSelect=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_SELECT).equals("true"));
+		substanceIFrame=(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_IFRAME).equals("true"));
+		minimumTextLength = Integer.parseInt(mFilter.getSetting(ContentExtractorConstants.SUBSTANCE_MIN_TEXT_LENGTH));
+        htmlOutput= (!mFilter.getSetting(ContentExtractorConstants.ONLY_TEXT).equals("true"));
+		textOutput=(mFilter.getSetting(ContentExtractorConstants.ONLY_TEXT).equals("true"));	
+		appendLinks=(mFilter.getSetting(ContentExtractorConstants.ADD_LINKS_TO_BOTTOM).equals("true"));
+		limitLineBreaks=(mFilter.getSetting(ContentExtractorConstants.LIMIT_LINEBREAKS).equals("true"));
+		maxLineBreaks=Integer.parseInt(mFilter.getSetting(ContentExtractorConstants.MAX_LINEBREAKS));
+		}
 	}
 	
 }

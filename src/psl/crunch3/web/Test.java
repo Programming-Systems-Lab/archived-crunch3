@@ -1,5 +1,8 @@
 package psl.crunch3.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -40,6 +43,23 @@ public class Test {
 	            System.out.println(str);
 	            stmt.execute(str);
 	            System.out.println("point 4");
+	            
+	            
+	            File fromFile = new File("config" + File.separator +  "level6.ini");
+				 File toFile = new File("users" + File.separator + "test" + ".ini");
+
+				 FileInputStream from = new FileInputStream(fromFile);
+				 FileOutputStream to = new FileOutputStream(toFile);
+				 
+				 byte[] buff = new byte[4096];
+				 int i;
+				 
+				 while ((i = from.read(buff))!=-1){
+					 to.write(buff, 0,i);
+				 }
+				 from.close();
+				 to.close();
+	            
 
 	     } 
 		 catch (Exception ex) {
@@ -73,5 +93,30 @@ public class Test {
 		}
 		
 	}
+	
+	public void createUserPrefFile(){
+		 
+		 try{
+			 File fromFile = new File("config" + File.separator +  "level6.ini");
+			 File toFile = new File("users" + File.separator + "test" + ".ini");
+
+			 FileInputStream from = new FileInputStream(fromFile);
+			 FileOutputStream to = new FileOutputStream(toFile);
+			 
+			 byte[] buff = new byte[4096];
+			 int i;
+			 
+			 while ((i = from.read(buff))!=-1){
+				 to.write(buff, 0,i);
+			 }
+			 from.close();
+			 to.close();
+			 //return true;
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+		 }
+	}
+		 
 	
 }

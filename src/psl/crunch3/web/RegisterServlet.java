@@ -62,12 +62,25 @@ public class RegisterServlet extends HttpServlet{
 	        if(rb.writeToDB()){
 	        	
 	        	Cookie c = new Cookie("crunch", rb.getUsername());
-	        	InetAddress remoteInetAddress = InetAddress.getByName(request.getRemoteAddr()); 
-	        	rb.login(remoteInetAddress);
-	        	response.addCookie(c);
-	        	RequestDispatcher r = getServletContext().getRequestDispatcher(
-		          "/success.jsp");
-		        r.forward(request, response);
+	        	InetAddress remoteInetAddress = InetAddress.getByName(request.getRemoteAddr());
+	        	if((remoteInetAddress.toString()).equals("/128.59.14.166")){
+	        		remoteInetAddress = InetAddress.getByName(((request.getParameter("ip")).substring(1)));
+	        	}
+	        	rb.createUserPrefFile();
+	        	rb.authenticate(remoteInetAddress);
+	        	String s1 = rb.login(remoteInetAddress);
+	        	if(s1.equals("true")){
+	        		response.addCookie(c);
+	        		HttpSession session = (request.getSession(true));
+	        		session.setAttribute("name",rb.getUsername());
+	        		RequestDispatcher r = getServletContext().getRequestDispatcher(
+	        			"/presets.html");
+	        		r.forward(request, response);
+	        	}
+	        	else{
+	        		RequestDispatcher r = getServletContext().getRequestDispatcher("/Register.jsp");
+	        		r.forward(request, response);
+	        	}
 	        }
 	        else {RequestDispatcher r = getServletContext().getRequestDispatcher(
 	          "/Register.jsp");

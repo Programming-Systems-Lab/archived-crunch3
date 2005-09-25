@@ -2,6 +2,7 @@ package psl.crunch3.web;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+
 import java.io.*;
 
 public class SettingsServlet extends HttpServlet {
@@ -77,24 +78,36 @@ public class SettingsServlet extends HttpServlet {
      b.setIgnoreFlash((request.getParameter("ignoreFlash")));
      
      
-
-     b.commitSettings();
-
-
-    response.setContentType(CONTENT_TYPE);
-
-    PrintWriter out = response.getWriter();
-    out.println(DOC_TYPE);
-    out.println("<html>");
-    out.println("<head> <title>test test</title> </head>");
-    out.println("<body> <H2> " + "Changes Submitted" + "</H2> </body></html>");
-     		
+     Cookie[] cookies = request.getCookies();
+     
+     //   if no cookies were found, the user isn't logged in, redirect to login page
+     if(cookies == null){
+    	 RequestDispatcher r = getServletContext().getRequestDispatcher(
+         "/login.htm");
+    	 r.forward(request, response);
+     }
+     else{
+    	 for (int i=0; i<cookies.length;i++){
+    		 if (((cookies[i]).getName()).equals("crunch")){
+    		 	b.setUsername((cookies[i]).getValue());
+    		 	break;
+    		 }
+    	 }
+     
+    	 
+    	 
+     
+    	 b.commitSettings();
+    	 HttpSession session = (request.getSession(true));
+      	 session.setAttribute("name",b.getUsername());
+    	 RequestDispatcher r = getServletContext().getRequestDispatcher(
+         "/interface.jsp");
+    	 r.forward(request, response);
+     }		
 
     
-    /**  RequestDispatcher r = getServletContext().getRequestDispatcher(
-          "/Form.jsp");
-      r.forward(request, response);
-**/
+     
+
 
     
 

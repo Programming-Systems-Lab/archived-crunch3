@@ -24,22 +24,48 @@ public class LoginServlet extends HttpServlet{
 			s.setAttribute("lb", lb);
 		}
 	
+		boolean done = false;
+		
+		
+		if((request.getParameter("reset")).equals("true")){
+			
+			done =(lb.resetPassword(request.getParameter("username"),request.getParameter("lastname"),request.getParameter("password")));
+			
+		       
+		}
+		
+		
+		
 		lb.setUsername((request.getParameter("username")));
 	    lb.setPassword((request.getParameter("password")));
 		
 			Cookie c = new Cookie("crunch", lb.getUsername());
-        	InetAddress remoteInetAddress = InetAddress.getByName(request.getRemoteAddr()); 
+        	InetAddress remoteInetAddress = InetAddress.getByName(request.getRemoteAddr());
+        	if((remoteInetAddress.toString()).equals("/128.59.14.166")){
+        		remoteInetAddress = InetAddress.getByName(((request.getParameter("ip")).substring(1)));
+        	}
         if(lb.authenticate(remoteInetAddress)){	
         	lb.login(remoteInetAddress);
         	response.addCookie(c);
+        	
+        	HttpSession session = (request.getSession(true));
+        	session.setAttribute("name",lb.getUsername());
+        	
 			RequestDispatcher r = getServletContext().getRequestDispatcher(
-	          "/interface.htm");
+	          "/presets.html");
 	        r.forward(request, response);
 		}
 		else{
-			RequestDispatcher r = getServletContext().getRequestDispatcher(
-	          "/login.htm");
-	        r.forward(request, response);
+			if((request.getParameter("reset")).equals("true")){
+				RequestDispatcher r = getServletContext().getRequestDispatcher(
+		          "/tryagain.html");
+		        r.forward(request, response);
+			}
+			else{
+				RequestDispatcher r = getServletContext().getRequestDispatcher(
+				"/login.htm");
+	        	r.forward(request, response);
+			}
 		}
 		
 	}
@@ -50,4 +76,6 @@ public class LoginServlet extends HttpServlet{
 	  }
 	
 	
+	  
+	  
 }

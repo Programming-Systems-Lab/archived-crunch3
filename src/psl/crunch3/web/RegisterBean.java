@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.security.*;
 import java.sql.*;
 
+import javax.servlet.RequestDispatcher;
+
 public class RegisterBean implements Serializable{
 
 	private String firstName, lastName, email;
@@ -211,8 +213,8 @@ public class RegisterBean implements Serializable{
 	            stmt = conn.createStatement();
 	            
 	            stmt.execute("insert into user values ('" + username + "' , '"+
-	            		firstName + "' , '"+ lastName + "' , '"+ email + "' , '"+
-	            		encrypt(password) + "')");
+	            		firstName + "' , '"+ lastName + "' , '"+ email + "' , "+
+	            		"MD5('" +password +"' ) )");
 	            inserted="true";
 	            return true;
 	         
@@ -302,6 +304,8 @@ public class RegisterBean implements Serializable{
 		 Statement stmt = null;
 		 ResultSet rs = null;
 		 
+		 boolean result=true;
+		 
 		 try {
 		
 			 
@@ -310,16 +314,13 @@ public class RegisterBean implements Serializable{
 		     
 	            stmt = conn.createStatement();
 	            
-	            stmt.execute("select password from user where username='" + username +  "'");
+	            stmt.execute("select username from user where username='" + username + "' and password=MD5('"+ password + "')");
 	            rs = stmt.getResultSet();
 	            
 	            if(!rs.next()){
-	            	return false;
+	            	result= false;
 	            }
-	            else{
-	            	if( !(rs.getString(1)).equals(password))
-	            		return false;
-	            }
+	            
 	            
 	            
 	            //remove row from connected table
@@ -336,7 +337,7 @@ public class RegisterBean implements Serializable{
 
 	     } 
 		 catch (Exception ex) {
-			 return false;
+			 result= false;
 	     }
 		 finally {
 			    
@@ -351,15 +352,16 @@ public class RegisterBean implements Serializable{
 			}
 		  
 		}
-		 return true;
+		 return result;
 		 
 	 
 	 }
 	 
-	 public boolean login(InetAddress address){
+	 public String login(InetAddress address){
 
 		 Statement stmt = null;
 
+		 String result = "true";
 			 try {
 			
 				 
@@ -370,15 +372,10 @@ public class RegisterBean implements Serializable{
 		            
 		            stmt.execute("insert into connected values ('" + username + "' , '"+
 		            		address + "')");
-		            
-		            
-		            
-		            
-		         
 
 		     } 
 			 catch (Exception ex) {
-				 return false;
+				 result = ex.getMessage();
 		     }
 			 finally {
 				    
@@ -393,6 +390,73 @@ public class RegisterBean implements Serializable{
 				}
 			  
 			}
-			 return true;
+			 return result;
 	 }
+	 
+	 
+	 /**
+	  * Creates a new settings file where the user's preferred settings
+	  * would be stored. The default file settings would be the same as config/level6.ini
+	  */
+	 public boolean createUserPrefFile(){
+		 
+		 try{
+			 File fromFile = new File("/home/hila/eclipse/workspace/crunch3/config/level6.ini");
+			 File toFile = new File("/home/hila/eclipse/workspace/crunch3/users/" + username + ".ini");
+
+			 FileInputStream from = new FileInputStream(fromFile);
+			 FileOutputStream to = new FileOutputStream(toFile);
+			 
+			 byte[] buff = new byte[4096];
+			 int i;
+			 
+			 while ((i = from.read(buff))!=-1){
+				 to.write(buff, 0,i);
+			 }
+			 from.close();
+			 to.close();
+			 return true;
+		 }
+		 catch(Exception e){
+			 return false;
+		 }
+		 
+		 
+	 }
+	 
+	 public boolean resetPassword(String userName, String lastName, String pass){
+		 Statement stmt = null;
+
+		 boolean result =true;
+			 try {
+
+				   if(conn==null) connect();
+			     
+		            stmt = conn.createStatement();
+		            
+		            stmt.execute("update user set password=MD5('"+ pass + "') where username = '" +userName + "' and "+
+		            		"lastname = '" + lastName + "'");
+
+		     } 
+			 catch (Exception ex) {
+				 result = false;
+		     }
+			 finally {
+				    
+
+				    if (stmt != null) {
+				        try {
+				            stmt.close();
+				        } catch (SQLException sqlEx) { // ignore }
+
+				        stmt = null;
+				    }
+				}
+			  
+			}
+			 return result;
+	 }	  
+		 
+		 
+	 
 }

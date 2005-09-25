@@ -31,6 +31,7 @@ public class HttpStream extends Thread {
 	private static final char LF = '\n';
 	private static final String CRLF = "\r\n";
 	private static final int BUFFER_SIZE = 16384;
+	
 
 	private static final String[] STATUS_STRINGS = { "0. Initializing", //0
 		"1. Reading Client First Line", //1
@@ -46,7 +47,9 @@ public class HttpStream extends Thread {
 	};
 
 	private int soTimeout = Crunch3.settings.getSocketTimeout();
-
+	
+	private boolean isCrunchPage = false;
+	
 	Socket clientSocket;
 	HttpMetadata clientMetadata = new HttpMetadata(HttpMetadata.CLIENT);
 
@@ -126,7 +129,23 @@ public class HttpStream extends Thread {
 
 		// try to read the first line from the client
 		try {
-			clientMetadata.setFirstLine(readLine(clientSocket.getInputStream()));
+			String get = readLine(clientSocket.getInputStream());
+			clientMetadata.setFirstLine(get);
+			
+			if(get.contains("rector.psl.cs.columbia.edu/crunch")){
+				//Crunch3.mainControl.loadFile("config"+ File.separator +"level13.ini");
+				if(get.contains("rector.psl.cs.columbia.edu/crunch/register.htm") || get.contains("rector.psl.cs.columbia.edu/crunch/slogin.html")
+						|| get.contains("rector.psl.cs.columbia.edu/crunch/Register.jsp") || get.contains("rector.psl.cs.columbia.edu/crunch/login.htm")){
+				int start = get.lastIndexOf("HTTP");
+				get = get.substring(0,start-1) + "?ip=" + clientSocket.getInetAddress() + " " + get.substring(start);
+			
+				clientMetadata.setFirstLine(get);
+				}
+				isCrunchPage = true;
+			}
+			else{
+				isCrunchPage = false;
+			}
 		} catch (IOException ioe) {
 			// shutdown on an error
 			if (Crunch3.settings.isVerbose())
@@ -317,6 +336,8 @@ public class HttpStream extends Thread {
 		// only filter if not homepage or filter homepages turned on
 		shouldFilter = shouldFilter && (Crunch3.settings.isFilterHomepages() || !isHomepage());
 		
+		//only filter if not crunch page
+		shouldFilter = shouldFilter && !isCrunchPage;
 		if (shouldFilter)
 			contentFile = filter();
 		
@@ -641,22 +662,24 @@ public class HttpStream extends Thread {
     		System.out.println("changing settings");
     		System.out.println();
     	}
-		System.out.println("********************working working");
+		
 		
 		if(con != null){
 			try{
-				System.out.println("**********");
+				
 				stmt = con.createStatement();
 	            
 	            stmt.execute("select user from connected where ip='" + clientSocket.getInetAddress() + "'");
 	            
+	            System.out.println(clientSocket.getInetAddress());
 	            rs= stmt.getResultSet();
 	            if(!rs.next()){
 	            	//load default settings
+	            	System.out.println("problem \n");
 	            }
 	            else{
 	            	String username=rs.getString(1);
-	            	Crunch3.mainControl.loadFile("config" +File.separator+ username+".ini");
+	            	Crunch3.mainControl.loadFile("users" +File.separator+ username+".ini");
 	            	if (Crunch3.settings.isVerbose()){
 	            		System.out.println("settings file loaded for user " + username);
 	            	}

@@ -96,6 +96,12 @@ public class ContentExtractorSettings implements ContentExtractorConstants {
 		loadSettings();
 	}
 
+	public void changeFile(String f){
+		mSettingsFile = f;
+		loadSettingsProperties();
+		loadSettings();
+	}
+	
 	/**
 	 * Returns a setting based on the final variables
 	 * 
