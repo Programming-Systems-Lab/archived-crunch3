@@ -10,11 +10,6 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>net.sourceforge.metrics.builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
@@ -23,16 +18,4 @@
 		<nature>net.sourceforge.metrics.nature</nature>
 		<nature>com.sysdeo.eclipse.tomcat.tomcatnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>output</name>
-			<type>2</type>
-			<location>/usr/local/jakarta-tomcat-5.5.9/webapps/crunch/WEB-INF/classes</location>
-		</link>
-		<link>
-			<name>Crunch_WebApp</name>
-			<type>2</type>
-			<location>/usr/local/jakarta-tomcat-5.5.9/webapps/crunch</location>
-		</link>
-	</linkedResources>
 </projectDescription>

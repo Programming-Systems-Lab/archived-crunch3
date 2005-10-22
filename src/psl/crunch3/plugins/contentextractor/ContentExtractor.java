@@ -170,9 +170,10 @@ public class ContentExtractor extends EnhancedProxyFilter implements SiteDepende
 			Document newTree;
 			InputStream in;
 			
+			boolean getNext = false;
 			
 			try{
-				while((linkToAppend !=null) && (linkToAppend != address) ){
+				while((linkToAppend !=null) && (linkToAppend != address) && getNext ){
 					
 					
 					System.out.println("*** " + linkToAppend);

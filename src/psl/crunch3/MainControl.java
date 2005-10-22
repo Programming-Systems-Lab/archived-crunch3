@@ -36,9 +36,13 @@ public class MainControl extends Thread{
 	
 	
 	public void run(){
+		ce = new ContentExtractor();
+		description = ce.getControl();
+		
 		if(!GUIActive){
 			menuLoop();
 		}
+		else yield();
 	}
 	
 	
@@ -52,6 +56,7 @@ public class MainControl extends Thread{
 		Scanner in = new Scanner(System.in);
 		ce = new ContentExtractor();
 		description = ce.getControl();
+		
 		yield();
 		Crunch3.proxy.registerPlugin(ce);
 	
@@ -177,17 +182,19 @@ public class MainControl extends Thread{
 	/**
 	 * Activate the GUI
 	 */
-	private void activateGUI(){
+	public MainWindow activateGUI(){
 		
 		GUIActive = true;
 		Crunch3.settings.setGUI(true);
 		
-		Crunch3.mainWindow = new MainWindow(this);		
+		MainWindow mw = new MainWindow(this);		
 		
-		Crunch3.proxy.registerPlugin(new SamplePlugin());
-		Crunch3.proxy.registerPlugin(new SizeModifier());
-		Crunch3.proxy.registerPlugin(ce);
+		return mw;
 	}
 	
+	
+	public ContentExtractor getContentExtractor(){
+		return ce;
+	}
 	
 }

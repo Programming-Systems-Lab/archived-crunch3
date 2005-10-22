@@ -38,11 +38,14 @@ public class Crunch3 {
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 		
 		mainControl = new MainControl(Crunch3.settings.isGUISet());
-		if(Crunch3.settings.isGUISet()) mainWindow = new MainWindow(mainControl);
+		
 		
 		proxy = new Proxy(settings.getListenPort());		
 		
-		proxy.registerPlugin(new ContentExtractor());
+		if(Crunch3.settings.isGUISet()) mainWindow = mainControl.activateGUI(); 
+			
+		
+		proxy.registerPlugin(mainControl.getContentExtractor());
 		proxy.registerPlugin(new SamplePlugin());
 		proxy.registerPlugin(new SizeModifier());
 		

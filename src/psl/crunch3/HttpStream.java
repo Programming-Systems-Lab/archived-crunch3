@@ -108,7 +108,7 @@ public class HttpStream extends Thread {
 
 		try {
 			readClientFirstLine();
-			Crunch3.mainControl.printStatus();
+			if(!Crunch3.settings.isGUISet())Crunch3.mainControl.printStatus();
 		} catch (Exception e) {
 			if (Crunch3.settings.isVerbose())
 				e.printStackTrace();

@@ -29,7 +29,7 @@ public class Crunch3Settings {
 	public static final boolean PROXY_MODE_DEF = true;
 	public static String SETTINGS_FILE = "config/content extractor settings.ini";
 	public static final boolean CHECK_HOMEPAGE_DEF = false;
-	public static final boolean RUN_ON_SERVER = true;
+	public static final boolean RUN_ON_SERVER = false;
 
 	//internal variables
 	private String[] arguments;
